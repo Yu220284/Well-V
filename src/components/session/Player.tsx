@@ -186,7 +186,7 @@ export function Player({ session }: { session: Session }) {
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
                   <Button variant="ghost" size="icon" onClick={handleFavoriteToggle} className="h-12 w-12" aria-label={isFav ? t.remove_from_favorites_button_aria : t.add_to_favorites_button_aria}>
-                    <Heart className={cn("h-6 w-6 transition-colors", isFav && "fill-pink-500 text-pink-500")} />
+                    <Heart className={cn("h-6 w-6 transition-colors", isFav && "fill-secondary text-secondary")} />
                   </Button>
                 </div>
                 

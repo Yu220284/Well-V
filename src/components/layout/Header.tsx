@@ -9,7 +9,7 @@ export function Header() {
       <div className="container mx-auto flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3 group">
           <Logo className="group-hover:scale-110 transition-transform duration-300 ease-in-out" />
-          <h1 className="text-2xl font-bold tracking-tight text-primary-foreground bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-violet-500 font-headline">
+          <h1 className="text-2xl font-bold tracking-tight text-primary font-headline">
             {t.title}
           </h1>
         </Link>

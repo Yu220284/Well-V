@@ -39,8 +39,8 @@ export function CategoryCard({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           {isFavorite && (
-             <div className="absolute top-3 right-3 bg-pastel-yellow-200/80 p-2 rounded-full backdrop-blur-sm">
-                <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+             <div className="absolute top-3 right-3 bg-secondary/80 p-2 rounded-full backdrop-blur-sm">
+                <Star className="w-5 h-5 text-primary fill-primary" />
             </div>
           )}
         </div>
