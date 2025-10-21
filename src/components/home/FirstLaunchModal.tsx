@@ -10,12 +10,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useTranslations } from "next-intl";
+import messages from '@/../messages/ja.json';
 
 const FIRST_VISIT_KEY = "wellv_first_visit";
 
 export function FirstLaunchModal() {
-  const t = useTranslations("FirstLaunch");
+  const t = messages.FirstLaunch;
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -34,22 +34,22 @@ export function FirstLaunchModal() {
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t('title')}</AlertDialogTitle>
+          <AlertDialogTitle>{t.title}</AlertDialogTitle>
           <AlertDialogDescription className="space-y-4 pt-4 text-foreground/80">
             <p>
-              {t('description_1')}
+              {t.description_1}
             </p>
             <p className="font-semibold">
-              {t('description_2')}
+              {t.description_2}
             </p>
             <p>
-              {t('description_3')}
+              {t.description_3}
             </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction onClick={handleAcknowledge}>
-            {t('acknowledge_button')}
+            {t.acknowledge_button}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

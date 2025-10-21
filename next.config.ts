@@ -1,5 +1,4 @@
 import type {NextConfig} from 'next';
-const withNextIntl = require('next-intl/plugin')();
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -24,7 +23,8 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https',
+        protocol: 'https'
+        ,
         hostname: 'picsum.photos',
         port: '',
         pathname: '/**',
@@ -33,4 +33,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+export default nextConfig;

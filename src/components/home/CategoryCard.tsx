@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ArrowRight, Star } from "lucide-react";
+import Link from "next/link";
 
 import {
   Card,
@@ -7,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Link } from "@/navigation";
 
 interface CategoryCardProps {
   name: string;

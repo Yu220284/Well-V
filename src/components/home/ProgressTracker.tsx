@@ -4,7 +4,7 @@ import { Flame, Target } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSessionStore } from "@/lib/hooks/use-session-store";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useTranslations } from "next-intl";
+import messages from '@/../messages/ja.json';
 
 function StatCard({ icon, title, value, unit }: { icon: React.ReactNode; title: string; value: number; unit: string; }) {
   return (
@@ -24,7 +24,7 @@ function StatCard({ icon, title, value, unit }: { icon: React.ReactNode; title: 
 }
 
 export function ProgressTracker() {
-  const t = useTranslations("ProgressTracker");
+  const t = messages.ProgressTracker;
   const { getTodayCount, getCurrentStreak, isLoaded } = useSessionStore();
 
   const sessionsToday = getTodayCount();
@@ -43,15 +43,15 @@ export function ProgressTracker() {
     <div className="grid gap-4 md:grid-cols-2">
       <StatCard
         icon={<Target className="h-5 w-5 text-accent" />}
-        title={t('sessions_today')}
+        title={t.sessions_today}
         value={sessionsToday}
-        unit={t('done')}
+        unit={t.done}
       />
       <StatCard
         icon={<Flame className="h-5 w-5 text-secondary" />}
-        title={t('current_streak')}
+        title={t.current_streak}
         value={currentStreak}
-        unit={currentStreak === 1 ? t('day') : t('days')}
+        unit={currentStreak === 1 ? t.day : t.days}
       />
     </div>
   );

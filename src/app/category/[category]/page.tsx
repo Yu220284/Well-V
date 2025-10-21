@@ -6,14 +6,22 @@ import { CATEGORIES, SESSIONS } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Play } from "lucide-react";
 import type { SessionCategory } from "@/lib/types";
+import messages from '@/../messages/ja.json';
 
 export default function CategoryPage({ params }: { params: { category: SessionCategory } }) {
   const { category: categoryId } = params;
-  const category = CATEGORIES.find((c) => c.id === categoryId);
+  
+  const categoryData = CATEGORIES.find((c) => c.id === categoryId);
   const sessions = SESSIONS.filter((s) => s.category === categoryId);
 
-  if (!category) {
+  if (!categoryData) {
     notFound();
+  }
+
+  const category = {
+    ...categoryData,
+    name: (messages.categories as any)[categoryData.id],
+    description: (messages.categories as any)[`${categoryData.id}_description`],
   }
 
   const formatDuration = (seconds: number) => {

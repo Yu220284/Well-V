@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import { useRouter } from "@/navigation";
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   Play,
@@ -21,7 +21,7 @@ import type { Session } from "@/lib/types";
 import { SafetyPromptDialog } from "./SafetyPromptDialog";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
+import messages from '@/../messages/ja.json';
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
@@ -30,7 +30,7 @@ function formatTime(seconds: number): string {
 }
 
 export function Player({ session }: { session: Session }) {
-  const t = useTranslations("SessionPlayer");
+  const t = messages.SessionPlayer;
   const router = useRouter();
   const { addSession, toggleFavorite, isFavorite, isLoaded } = useSessionStore();
   const { toast } = useToast();
@@ -91,7 +91,7 @@ export function Player({ session }: { session: Session }) {
   const handleFavoriteToggle = () => {
     toggleFavorite(session.id);
     toast({
-      title: isFav ? t("removed_from_favorites") : t("added_to_favorites"),
+      title: isFav ? t.removed_from_favorites : t.added_to_favorites,
       description: session.title,
     });
   };
@@ -107,8 +107,8 @@ export function Player({ session }: { session: Session }) {
       addSession(session.id);
       setIsPlaying(false);
       toast({
-        title: t('session_complete_title'),
-        description: t('session_complete_description', {sessionTitle: session.title}),
+        title: t.session_complete_title,
+        description: t.session_complete_description.replace('{sessionTitle}', session.title),
       });
       setTimeout(() => router.push('/'), 2000);
     };
@@ -159,7 +159,7 @@ export function Player({ session }: { session: Session }) {
             </div>
 
             <div className="space-y-2">
-              <Progress value={progress} aria-label={t("progress_label")} />
+              <Progress value={progress} aria-label={t.progress_label} />
               <div className="flex justify-between text-xs text-muted-foreground font-mono">
                 <span>{formatTime(currentTime)}</span>
                 <span>-{formatTime(session.duration - currentTime)}</span>
@@ -174,23 +174,23 @@ export function Player({ session }: { session: Session }) {
 
             {isReady && (
               <div className="grid grid-cols-5 items-center gap-2">
-                <Button variant="ghost" size="icon" onClick={toggleMute} aria-label={isMuted ? t("unmute_button_aria") : t("mute_button_aria")}>
+                <Button variant="ghost" size="icon" onClick={toggleMute} aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria}>
                   {isMuted ? <VolumeX /> : <Volume2 />}
                 </Button>
 
                 <div className="col-span-3 flex justify-center items-center gap-4">
-                  <Button variant="ghost" size="icon" onClick={restart} className="h-12 w-12" aria-label={t("restart_button_aria")}>
+                  <Button variant="ghost" size="icon" onClick={restart} className="h-12 w-12" aria-label={t.restart_button_aria}>
                     <RotateCcw className="h-6 w-6" />
                   </Button>
-                  <Button variant="default" size="icon" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t("pause_button_aria") : t("play_button_aria")}>
+                  <Button variant="default" size="icon" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={handleFavoriteToggle} className="h-12 w-12" aria-label={isFav ? t("remove_from_favorites_button_aria") : t("add_to_favorites_button_aria")}>
+                  <Button variant="ghost" size="icon" onClick={handleFavoriteToggle} className="h-12 w-12" aria-label={isFav ? t.remove_from_favorites_button_aria : t.add_to_favorites_button_aria}>
                     <Heart className={cn("h-6 w-6 transition-colors", isFav && "fill-pink-500 text-pink-500")} />
                   </Button>
                 </div>
                 
-                <Button variant="ghost" size="icon" onClick={stop} aria-label={t("stop_button_aria")}>
+                <Button variant="ghost" size="icon" onClick={stop} aria-label={t.stop_button_aria}>
                     <X />
                 </Button>
               </div>
