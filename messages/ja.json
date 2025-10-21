@@ -39,7 +39,7 @@
   },
   "SessionPlayer": {
     "session_complete_title": "セッションクリア！",
-    "session_complete_description": "{sessionTitle} をクリア<br>お疲れ様でした！",
+    "session_complete_description": "{sessionTitle} を完了しました！",
     "added_to_favorites": "お気に入りに追加しました",
     "removed_from_favorites": "お気に入り解除しました",
     "progress_label": "セッションの進捗",
