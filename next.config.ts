@@ -31,6 +31,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/audio/:path*',
+        destination: '/audio/:path*',
+      },
+    ]
+  },
 };
 
 export default nextConfig;
