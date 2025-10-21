@@ -1,17 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { Link } from "@/navigation";
+import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { SESSIONS } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Play, HeartCrack } from "lucide-react";
 import { useSessionStore } from "@/lib/hooks/use-session-store";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useTranslations } from "next-intl";
+import messages from '@/../messages/ja.json';
 
 export default function FavoritesPage() {
-  const t = useTranslations("FavoritesPage");
+  const t = messages.FavoritesPage;
   const { favorites, isLoaded } = useSessionStore();
   const favoriteSessions = SESSIONS.filter(session => favorites.includes(session.id));
 
@@ -25,8 +25,8 @@ export default function FavoritesPage() {
       <Header />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold font-headline mb-2">{t('title')}</h1>
-          <p className="text-lg text-muted-foreground">{t('description')}</p>
+          <h1 className="text-4xl font-bold font-headline mb-2">{t.title}</h1>
+          <p className="text-lg text-muted-foreground">{t.description}</p>
         </div>
 
         {!isLoaded && (
@@ -38,10 +38,10 @@ export default function FavoritesPage() {
         {isLoaded && favoriteSessions.length === 0 && (
           <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed rounded-xl bg-card">
               <HeartCrack className="w-16 h-16 text-muted-foreground/50 mb-4" />
-              <h2 className="text-2xl font-bold">{t('no_favorites_title')}</h2>
-              <p className="text-muted-foreground mt-2">{t('no_favorites_description')}</p>
+              <h2 className="text-2xl font-bold">{t.no_favorites_title}</h2>
+              <p className="text-muted-foreground mt-2">{t.no_favorites_description}</p>
               <Link href="/" className="mt-6 inline-block px-6 py-2 text-sm font-semibold text-primary-foreground bg-primary rounded-full shadow-lg hover:scale-105 transition-transform">
-                {t('explore_sessions_button')}
+                {t.explore_sessions_button}
               </Link>
           </div>
         )}

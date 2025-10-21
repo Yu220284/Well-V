@@ -2,15 +2,15 @@ import { notFound } from "next/navigation";
 import { SESSIONS } from "@/lib/data";
 import { Player } from "@/components/session/Player";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import messages from '@/../messages/ja.json';
 
 type Props = {
-  params: { slug: string; locale: string };
+  params: { slug: string };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const session = SESSIONS.find((s) => s.id === params.slug);
-  const t = await getTranslations({locale: params.locale, namespace: 'Metadata'});
+  const t = messages.Metadata;
 
   if (!session) {
     return {
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
   return {
-    title: `${session.title} | ${t('title')}`,
+    title: `${session.title} | ${t.title}`,
     description: `Start your ${session.category} session: ${session.title}.`,
   };
 }
@@ -34,12 +34,7 @@ export default function SessionPage({ params }: Props) {
 }
 
 export function generateStaticParams() {
-    const locales = ['en', 'ja', 'zh'];
-    const paths = SESSIONS.flatMap(session => 
-      locales.map(locale => ({
-        locale,
+    return SESSIONS.map((session) => ({
         slug: session.id,
-      }))
-    );
-    return paths;
+    }));
 }

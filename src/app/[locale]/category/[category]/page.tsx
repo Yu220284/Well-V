@@ -1,18 +1,16 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { CATEGORIES, SESSIONS } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Play } from "lucide-react";
 import type { SessionCategory } from "@/lib/types";
-import { Link } from "@/navigation";
-import { getTranslations } from 'next-intl/server';
+import messages from '@/../messages/ja.json';
 
-
-export default async function CategoryPage({ params }: { params: { category: SessionCategory, locale: string } }) {
-  const { category: categoryId, locale } = params;
-  const t = await getTranslations({locale});
-
+export default function CategoryPage({ params }: { params: { category: SessionCategory } }) {
+  const { category: categoryId } = params;
+  
   const categoryData = CATEGORIES.find((c) => c.id === categoryId);
   const sessions = SESSIONS.filter((s) => s.category === categoryId);
 
@@ -21,9 +19,9 @@ export default async function CategoryPage({ params }: { params: { category: Ses
   }
 
   const category = {
-      ...categoryData,
-      name: t(`categories.${categoryData.id}`),
-      description: t(`categories.${categoryData.id}_description`),
+    ...categoryData,
+    name: (messages.categories as any)[categoryData.id],
+    description: (messages.categories as any)[`${categoryData.id}_description`],
   }
 
   const formatDuration = (seconds: number) => {
@@ -75,12 +73,7 @@ export default async function CategoryPage({ params }: { params: { category: Ses
 }
 
 export function generateStaticParams() {
-  const locales = ['en', 'ja', 'zh'];
-  const paths = CATEGORIES.flatMap(category => 
-    locales.map(locale => ({
-      locale,
-      category: category.id,
-    }))
-  );
-  return paths;
+  return CATEGORIES.map((category) => ({
+    category: category.id,
+  }));
 }
