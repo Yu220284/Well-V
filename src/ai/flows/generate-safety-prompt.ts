@@ -5,7 +5,7 @@
  *
  * - generateSafetyPrompt - A function that generates a safety disclaimer.
  * - GenerateSafetyPromptInput - The input type for the generateSafetyPrompt function.
- * - GenerateSafetyPromptOutput - The return type for the generateSafetyPrompt function.
+ * - GenerateSafetyPromptOutput - The return type for the generateSafetyPrmpt function.
  */
 
 import {ai} from '@/ai/genkit';
@@ -29,18 +29,18 @@ const prompt = ai.definePrompt({
   name: 'generateSafetyPromptPrompt',
   input: {schema: GenerateSafetyPromptInputSchema},
   output: {schema: GenerateSafetyPromptOutputSchema},
-  prompt: `You are an AI assistant that generates safety prompts for different types of sessions.
+  prompt: `あなたはセッションの種類に応じて、セッション前の注意事項を生成するAIアシスタントです。
 
-  Generate a variation of the safety disclaimer based on the session type.
+  セッションの種類に合わせて、注意事項のバリエーションを生成してください。
 
-  Session Type: {{{sessionType}}}
+  セッションの種類: {{{sessionType}}}
 
-  Here is the general safety disclaimer:
-  "Before starting, ensure you are in a safe environment. Stay hydrated and listen to your body. If you experience any pain or discomfort, stop immediately."
+  基本的な注意事項はこちらです:
+  "セッションを始める前に、周囲の安全を確かめてください。水分補給を忘れずに、ご自身の体の声に耳を傾けましょう。痛みや不快感があった場合はすぐに中止してください。"
 
-  Your generated prompt should be a concise reminder of key safety precautions relevant to the session type.
-  The generated prompt should be no more than 3 sentences.
-  The tone should be encouraging, calm and caring.
+  生成するプロンプトは、セッションの種類に関連する重要な安全上の注意点を簡潔にまとめたものにしてください。
+  生成するプロンプTプとは3文以内としてください。
+  トーンは、励ますような、穏やかで思いやりのあるものにしてください。
 `,
 });
 

@@ -1,71 +1,72 @@
 {
   "Metadata": {
     "title": "うぇるぶい",
-    "description": "ガイド付き音声セッションであなたの穏やかさを見つけてください。"
+    "description": "がんばるあなたに、推しからエール！"
   },
   "Header": {
     "title": "うぇるぶい"
   },
   "Home": {
-    "progress": "あなたの進捗",
-    "start_session": "セッションを開始",
+    "progress": "あなたの記録",
+    "start_session": "セッション開始",
     "favorites_card_name": "お気に入り",
-    "favorites_card_description": "保存したセッションのコレクション。",
-    "footer_text": "{sparkles} を使って うぇるぶい が作成"
+    "favorites_card_description": "保存したセッション",
+    "footer_text": "{sparkles} WellV {sparkles}"
   },
   "FirstLaunch": {
     "title": "うぇるぶいへようこそ！",
-    "description_1": "最初のセッションを開始する前に、少し時間を取ってこの重要な安全情報をお読みください。",
-    "description_2": "常に安全で快適な環境にいることを確認してください。水分を補給し、自分の体に耳を傾けてください。痛みや不快感を感じた場合は、直ちにセッションを中止し、必要に応じて医療専門家にご相談ください。",
-    "description_3": "マインドフルネスへの旅をお楽しみください！",
-    "acknowledge_button": "理解しました"
+    "description_1": "セッションを開始する前に、注意事項をお読みください。",
+    "description_2": "周囲の安全と環境を確認し、痛みや不快感を感じた場合は、セッションを中止してください。",
+    "description_3": "推しのボイスと一緒に、心と体をリフレッシュしましょう！",
+    "acknowledge_button": "準備OK！"
   },
   "ProgressTracker": {
     "sessions_today": "今日のセッション",
-    "done": "完了",
-    "current_streak": "現在の連続記録",
+    "done": "セッション達成",
+    "current_streak": "連続記録",
     "day": "日",
     "days": "日間"
   },
   "CategoryPage": {
-    "play_button_aria": "セッションを再生"
+    "play_button_aria": "セッションスタート！"
   },
   "FavoritesPage": {
     "title": "あなたのお気に入り",
-    "description": "大切なセッションをすべて1か所に。",
+    "description": "お気に入りのセッションをコレクションしよう",
     "no_favorites_title": "まだお気に入りがありません",
-    "no_favorites_description": "ここにお気に入りのセッションを追加してください。",
+    "no_favorites_description": "お気に入りを追加して、マイセットリストを作ろう！",
     "explore_sessions_button": "セッションを探す"
   },
   "SessionPlayer": {
-    "session_complete_title": "セッション完了！",
-    "session_complete_description": "{sessionTitle} の完了、お疲れ様でした。",
+    "session_complete_title": "セッションクリア！",
+    "session_complete_description": "{sessionTitle} をクリア<br>お疲れ様でした！",
     "added_to_favorites": "お気に入りに追加しました",
-    "removed_from_favorites": "お気に入りから削除しました",
+    "removed_from_favorites": "お気に入り解除しました",
     "progress_label": "セッションの進捗",
     "mute_button_aria": "ミュート",
     "unmute_button_aria": "ミュート解除",
-    "restart_button_aria": "セッションを再開",
-    "play_button_aria": "セッションを再生",
+    "restart_button_aria": "セッションの再開",
+    "play_button_aria": "セッションの再生",
     "pause_button_aria": "セッションを一時停止",
     "add_to_favorites_button_aria": "お気に入りに追加",
-    "remove_from_favorites_button_aria": "お気に入りから削除",
-    "stop_button_aria": "セッションを停止してホームに戻る"
+    "remove_from_favorites_button_aria": "お気に入り解除",
+    "stop_button_aria": "セッションを終了してホームへ戻る"
   },
   "SafetyPrompt": {
-    "title": "簡単な安全確認",
-    "loading": "読み込み中...",
+    "title": "セッション前の安全チェック",
+    "loading": "準備中……",
     "start_button": "セッションを開始"
   },
   "LanguageSwitcher": {
-    "select_language": "言語を選択"
+    "select_language": "言語を選択してください"
   },
   "categories": {
     "workout": "ワークアウト",
-    "workout_description": "体を動かすためのエネルギッシュなセッション。",
+    "workout_description": "体を動かして筋力やスタミナをつけましょう。",
     "yoga": "ヨガ",
-    "yoga_description": "自分のフローを見つけ、呼吸とつながる。",
-    "meditation": "瞑想",
-    "meditation_description": "心を落ち着かせ、内なる平和を見つける。"
+    "yoga_description": "呼吸を意識して、体の柔軟性や基礎代謝を高めます。",
+    "meditation": "マインドフルネス",
+    "meditation_description": "心を落ち着かせ、精神のバランスを整えます。"
   }
 }
+

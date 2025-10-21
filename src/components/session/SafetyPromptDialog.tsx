@@ -35,7 +35,7 @@ export function SafetyPromptDialog({ open, onStart, sessionType }: SafetyPromptD
         })
         .catch(error => {
           console.error("Failed to generate safety prompt:", error);
-          setSafetyPrompt("Before starting, ensure you are in a safe environment. Stay hydrated and listen to your body. If you experience any pain or discomfort, stop immediately.");
+          setSafetyPrompt("セッションを始める前に、周囲の安全を確かめてください。水分補給を忘れずに、ご自身の体の声に耳を傾けましょう。痛みや不快感があった場合はすぐに中止してください。");
         })
         .finally(() => {
           setIsLoading(false);
