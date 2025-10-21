@@ -21,7 +21,7 @@ export default function CategoryPage({ params }: { params: { category: SessionCa
   const category = {
     ...categoryData,
     name: (messages.categories as any)[categoryData.id],
-    description: (messages.categories as any)[`${categoryData.id}_description`],
+    description: (messages.categories as any)[`${categoryId}_description`],
   }
 
   const formatDuration = (seconds: number) => {
