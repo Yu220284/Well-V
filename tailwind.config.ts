@@ -10,8 +10,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['PT Sans', 'sans-serif'],
-        headline: ['Kaisei Opti', 'serif'],
+        body: ['Noto Sans JP', 'sans-serif'],
+        headline: ['Noto Sans JP', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {
