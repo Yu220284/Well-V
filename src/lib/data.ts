@@ -5,22 +5,22 @@ export const CATEGORIES: Category[] = [
     id: 'workout',
     name: 'Workout',
     description: 'Energizing sessions to get your body moving.',
-    imageUrl: 'https://picsum.photos/seed/workout/600/400',
-    imageHint: 'woman stretching',
+    imageUrl: 'https://picsum.photos/seed/stylish-workout/600/400',
+    imageHint: 'running illustration',
   },
   {
     id: 'yoga',
     name: 'Yoga',
     description: 'Find your flow and connect with your breath.',
-    imageUrl: 'https://picsum.photos/seed/yoga/600/400',
-    imageHint: 'yoga pose',
+    imageUrl: 'https://picsum.photos/seed/stylish-yoga/600/400',
+    imageHint: 'yoga pose illustration',
   },
   {
     id: 'meditation',
     name: 'Meditation',
     description: 'Calm your mind and find inner peace.',
-    imageUrl: 'https://picsum.photos/seed/meditation/600/400',
-    imageHint: 'calm water',
+    imageUrl: 'https://picsum.photos/seed/stylish-meditation/600/400',
+    imageHint: 'calm mind illustration',
   },
 ];
 
