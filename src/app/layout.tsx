@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation';
-
-// This is the root layout, which redirects to the default locale.
+// This file is intentionally blank.
+// The root layout is handled by src/app/[locale]/layout.tsx
 export default function RootLayout() {
-  redirect('/ja');
+  return null;
 }
