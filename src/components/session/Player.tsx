@@ -46,35 +46,44 @@ export function Player({ session }: { session: Session }) {
   
   const handleStartSession = () => {
     setIsSafetyPromptOpen(false);
-    if(audioRef.current) {
+    if (session.audioUrl) {
+      if(audioRef.current) {
         audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+      }
+    } else {
+      setIsPlaying(true);
+      setIsReady(true);
     }
   };
 
   const handleCanPlay = () => setIsReady(true);
   
   const togglePlayPause = () => {
-    if (audioRef.current) {
+    if (session.audioUrl && audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
         audioRef.current.play().catch(e => console.error("Audio play failed:", e));
       }
+    } else {
+      setIsPlaying(!isPlaying);
     }
   };
 
   const restart = () => {
-    if (audioRef.current) {
+    setCurrentTime(0);
+    if (session.audioUrl && audioRef.current) {
       audioRef.current.currentTime = 0;
-      setCurrentTime(0);
       if(!isPlaying) {
           audioRef.current.play().catch(e => console.error("Audio play failed:", e));
       }
+    } else if (!isPlaying) {
+      setIsPlaying(true);
     }
   };
 
   const stop = () => {
-    if (audioRef.current) {
+    if (session.audioUrl && audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
@@ -97,8 +106,31 @@ export function Player({ session }: { session: Session }) {
   };
 
   useEffect(() => {
+    if (isPlaying && !session.audioUrl) {
+      const timer = setInterval(() => {
+        setCurrentTime(prevTime => {
+          if (prevTime >= session.duration) {
+            clearInterval(timer);
+            addSession(session.id);
+            setIsPlaying(false);
+            toast({
+              title: t.session_complete_title,
+              description: t.session_complete_description.replace('{sessionTitle}', session.title),
+            });
+            setTimeout(() => router.push('/'), 2000);
+            return session.duration;
+          }
+          return prevTime + 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isPlaying, session.duration, session.id, session.audioUrl, addSession, router, toast, t, session.title]);
+
+
+  useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !session.audioUrl) return;
 
     const updateCurrentTime = () => setCurrentTime(audio.currentTime);
     const onPlay = () => setIsPlaying(true);
@@ -126,7 +158,7 @@ export function Player({ session }: { session: Session }) {
       audio.removeEventListener("ended", onEnded);
       audio.removeEventListener("canplay", handleCanPlay);
     };
-  }, [addSession, session.id, router, toast, t, session.title]);
+  }, [addSession, session.id, router, toast, t, session.title, session.audioUrl]);
 
   const progress = (currentTime / session.duration) * 100;
 
@@ -137,7 +169,7 @@ export function Player({ session }: { session: Session }) {
         onStart={handleStartSession}
         sessionType={session.category}
       />
-      <audio ref={audioRef} src={session.audioUrl} preload="auto" />
+      {session.audioUrl && <audio ref={audioRef} src={session.audioUrl} preload="auto" />}
       <div className="relative h-screen w-screen overflow-hidden">
         <Image
           src={session.imageUrl}
@@ -174,7 +206,7 @@ export function Player({ session }: { session: Session }) {
 
             {isReady && (
               <div className="grid grid-cols-5 items-center gap-2">
-                <Button variant="ghost" size="icon" onClick={toggleMute} aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria}>
+                <Button variant="ghost" size="icon" onClick={toggleMute} aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria} disabled={!session.audioUrl}>
                   {isMuted ? <VolumeX /> : <Volume2 />}
                 </Button>
 

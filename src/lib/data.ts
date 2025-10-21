@@ -13,7 +13,7 @@ export const CATEGORIES: Category[] = [
     id: 'yoga',
     name: 'Yoga',
     description: 'Find your flow and connect with your breath.',
-    imageUrl: 'https://picsum.photos/seed/stylish-yoga/600/400',
+    imageUrl: 'https://picsum.photos/seed/yoga-mat-plant/600/400',
     imageHint: 'yoga pose illustration',
   },
   {
@@ -32,7 +32,7 @@ export const SESSIONS: Session[] = [
     title: '5分で完了！朝のブーストワークアウト',
     category: 'workout',
     duration: 300,
-    audioUrl: '/audio/workout-5min.mp3',
+    audioUrl: '',
     imageUrl: 'https://picsum.photos/seed/w01-workout/600/400',
     imageHint: 'woman jogging',
   },
@@ -41,7 +41,7 @@ export const SESSIONS: Session[] = [
     title: '10分で脂肪燃焼！カーディオブラスト',
     category: 'workout',
     duration: 600,
-    audioUrl: '/audio/workout-10min.mp3',
+    audioUrl: '',
     imageUrl: 'https://picsum.photos/seed/w02-workout/600/400',
     imageHint: 'running shoes',
   },
@@ -51,7 +51,7 @@ export const SESSIONS: Session[] = [
     title: '心と体を整えるモーニングストレッチ',
     category: 'yoga',
     duration: 480,
-    audioUrl: '/audio/yoga-8min.mp3',
+    audioUrl: '',
     imageUrl: 'https://picsum.photos/seed/y01-yoga/600/400',
     imageHint: 'sunrise yoga',
   },
@@ -60,7 +60,7 @@ export const SESSIONS: Session[] = [
     title: '15分でリフレッシュ！パワーフローヨガ',
     category: 'yoga',
     duration: 900,
-    audioUrl: '/audio/yoga-15min.mp3',
+    audioUrl: '',
     imageUrl: 'https://picsum.photos/seed/y02-yoga/600/400',
     imageHint: 'yoga class',
   },
@@ -70,7 +70,7 @@ export const SESSIONS: Session[] = [
     title: '3分で集中力アップ！マインドフル呼吸法',
     category: 'meditation',
     duration: 180,
-    audioUrl: '/audio/meditation-3min.mp3',
+    audioUrl: '',
     imageUrl: 'https://picsum.photos/seed/m01-meditation/600/400',
     imageHint: 'zen garden',
   },
@@ -79,7 +79,7 @@ export const SESSIONS: Session[] = [
     title: '10分でリラックス。ボディスキャン瞑想',
     category: 'meditation',
     duration: 600,
-    audioUrl: '/audio/meditation-10min.mp3',
+    audioUrl: '',
     imageUrl: 'https://picsum.photos/seed/m02-meditation/600/400',
     imageHint: 'stacked stones',
   },
@@ -88,3 +88,4 @@ export const SESSIONS: Session[] = [
 // NOTE: The audio files are placeholders. In a real app, these would point to files in Firebase Storage.
 // For this project, we assume these files exist in the public/audio directory.
 // You would need to add these mp3 files yourself.
+
