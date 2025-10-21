@@ -10,10 +10,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useTranslations } from "next-intl";
 
 const FIRST_VISIT_KEY = "wellv_first_visit";
 
 export function FirstLaunchModal() {
+  const t = useTranslations("FirstLaunch");
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -32,22 +34,22 @@ export function FirstLaunchModal() {
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>うぇるぶいへようこそ！</AlertDialogTitle>
+          <AlertDialogTitle>{t('title')}</AlertDialogTitle>
           <AlertDialogDescription className="space-y-4 pt-4 text-foreground/80">
             <p>
-              最初のセッションを開始する前に、少し時間を取ってこの重要な安全情報をお読みください。
+              {t('description_1')}
             </p>
             <p className="font-semibold">
-              常に安全で快適な環境にいることを確認してください。水分を補給し、自分の体に耳を傾けてください。痛みや不快感を感じた場合は、直ちにセッションを中止し、必要に応じて医療専門家にご相談ください。
+              {t('description_2')}
             </p>
             <p>
-              マインドフルネスへの旅をお楽しみください！
+              {t('description_3')}
             </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction onClick={handleAcknowledge}>
-            理解しました
+            {t('acknowledge_button')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

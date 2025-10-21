@@ -1,0 +1,71 @@
+{
+  "Metadata": {
+    "title": "Wellv",
+    "description": "通过引导式音频课程寻找您的平静。"
+  },
+  "Header": {
+    "title": "Wellv"
+  },
+  "Home": {
+    "progress": "您的进度",
+    "start_session": "开始一个课程",
+    "favorites_card_name": "收藏",
+    "favorites_card_description": "您保存的课程集。",
+    "footer_text": "由 Wellv 用 {sparkles} 制作"
+  },
+  "FirstLaunch": {
+    "title": "欢迎来到 Wellv！",
+    "description_1": "在开始您的第一次课程之前，请花点时间阅读此重要安全信息。",
+    "description_2": "始终确保您处于安全舒适的环境中。保持水分，倾听身体的声音。如果您感到任何疼痛或不适，请立即停止课程，并在必要时咨询医疗专业人员。",
+    "description_3": "享受您的正念之旅！",
+    "acknowledge_button": "我明白了"
+  },
+  "ProgressTracker": {
+    "sessions_today": "今日课程",
+    "done": "完成",
+    "current_streak": "当前连续记录",
+    "day": "天",
+    "days": "天"
+  },
+  "CategoryPage": {
+    "play_button_aria": "播放课程"
+  },
+  "FavoritesPage": {
+    "title": "您的收藏",
+    "description": "您所有珍爱的课程都在一个地方。",
+    "no_favorites_title": "暂无收藏",
+    "no_favorites_description": "将课程添加到您的收藏中，即可在此处看到它们。",
+    "explore_sessions_button": "探索课程"
+  },
+  "SessionPlayer": {
+    "session_complete_title": "课程完成！",
+    "session_complete_description": "恭喜您完成 {sessionTitle}。",
+    "added_to_favorites": "已添加到收藏",
+    "removed_from_favorites": "已从收藏中删除",
+    "progress_label": "课程进度",
+    "mute_button_aria": "静音",
+    "unmute_button_aria": "取消静音",
+    "restart_button_aria": "重新开始课程",
+    "play_button_aria": "播放课程",
+    "pause_button_aria": "暂停课程",
+    "add_to_favorites_button_aria": "添加到收藏",
+    "remove_from_favorites_button_aria": "从收藏中删除",
+    "stop_button_aria": "停止课程并返回主页"
+  },
+  "SafetyPrompt": {
+    "title": "快速安全检查",
+    "loading": "加载中...",
+    "start_button": "开始课程"
+  },
+  "LanguageSwitcher": {
+    "select_language": "选择语言"
+  },
+  "categories": {
+    "workout": "锻炼",
+    "workout_description": "让您身体动起来的充满活力的课程。",
+    "yoga": "瑜伽",
+    "yoga_description": "找到您的心流并与您的呼吸联系起来。",
+    "meditation": "冥想",
+    "meditation_description": "平靜您的心靈，找到內心的平靜。"
+  }
+}

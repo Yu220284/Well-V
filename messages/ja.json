@@ -1,0 +1,71 @@
+{
+  "Metadata": {
+    "title": "うぇるぶい",
+    "description": "ガイド付き音声セッションであなたの穏やかさを見つけてください。"
+  },
+  "Header": {
+    "title": "うぇるぶい"
+  },
+  "Home": {
+    "progress": "あなたの進捗",
+    "start_session": "セッションを開始",
+    "favorites_card_name": "お気に入り",
+    "favorites_card_description": "保存したセッションのコレクション。",
+    "footer_text": "{sparkles} を使って うぇるぶい が作成"
+  },
+  "FirstLaunch": {
+    "title": "うぇるぶいへようこそ！",
+    "description_1": "最初のセッションを開始する前に、少し時間を取ってこの重要な安全情報をお読みください。",
+    "description_2": "常に安全で快適な環境にいることを確認してください。水分を補給し、自分の体に耳を傾けてください。痛みや不快感を感じた場合は、直ちにセッションを中止し、必要に応じて医療専門家にご相談ください。",
+    "description_3": "マインドフルネスへの旅をお楽しみください！",
+    "acknowledge_button": "理解しました"
+  },
+  "ProgressTracker": {
+    "sessions_today": "今日のセッション",
+    "done": "完了",
+    "current_streak": "現在の連続記録",
+    "day": "日",
+    "days": "日間"
+  },
+  "CategoryPage": {
+    "play_button_aria": "セッションを再生"
+  },
+  "FavoritesPage": {
+    "title": "あなたのお気に入り",
+    "description": "大切なセッションをすべて1か所に。",
+    "no_favorites_title": "まだお気に入りがありません",
+    "no_favorites_description": "ここにお気に入りのセッションを追加してください。",
+    "explore_sessions_button": "セッションを探す"
+  },
+  "SessionPlayer": {
+    "session_complete_title": "セッション完了！",
+    "session_complete_description": "{sessionTitle} の完了、お疲れ様でした。",
+    "added_to_favorites": "お気に入りに追加しました",
+    "removed_from_favorites": "お気に入りから削除しました",
+    "progress_label": "セッションの進捗",
+    "mute_button_aria": "ミュート",
+    "unmute_button_aria": "ミュート解除",
+    "restart_button_aria": "セッションを再開",
+    "play_button_aria": "セッションを再生",
+    "pause_button_aria": "セッションを一時停止",
+    "add_to_favorites_button_aria": "お気に入りに追加",
+    "remove_from_favorites_button_aria": "お気に入りから削除",
+    "stop_button_aria": "セッションを停止してホームに戻る"
+  },
+  "SafetyPrompt": {
+    "title": "簡単な安全確認",
+    "loading": "読み込み中...",
+    "start_button": "セッションを開始"
+  },
+  "LanguageSwitcher": {
+    "select_language": "言語を選択"
+  },
+  "categories": {
+    "workout": "ワークアウト",
+    "workout_description": "体を動かすためのエネルギッシュなセッション。",
+    "yoga": "ヨガ",
+    "yoga_description": "自分のフローを見つけ、呼吸とつながる。",
+    "meditation": "瞑想",
+    "meditation_description": "心を落ち着かせ、内なる平和を見つける。"
+  }
+}

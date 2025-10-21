@@ -1,0 +1,71 @@
+{
+  "Metadata": {
+    "title": "Wellv",
+    "description": "Find your calm with guided audio sessions."
+  },
+  "Header": {
+    "title": "Wellv"
+  },
+  "Home": {
+    "progress": "Your Progress",
+    "start_session": "Start a Session",
+    "favorites_card_name": "Favorites",
+    "favorites_card_description": "Your collection of saved sessions.",
+    "footer_text": "Made with {sparkles} by Wellv"
+  },
+  "FirstLaunch": {
+    "title": "Welcome to Wellv!",
+    "description_1": "Before you begin your first session, please take a moment to read this important safety information.",
+    "description_2": "Always ensure you are in a safe and comfortable environment. Stay hydrated and listen to your body. If you experience any pain or discomfort, stop the session immediately and consult a healthcare professional if necessary.",
+    "description_3": "Enjoy your journey to mindfulness!",
+    "acknowledge_button": "I Understand"
+  },
+  "ProgressTracker": {
+    "sessions_today": "Sessions Today",
+    "done": "done",
+    "current_streak": "Current Streak",
+    "day": "day",
+    "days": "days"
+  },
+  "CategoryPage": {
+    "play_button_aria": "Play session"
+  },
+  "FavoritesPage": {
+    "title": "Your Favorites",
+    "description": "All your cherished sessions in one place.",
+    "no_favorites_title": "No Favorites Yet",
+    "no_favorites_description": "Add sessions to your favorites to see them here.",
+    "explore_sessions_button": "Explore Sessions"
+  },
+  "SessionPlayer": {
+    "session_complete_title": "Session Complete!",
+    "session_complete_description": "Great job on finishing {sessionTitle}.",
+    "added_to_favorites": "Added to Favorites",
+    "removed_from_favorites": "Removed from Favorites",
+    "progress_label": "Session progress",
+    "mute_button_aria": "Mute",
+    "unmute_button_aria": "Unmute",
+    "restart_button_aria": "Restart session",
+    "play_button_aria": "Play session",
+    "pause_button_aria": "Pause session",
+    "add_to_favorites_button_aria": "Add to favorites",
+    "remove_from_favorites_button_aria": "Remove from favorites",
+    "stop_button_aria": "Stop session and go home"
+  },
+  "SafetyPrompt": {
+    "title": "Quick Safety Check",
+    "loading": "Loading...",
+    "start_button": "Start Session"
+  },
+  "LanguageSwitcher": {
+    "select_language": "Select Language"
+  },
+  "categories": {
+    "workout": "Workout",
+    "workout_description": "Energizing sessions to get your body moving.",
+    "yoga": "Yoga",
+    "yoga_description": "Find your flow and connect with your breath.",
+    "meditation": "Meditation",
+    "meditation_description": "Calm your mind and find inner peace."
+  }
+}

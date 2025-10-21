@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { generateSafetyPrompt } from "@/ai/flows/generate-safety-prompt";
 import type { SessionCategory } from "@/lib/types";
 import { Loader2, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface SafetyPromptDialogProps {
   open: boolean;
@@ -21,6 +22,7 @@ interface SafetyPromptDialogProps {
 }
 
 export function SafetyPromptDialog({ open, onStart, sessionType }: SafetyPromptDialogProps) {
+  const t = useTranslations("SafetyPrompt");
   const [safetyPrompt, setSafetyPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -47,7 +49,7 @@ export function SafetyPromptDialog({ open, onStart, sessionType }: SafetyPromptD
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <ShieldCheck className="h-6 w-6 text-primary" />
-            Quick Safety Check
+            {t('title')}
           </DialogTitle>
           <DialogDescription className="pt-4 text-left">
             {isLoading ? (
@@ -61,7 +63,7 @@ export function SafetyPromptDialog({ open, onStart, sessionType }: SafetyPromptD
         </DialogHeader>
         <DialogFooter>
           <Button onClick={onStart} disabled={isLoading} className="w-full">
-            {isLoading ? "Loading..." : "Start Session"}
+            {isLoading ? t('loading') : t('start_button')}
           </Button>
         </DialogFooter>
       </DialogContent>
