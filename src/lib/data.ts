@@ -5,22 +5,22 @@ export const CATEGORIES: Category[] = [
     id: 'workout',
     name: 'Workout',
     description: 'Energizing sessions to get your body moving.',
-    imageUrl: 'https://picsum.photos/seed/running-woman/600/400',
-    imageHint: 'woman running',
+    imageUrl: 'https://picsum.photos/seed/workout/600/400',
+    imageHint: 'woman stretching',
   },
   {
     id: 'yoga',
     name: 'Yoga',
     description: 'Find your flow and connect with your breath.',
-    imageUrl: 'https://storage.googleapis.com/aifirebase/images/yoga-mat-and-plant.png',
-    imageHint: 'yoga mat',
+    imageUrl: 'https://picsum.photos/seed/yoga/600/400',
+    imageHint: 'yoga pose',
   },
   {
     id: 'meditation',
     name: 'Meditation',
     description: 'Calm your mind and find inner peace.',
-    imageUrl: 'https://picsum.photos/seed/lotus/600/400',
-    imageHint: 'lotus flower',
+    imageUrl: 'https://picsum.photos/seed/meditation/600/400',
+    imageHint: 'calm water',
   },
 ];
 
@@ -32,8 +32,8 @@ export const SESSIONS: Session[] = [
     category: 'workout',
     duration: 300,
     audioUrl: '/audio/workout-5min.mp3',
-    imageUrl: 'https://picsum.photos/seed/w01-sunrise/600/400',
-    imageHint: 'morning sunrise',
+    imageUrl: 'https://picsum.photos/seed/w01-workout/600/400',
+    imageHint: 'woman jogging',
   },
   {
     id: 'w-02',
@@ -41,8 +41,8 @@ export const SESSIONS: Session[] = [
     category: 'workout',
     duration: 600,
     audioUrl: '/audio/workout-10min.mp3',
-    imageUrl: 'https://picsum.photos/seed/w02-running/600/400',
-    imageHint: 'person running',
+    imageUrl: 'https://picsum.photos/seed/w02-workout/600/400',
+    imageHint: 'running shoes',
   },
   // Yoga
   {
@@ -51,8 +51,8 @@ export const SESSIONS: Session[] = [
     category: 'yoga',
     duration: 480,
     audioUrl: '/audio/yoga-8min.mp3',
-    imageUrl: 'https://picsum.photos/seed/y01-stretch/600/400',
-    imageHint: 'woman stretching',
+    imageUrl: 'https://picsum.photos/seed/y01-yoga/600/400',
+    imageHint: 'sunrise yoga',
   },
   {
     id: 'y-02',
@@ -60,8 +60,8 @@ export const SESSIONS: Session[] = [
     category: 'yoga',
     duration: 900,
     audioUrl: '/audio/yoga-15min.mp3',
-    imageUrl: 'https://picsum.photos/seed/y02-flow/600/400',
-    imageHint: 'yoga pose',
+    imageUrl: 'https://picsum.photos/seed/y02-yoga/600/400',
+    imageHint: 'yoga class',
   },
   // Meditation
   {
@@ -70,8 +70,8 @@ export const SESSIONS: Session[] = [
     category: 'meditation',
     duration: 180,
     audioUrl: '/audio/meditation-3min.mp3',
-    imageUrl: 'https://picsum.photos/seed/m01-breath/600/400',
-    imageHint: 'calm water',
+    imageUrl: 'https://picsum.photos/seed/m01-meditation/600/400',
+    imageHint: 'zen garden',
   },
   {
     id: 'm-02',
@@ -79,8 +79,8 @@ export const SESSIONS: Session[] = [
     category: 'meditation',
     duration: 600,
     audioUrl: '/audio/meditation-10min.mp3',
-    imageUrl: 'https://picsum.photos/seed/m02-serene/600/400',
-    imageHint: 'serene landscape',
+    imageUrl: 'https://picsum.photos/seed/m02-meditation/600/400',
+    imageHint: 'stacked stones',
   },
 ];
 

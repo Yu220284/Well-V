@@ -38,7 +38,7 @@ export default function Home() {
                     description={t.favorites_card_description}
                     href="/favorites"
                     imageUrl="https://picsum.photos/seed/favorites/600/400"
-                    imageHint="heart shape"
+                    imageHint="glowing heart"
                     isFavorite
                 />
                 {categories.map((category) => (
