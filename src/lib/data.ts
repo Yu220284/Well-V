@@ -1,3 +1,4 @@
+
 import type { Category, Session } from './types';
 
 export const CATEGORIES: Category[] = [
@@ -28,7 +29,7 @@ export const SESSIONS: Session[] = [
   // Workout
   {
     id: 'w-01',
-    title: '5-Minute Morning Boost',
+    title: '5分で完了！朝のブーストワークアウト',
     category: 'workout',
     duration: 300,
     audioUrl: '/audio/workout-5min.mp3',
@@ -37,7 +38,7 @@ export const SESSIONS: Session[] = [
   },
   {
     id: 'w-02',
-    title: '10-Minute Cardio Blast',
+    title: '10分で脂肪燃焼！カーディオブラスト',
     category: 'workout',
     duration: 600,
     audioUrl: '/audio/workout-10min.mp3',
@@ -47,7 +48,7 @@ export const SESSIONS: Session[] = [
   // Yoga
   {
     id: 'y-01',
-    title: 'Gentle Morning Stretch',
+    title: '心と体を整えるモーニングストレッチ',
     category: 'yoga',
     duration: 480,
     audioUrl: '/audio/yoga-8min.mp3',
@@ -56,7 +57,7 @@ export const SESSIONS: Session[] = [
   },
   {
     id: 'y-02',
-    title: '15-Minute Power Flow',
+    title: '15分でリフレッシュ！パワーフローヨガ',
     category: 'yoga',
     duration: 900,
     audioUrl: '/audio/yoga-15min.mp3',
@@ -66,7 +67,7 @@ export const SESSIONS: Session[] = [
   // Meditation
   {
     id: 'm-01',
-    title: '3-Minute Mindful Breath',
+    title: '3分で集中力アップ！マインドフル呼吸法',
     category: 'meditation',
     duration: 180,
     audioUrl: '/audio/meditation-3min.mp3',
@@ -75,7 +76,7 @@ export const SESSIONS: Session[] = [
   },
   {
     id: 'm-02',
-    title: '10-Minute Body Scan',
+    title: '10分でリラックス。ボディスキャン瞑想',
     category: 'meditation',
     duration: 600,
     audioUrl: '/audio/meditation-10min.mp3',
