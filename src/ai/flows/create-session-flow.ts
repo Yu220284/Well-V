@@ -4,30 +4,14 @@
  * @fileOverview A flow for creating and validating new audio sessions.
  * 
  * - createSession - Transcribes audio, checks for inappropriate content, and returns a session object.
- * - CreateSessionInput - The input type for the createSession function.
- * - CreateSessionOutput - The return type for the createSession function.
  */
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import wav from 'wav';
+import type { CreateSessionInput, CreateSessionOutput } from '@/lib/types';
+import { CreateSessionInputSchema, CreateSessionOutputSchema } from '@/lib/types';
 
-export const CreateSessionInputSchema = z.object({
-  title: z.string().describe('The title of the session.'),
-  category: z.string().describe('The category of the session (e.g., workout, yoga).'),
-  audioDataUri: z
-    .string()
-    .describe(
-      "A recording of the session audio, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
-    ),
-});
-export type CreateSessionInput = z.infer<typeof CreateSessionInputSchema>;
-
-export const CreateSessionOutputSchema = z.object({
-  approved: z.boolean().describe('Whether the session was automatically approved.'),
-  transcription: z.string().describe('The transcribed text from the audio.'),
-});
-export type CreateSessionOutput = z.infer<typeof CreateSessionOutputSchema>;
 
 export async function createSession(input: CreateSessionInput): Promise<CreateSessionOutput> {
   return createSessionFlow(input);

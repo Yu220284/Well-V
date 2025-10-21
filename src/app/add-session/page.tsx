@@ -29,6 +29,7 @@ import React from 'react';
 import messages from '@/../messages/ja.json';
 import { createSession } from '@/ai/flows/create-session-flow';
 import { Loader2 } from 'lucide-react';
+import { CreateSessionInputSchema } from '@/lib/types';
 
 const tCat = messages.categories;
 const categories = CATEGORIES.map((c) => ({
@@ -36,13 +37,7 @@ const categories = CATEGORIES.map((c) => ({
   name: (tCat as any)[c.id],
 }));
 
-const FormSchema = z.object({
-  title: z.string().min(2, {
-    message: 'セッション名は2文字以上で入力してください。',
-  }),
-  category: z.enum(['workout', 'yoga', 'meditation'], {
-    required_error: 'カテゴリーを選択してください。',
-  }),
+const FormSchema = CreateSessionInputSchema.extend({
   audio: z
     .any()
     .refine((files) => files?.length == 1, '音声ファイルを選択してください。')
@@ -50,12 +45,17 @@ const FormSchema = z.object({
       (files) => files?.[0]?.type.startsWith('audio/'),
       '音声ファイルを選択してください。'
     ),
-});
+}).omit({ audioDataUri: true });
+
 
 export default function AddSessionPage() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      title: '',
+      category: 'workout',
+    }
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
