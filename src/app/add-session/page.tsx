@@ -27,6 +27,8 @@ import { Header } from '@/components/layout/Header';
 import { CATEGORIES } from '@/lib/data';
 import React from 'react';
 import messages from '@/../messages/ja.json';
+import { createSession } from '@/ai/flows/create-session-flow';
+import { Loader2 } from 'lucide-react';
 
 const tCat = messages.categories;
 const categories = CATEGORIES.map((c) => ({
@@ -51,32 +53,51 @@ const FormSchema = z.object({
 });
 
 export default function AddSessionPage() {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    setIsSubmitting(true);
     const reader = new FileReader();
     reader.readAsDataURL(data.audio[0]);
-    reader.onload = () => {
-      const audioDataUri = reader.result as string;
-      console.log({
-        title: data.title,
-        category: data.category,
-        audioFileName: data.audio[0].name,
-        // In a real app, you'd send this to your backend/AI flow
-        // audioDataUri: audioDataUri, 
-      });
+    
+    reader.onload = async () => {
+      try {
+        const audioDataUri = reader.result as string;
+        
+        const result = await createSession({
+          title: data.title,
+          category: data.category,
+          audioDataUri: audioDataUri,
+        });
 
-      toast({
-        title: 'セッションが送信されました',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
+        toast({
+          title: 'セッションが送信され、分析されました',
+          description: (
+            <div className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <h4 className="font-bold text-white mb-2">分析結果</h4>
+              <pre className='text-xs text-white/80 whitespace-pre-wrap'>
+                承認ステータス: {result.approved ? '自動承認' : '要レビュー'}\n\n
+                文字起こし:\n{result.transcription}
+              </pre>
+            </div>
+          ),
+        });
+        form.reset();
+      } catch (error) {
+        console.error("Flow execution error:", error);
+        toast({
+            variant: "destructive",
+            title: "エラー",
+            description: "セッションの処理中にエラーが発生しました。",
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     };
+
     reader.onerror = (error) => {
         console.error("File reading error:", error);
         toast({
@@ -84,6 +105,7 @@ export default function AddSessionPage() {
             title: "エラー",
             description: "ファイルの読み込みに失敗しました。",
         });
+        setIsSubmitting(false);
     }
   }
 
@@ -95,7 +117,7 @@ export default function AddSessionPage() {
           <div className="mb-8">
             <h1 className="text-4xl font-bold font-headline mb-2">新しいセッションを追加</h1>
             <p className="text-lg text-muted-foreground">
-              セッション名、カテゴリ、音声ファイルを指定して、新しいセッションを提案します。
+              セッション名、カテゴリ、音声ファイルを指定して、新しいセッションを提案します。AIが内容を分析します。
             </p>
           </div>
           <Form {...form}>
@@ -157,7 +179,10 @@ export default function AddSessionPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">セッションを送信</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isSubmitting ? '送信中...' : 'セッションを送信'}
+              </Button>
             </form>
           </Form>
         </div>
