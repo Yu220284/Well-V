@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -12,6 +13,8 @@ import {
   Volume2,
   VolumeX,
   Loader2,
+  Rewind,
+  FastForward,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -104,6 +107,15 @@ export function Player({ session }: { session: Session }) {
       description: session.title,
     });
   };
+  
+  const seek = (delta: number) => {
+    const newTime = Math.max(0, Math.min(session.duration, currentTime + delta));
+    setCurrentTime(newTime);
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+    }
+  };
+
 
   useEffect(() => {
     if (isPlaying && !session.audioUrl) {
@@ -205,26 +217,37 @@ export function Player({ session }: { session: Session }) {
             )}
 
             {isReady && (
-              <div className="grid grid-cols-5 items-center gap-2">
-                <Button variant="ghost" size="icon" onClick={toggleMute} aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria} disabled={!session.audioUrl}>
-                  {isMuted ? <VolumeX /> : <Volume2 />}
-                </Button>
-
-                <div className="col-span-3 flex justify-center items-center gap-4">
-                  <Button variant="ghost" size="icon" onClick={restart} className="h-12 w-12" aria-label={t.restart_button_aria}>
-                    <RotateCcw className="h-6 w-6" />
+              <div className="flex flex-col gap-4">
+                <div className="flex justify-center items-center gap-4">
+                  <Button variant="ghost" size="icon" onClick={() => seek(-10)} className="h-12 w-12" aria-label="10秒巻き戻し">
+                      <Rewind className="h-6 w-6" />
                   </Button>
                   <Button variant="default" size="icon" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={handleFavoriteToggle} className="h-12 w-12" aria-label={isFav ? t.remove_from_favorites_button_aria : t.add_to_favorites_button_aria}>
-                    <Heart className={cn("h-6 w-6 transition-colors", isFav && "fill-secondary text-secondary")} />
+                  <Button variant="ghost" size="icon" onClick={() => seek(10)} className="h-12 w-12" aria-label="10秒早送り">
+                      <FastForward className="h-6 w-6" />
                   </Button>
                 </div>
-                
-                <Button variant="ghost" size="icon" onClick={stop} aria-label={t.stop_button_aria}>
-                    <X />
-                </Button>
+
+                <div className="grid grid-cols-5 items-center gap-2">
+                  <Button variant="ghost" size="icon" onClick={toggleMute} aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria} disabled={!session.audioUrl}>
+                    {isMuted ? <VolumeX /> : <Volume2 />}
+                  </Button>
+
+                  <div className="col-span-3 flex justify-center items-center gap-4">
+                    <Button variant="ghost" size="icon" onClick={restart} className="h-12 w-12" aria-label={t.restart_button_aria}>
+                      <RotateCcw className="h-6 w-6" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={handleFavoriteToggle} className="h-12 w-12" aria-label={isFav ? t.remove_from_favorites_button_aria : t.add_to_favorites_button_aria}>
+                      <Heart className={cn("h-6 w-6 transition-colors", isFav && "fill-secondary text-secondary")} />
+                    </Button>
+                  </div>
+                  
+                  <Button variant="ghost" size="icon" onClick={stop} aria-label={t.stop_button_aria}>
+                      <X />
+                  </Button>
+                </div>
               </div>
             )}
           </div>
@@ -233,3 +256,5 @@ export function Player({ session }: { session: Session }) {
     </>
   );
 }
+
+    
