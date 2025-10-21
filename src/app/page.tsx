@@ -44,7 +44,7 @@ export default function Home() {
           </div>
         </main>
         <footer className="text-center py-6 text-sm text-muted-foreground">
-            <p>Made with <Sparkles className="inline-block h-4 w-4 text-primary" /> by VoiceZen</p>
+            <p>Made with <Sparkles className="inline-block h-4 w-4 text-primary" /> by うぇるぶい</p>
         </footer>
       </div>
     </>

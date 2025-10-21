@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
   return {
-    title: `${session.title} | VoiceZen`,
+    title: `${session.title} | うぇるぶい`,
     description: `Start your ${session.category} session: ${session.title}.`,
   };
 }

@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { isToday, isYesterday, differenceInCalendarDays, parseISO } from 'date-fns';
 import type { LoggedSession } from '@/lib/types';
 
-const SESSION_HISTORY_KEY = 'voicezen_session_history';
-const FAVORITES_KEY = 'voicezen_favorites';
+const SESSION_HISTORY_KEY = 'wellv_session_history';
+const FAVORITES_KEY = 'wellv_favorites';
 
 export function useSessionStore() {
   const [sessionHistory, setSessionHistory] = useState<LoggedSession[]>([]);

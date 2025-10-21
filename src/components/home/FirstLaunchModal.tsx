@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-const FIRST_VISIT_KEY = "voicezen_first_visit";
+const FIRST_VISIT_KEY = "wellv_first_visit";
 
 export function FirstLaunchModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,22 +32,22 @@ export function FirstLaunchModal() {
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Welcome to VoiceZen!</AlertDialogTitle>
+          <AlertDialogTitle>うぇるぶいへようこそ！</AlertDialogTitle>
           <AlertDialogDescription className="space-y-4 pt-4 text-foreground/80">
             <p>
-              Before starting your first session, please take a moment to read this important safety information.
+              最初のセッションを開始する前に、少し時間を取ってこの重要な安全情報をお読みください。
             </p>
             <p className="font-semibold">
-              Always ensure you are in a safe, comfortable environment. Stay hydrated and listen to your body. If you experience any pain or discomfort, please stop the session immediately and consult a healthcare professional if necessary.
+              常に安全で快適な環境にいることを確認してください。水分を補給し、自分の体に耳を傾けてください。痛みや不快感を感じた場合は、直ちにセッションを中止し、必要に応じて医療専門家にご相談ください。
             </p>
             <p>
-              Enjoy your journey to mindfulness!
+              マインドフルネスへの旅をお楽しみください！
             </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction onClick={handleAcknowledge}>
-            I Understand
+            理解しました
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
