@@ -51,14 +51,16 @@ export function SafetyPromptDialog({ open, onStart, sessionType }: SafetyPromptD
             <ShieldCheck className="h-6 w-6 text-primary" />
             {t.title}
           </DialogTitle>
-          <DialogDescription className="pt-4 text-left">
-            {isLoading ? (
-              <div className="flex items-center justify-center h-24">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <p className="text-base text-foreground/90">{safetyPrompt}</p>
-            )}
+          <DialogDescription asChild className="pt-4 text-left">
+            <div>
+              {isLoading ? (
+                <div className="flex items-center justify-center h-24">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                </div>
+              ) : (
+                <p className="text-base text-foreground/90">{safetyPrompt}</p>
+              )}
+            </div>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
