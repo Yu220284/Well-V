@@ -44,7 +44,7 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
     >
       <path d="M10.262 4.168a9.5 9.5 0 1 0 9.579 9.579" />
       <path d="M7 8.5h3.5V5" />
-      <text x="12" y="16.5" textAnchor="middle" fontSize="16" >10</text>
+      <text x="12" y="16.5" textAnchor="middle" fontSize="16">10</text>
     </svg>
   );
 
@@ -61,7 +61,7 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
     >
       <path d="M13.738 4.168a9.5 9.5 0 1 1-9.579 9.579" />
       <path d="M17 8.5h-3.5V5" />
-      <text x="12" y="16.5" textAnchor="middle" fontSize="16" >10</text>
+      <text x="12" y="16.5" textAnchor="middle" fontSize="16">10</text>
     </svg>
   );
 
@@ -253,13 +253,13 @@ export function Player({ session }: { session: Session }) {
             {isReady && (
               <div className="flex flex-col gap-4">
                 <div className="flex justify-center items-center gap-4">
-                  <Button variant="ghost" onClick={() => seek(-10)} className="h-14 w-14 p-0" aria-label={t.seek_backward_aria}>
+                  <Button variant="ghost" onClick={() => seek(-10)} className="h-14 w-14 p-0 gap-0" aria-label={t.seek_backward_aria}>
                       <Rewind10Icon className="h-14 w-14" />
                   </Button>
                   <Button variant="default" size="icon" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
-                  <Button variant="ghost" onClick={() => seek(10)} className="h-14 w-14 p-0" aria-label={t.seek_forward_aria}>
+                  <Button variant="ghost" onClick={() => seek(10)} className="h-14 w-14 p-0 gap-0" aria-label={t.seek_forward_aria}>
                       <FastForward10Icon className="h-14 w-14" />
                   </Button>
                 </div>
