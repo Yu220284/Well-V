@@ -73,12 +73,19 @@ const createSessionFlow = ai.defineFlow(
     // 2. Check for inappropriate content
     const { output: contentCheck } = await ai.generate({
         model: 'googleai/gemini-2.5-flash',
-        prompt: `あなたは、ユーザーが投稿したコンテンツをレビューするモデレーターです。以下のテキストに、不適切な内容（暴力的、性的、差別的、その他公序良俗に反するもの）が含まれているか確認してください。
+        prompt: `あなたは、ユーザーが投稿したコンテンツをレビューするモデレーターです。
+以下のテキストに、不適切な内容（暴力的、性的、差別的、その他公序良俗に反するもの）が含まれているか確認してください。
 
 テキスト：
 "${transcription}"
 
-問題がなければ "isAppropriate": true、不適切な内容が含まれている可能性がある場合は "isAppropriate": false と、JSON形式で回答してください。`,
+問題がなければ isAppropriate を true、不適切な内容が含まれている可能性がある場合は isAppropriate を false に設定したJSON形式で回答してください。
+回答はJSONのみとし、前後に他のテキストは含めないでください。
+
+例：
+{
+  "isAppropriate": true
+}`,
         output: {
             schema: z.object({
                 isAppropriate: z.boolean(),
