@@ -42,13 +42,14 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
       strokeLinejoin="round"
       {...props}
     >
-        <path d="M3.5 13a9.5 9.5 0 1 0 4-7.8" />
-        <path d="M3 8.5V5h3.5" />
+        <path d="M18.5 13a9.5 9.5 0 1 0-8.5 6.5" />
+        <path d="M8 19.5V16h3.5" />
         <text
             x="12"
-            y="17"
+            y="13"
             textAnchor="middle"
-            fontSize="16"
+            dominantBaseline="middle"
+            fontSize="14"
             fill="currentColor"
         >
             10
@@ -67,13 +68,14 @@ const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
       strokeLinejoin="round"
       {...props}
     >
-        <path d="M20.5 13a9.5 9.5 0 1 1-4-7.8" />
-        <path d="M21 8.5V5h-3.5" />
+        <path d="M5.5 13a9.5 9.5 0 1 1 8.5 6.5" />
+        <path d="M16 19.5V16h-3.5" />
         <text
             x="12"
-            y="17"
+            y="13"
             textAnchor="middle"
-            fontSize="16"
+            dominantBaseline="middle"
+            fontSize="14"
             fill="currentColor"
         >
             10
@@ -269,14 +271,14 @@ export function Player({ session }: { session: Session }) {
             {isReady && (
               <div className="flex flex-col gap-4">
                 <div className="flex justify-center items-center gap-4">
-                  <Button variant="ghost" onClick={() => seek(-10)} className="h-8 w-8 p-0 gap-0" aria-label={t.seek_backward_aria}>
-                      <Rewind10Icon className="h-8 w-8" />
+                  <Button variant="ghost" size="icon" onClick={() => seek(-10)} className="h-12 w-12 p-0" aria-label={t.seek_backward_aria}>
+                      <Rewind10Icon className="h-12 w-12" />
                   </Button>
                   <Button variant="default" size="icon" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
-                  <Button variant="ghost" onClick={() => seek(10)} className="h-8 w-8 p-0 gap-0" aria-label={t.seek_forward_aria}>
-                      <FastForward10Icon className="h-8 w-8" />
+                  <Button variant="ghost" size="icon" onClick={() => seek(10)} className="h-12 w-12 p-0" aria-label={t.seek_forward_aria}>
+                      <FastForward10Icon className="h-12 w-12" />
                   </Button>
                 </div>
 
