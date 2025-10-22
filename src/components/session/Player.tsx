@@ -32,14 +32,16 @@ function formatTime(seconds: number): string {
 }
 
 const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <path d="M 21,13 A 9,9 0 1 1 12,3 L 12,7 L 16,3" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M21 12.5a9.5 9.5 0 1 1-6.72-9.28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M14.28 3.22a.5.5 0 0 1 .7.72l-4.5 4.5a.5.5 0 0 1-.7 0l-1.5-1.5a.5.5 0 0 1 .7-.7l1.15 1.14 3.15-3.16z" fill="currentColor"/>
         <text
             x="12"
             y="13"
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize="7"
+            fontSize="8"
+            fontWeight="bold"
             fill="currentColor"
         >
             10
@@ -48,14 +50,16 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <path d="M 3,13 A 9,9 0 1 0 12,3 L 12,7 L 8,3" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M3 12.5a9.5 9.5 0 1 0 6.72-9.28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M9.72 3.22a.5.5 0 0 0-.7.72l4.5 4.5a.5.5 0 0 0 .7 0l1.5-1.5a.5.5 0 0 0-.7-.7l-1.15 1.14-3.15-3.16z" fill="currentColor"/>
         <text
             x="12"
             y="13"
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize="7"
+            fontSize="8"
+            fontWeight="bold"
             fill="currentColor"
         >
             10
@@ -251,14 +255,14 @@ export function Player({ session }: { session: Session }) {
             {isReady && (
               <div className="flex flex-col gap-4">
                 <div className="flex justify-center items-center gap-4">
-                  <Button variant="ghost" onClick={() => seek(-10)} className="h-20 w-20 p-0" aria-label={t.seek_backward_aria}>
-                      <Rewind10Icon className="h-20 w-20" />
+                  <Button variant="ghost" onClick={() => seek(-10)} className="h-12 w-12 p-0" aria-label={t.seek_backward_aria}>
+                      <Rewind10Icon className="h-12 w-12" />
                   </Button>
                   <Button variant="default" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
-                  <Button variant="ghost" onClick={() => seek(10)} className="h-20 w-20 p-0" aria-label={t.seek_forward_aria}>
-                      <FastForward10Icon className="h-20 w-20" />
+                  <Button variant="ghost" onClick={() => seek(10)} className="h-12 w-12 p-0" aria-label={t.seek_forward_aria}>
+                      <FastForward10Icon className="h-12 w-12" />
                   </Button>
                 </div>
 
