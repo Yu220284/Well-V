@@ -256,14 +256,14 @@ export function Player({ session }: { session: Session }) {
             {isReady && (
               <div className="flex flex-col gap-4">
                 <div className="flex justify-center items-center gap-4">
-                  <Button variant="ghost" size="icon" onClick={() => seek(-10)} className="h-12 w-12" aria-label={t.seek_backward_aria}>
-                      <Rewind10Icon className="h-10 w-10" />
+                  <Button variant="ghost" size="icon" onClick={() => seek(-10)} className="h-14 w-14" aria-label={t.seek_backward_aria}>
+                      <Rewind10Icon className="h-12 w-12" />
                   </Button>
                   <Button variant="default" size="icon" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => seek(10)} className="h-12 w-12" aria-label={t.seek_forward_aria}>
-                      <FastForward10Icon className="h-10 w-10" />
+                  <Button variant="ghost" size="icon" onClick={() => seek(10)} className="h-14 w-14" aria-label={t.seek_forward_aria}>
+                      <FastForward10Icon className="h-12 w-12" />
                   </Button>
                 </div>
 
