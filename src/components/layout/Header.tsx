@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
 import messages from '@/../messages/ja.json';
 import { Button } from "../ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Settings } from "lucide-react";
 
 export function Header() {
   const t = messages.Header;
@@ -15,12 +15,19 @@ export function Header() {
             {t.title}
           </h1>
         </Link>
-        <Link href="/add-session">
-          <Button variant="ghost" size="sm">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            セッションを追加
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+            <Link href="/add-session">
+              <Button variant="ghost" size="sm">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                セッションを追加
+              </Button>
+            </Link>
+            <Link href="/settings">
+                <Button variant="ghost" size="icon" aria-label="設定">
+                    <Settings className="h-5 w-5" />
+                </Button>
+            </Link>
+        </div>
       </div>
     </header>
   );
