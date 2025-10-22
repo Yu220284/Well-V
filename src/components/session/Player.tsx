@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -36,14 +37,14 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-      <path d="M3 3v5h5" />
-      <text x="12" y="17" textAnchor="middle" fontSize="10" fill="currentColor">10</text>
+      <path d="M2.5 12a9.5 9.5 0 1 0 9.5-9.5A9.75 9.75 0 0 0 7 5.24L2.5 8" />
+      <path d="M2.5 3v5h5" />
+      <text x="12" y="16.5" textAnchor="middle" fontSize="11" fill="currentColor" fontWeight="normal">10</text>
     </svg>
 );
   
@@ -53,14 +54,14 @@ const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
         {...props}
     >
-        <path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-        <path d="M21 3v5h-5" />
-        <text x="12" y="17" textAnchor="middle" fontSize="10" fill="currentColor">10</text>
+        <path d="M21.5 12a9.5 9.5 0 1 1-9.5-9.5A9.75 9.75 0 0 1 17 5.24L21.5 8" />
+        <path d="M21.5 3v5h-5" />
+        <text x="12" y="16.5" textAnchor="middle" fontSize="11" fill="currentColor" fontWeight="normal">10</text>
     </svg>
 );
 
