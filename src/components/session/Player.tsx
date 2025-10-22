@@ -42,9 +42,9 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M2 12A10 10 0 1 0 12 2 10 10 0 0 0 7 3l-4.5 4" />
-      <path d="M2.5 2.5v5h5" />
-      <text x="12" y="17" textAnchor="middle" fontSize="12" fill="currentColor" fontWeight="normal">10</text>
+      <path d="M2.5 7.5v-5h5" />
+      <path d="M3.05 13A9 9 0 1 0 5 8" />
+      <text x="12" y="16" textAnchor="middle" fontSize="14" fontWeight="bold" fill="currentColor">10</text>
     </svg>
   );
 
@@ -59,9 +59,9 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M22 12A10 10 0 1 1 12 2a10 10 0 0 1 5 1.22l4.5 4.38" />
-      <path d="M21.5 2.5v5h-5" />
-      <text x="12" y="17" textAnchor="middle" fontSize="12" fill="currentColor" fontWeight="normal">10</text>
+        <path d="M21.5 7.5v-5h-5" />
+        <path d="M20.95 13A9 9 0 1 1 19 8" />
+        <text x="12" y="16" textAnchor="middle" fontSize="14" fontWeight="bold" fill="currentColor">10</text>
     </svg>
   );
 
