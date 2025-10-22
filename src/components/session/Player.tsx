@@ -37,33 +37,33 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.5"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M2.5 12a9.5 9.5 0 1 0 9.5-9.5A9.75 9.75 0 0 0 7 5.24L2.5 8" />
-      <path d="M2.5 3v5h5" />
-      <text x="12" y="16.5" textAnchor="middle" fontSize="11" fill="currentColor" fontWeight="normal">10</text>
+      <path d="M2 12A10 10 0 1 0 12 2 10 10 0 0 0 7 3l-4.5 4" />
+      <path d="M2.5 2.5v5h5" />
+      <text x="12" y="17" textAnchor="middle" fontSize="12" fill="currentColor" fontWeight="normal">10</text>
     </svg>
-);
-  
-const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
+  );
+
+  const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
     >
-        <path d="M21.5 12a9.5 9.5 0 1 1-9.5-9.5A9.75 9.75 0 0 1 17 5.24L21.5 8" />
-        <path d="M21.5 3v5h-5" />
-        <text x="12" y="16.5" textAnchor="middle" fontSize="11" fill="currentColor" fontWeight="normal">10</text>
+      <path d="M22 12A10 10 0 1 1 12 2a10 10 0 0 1 5 1.22l4.5 4.38" />
+      <path d="M21.5 2.5v5h-5" />
+      <text x="12" y="17" textAnchor="middle" fontSize="12" fill="currentColor" fontWeight="normal">10</text>
     </svg>
-);
+  );
 
 
 export function Player({ session }: { session: Session }) {
