@@ -32,7 +32,7 @@ function formatTime(seconds: number): string {
 }
 
 const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
         <path d="M21 12.5a9.5 9.5 0 1 1-6.72-9.28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M14.28 3.22a.5.5 0 0 1 .7.72l-4.5 4.5a.5.5 0 0 1-.7 0l-1.5-1.5a.5.5 0 0 1 .7-.7l1.15 1.14 3.15-3.16z" fill="currentColor"/>
         <text
@@ -41,7 +41,6 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
             textAnchor="middle"
             dominantBaseline="central"
             fontSize="8"
-            fontWeight="bold"
             fill="currentColor"
         >
             10
@@ -50,7 +49,7 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
         <path d="M3 12.5a9.5 9.5 0 1 0 6.72-9.28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M9.72 3.22a.5.5 0 0 0-.7.72l4.5 4.5a.5.5 0 0 0 .7 0l1.5-1.5a.5.5 0 0 0-.7-.7l-1.15 1.14-3.15-3.16z" fill="currentColor"/>
         <text
@@ -59,7 +58,6 @@ const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
             textAnchor="middle"
             dominantBaseline="central"
             fontSize="8"
-            fontWeight="bold"
             fill="currentColor"
         >
             10
