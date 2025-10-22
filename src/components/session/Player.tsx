@@ -32,15 +32,15 @@ function formatTime(seconds: number): string {
 }
 
 const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="-4 -4 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <path d="M12 2a10 10 0 1 0 9.24 13.92" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M5 6.58A.5.5 0 0 1 5.7.7l4.5 4.5a.5.5 0 0 1 0 .7l-4.5 4.5a.5.5 0 0 1-.7-.7l4.14-4.15L5 6.58z" fill="currentColor"/>
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M7.5 4.5A9 9 0 1 1 4.5 16.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M8.5 4.5 L4.5 4.5 L4.5 8.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         <text
             x="12"
             y="13"
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize="8"
+            fontSize="12"
             fill="currentColor"
         >
             10
@@ -49,15 +49,15 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="-4 -4 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <path d="M12 2a10 10 0 1 1-9.24 13.92" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M19 6.58a.5.5 0 0 0-.7-.7l-4.5 4.5a.5.5 0 0 0 0 .7l4.5 4.5a.5.5 0 0 0 .7-.7L15.14 12l3.86-3.84z" fill="currentColor"/>
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M16.5 4.5A9 9 0 1 0 19.5 16.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M15.5 4.5 L19.5 4.5 L19.5 8.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         <text
             x="12"
             y="13"
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize="8"
+            fontSize="12"
             fill="currentColor"
         >
             10
