@@ -52,7 +52,7 @@ const FormSchema = CreateSessionInputSchema.extend({
 
 export default function AddSessionPage() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const { addSubmission, updateSubmissionStatus } = useSubmissionStore();
+  const { addSubmission, updateSubmissionStatus, getSubmissionById } = useSubmissionStore();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -69,11 +69,12 @@ export default function AddSessionPage() {
     reader.readAsDataURL(data.audio[0]);
     
     reader.onload = async () => {
+      let submissionId : string | null = null;
       try {
         const audioDataUri = reader.result as string;
 
         // Immediately add to store and get ID
-        const submissionId = addSubmission({ title: data.title, category: data.category });
+        submissionId = addSubmission({ title: data.title, category: data.category });
 
         toast({
           title: t.toast_submitted_title,
@@ -98,12 +99,8 @@ export default function AddSessionPage() {
 
       } catch (error) {
         console.error("Flow execution error:", error);
-        // Find the submission and update its status to failed
-        // This is a simplification; in a real app you'd need a more robust way to get the ID
-        const submissions = JSON.parse(localStorage.getItem('wellv_submissions') || '[]');
-        const failedSubmission = submissions.find((s: any) => s.title === data.title);
-        if (failedSubmission) {
-            updateSubmissionStatus(failedSubmission.id, 'failed');
+        if (submissionId) {
+            updateSubmissionStatus(submissionId, 'failed');
         }
 
         toast({

@@ -43,21 +43,32 @@ export function useSubmissionStore() {
         status: 'pending',
         submittedAt: new Date().toISOString(),
     };
-    // Use ref to get the latest state
-    saveSubmissions([...submissionsRef.current, submission]);
+    // Use functional update to ensure we have the latest state
+    setSubmissions(prevSubmissions => {
+        const newSubmissions = [...prevSubmissions, submission];
+        localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(newSubmissions));
+        return newSubmissions;
+    });
     return id;
-  }, [saveSubmissions]);
+  }, []);
 
   const updateSubmissionStatus = useCallback((id: string, status: SubmittedSession['status'], transcription?: string, approved?: boolean) => {
-    // Use ref to get the latest state
-    const newSubmissions = submissionsRef.current.map(sub => {
-        if (sub.id === id) {
-            return { ...sub, status, transcription, approved };
-        }
-        return sub;
+    // Use functional update to ensure we have the latest state
+    setSubmissions(prevSubmissions => {
+        const newSubmissions = prevSubmissions.map(sub => {
+            if (sub.id === id) {
+                return { ...sub, status, transcription, approved };
+            }
+            return sub;
+        });
+        localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(newSubmissions));
+        return newSubmissions;
     });
-    saveSubmissions(newSubmissions);
-  }, [saveSubmissions]);
+  }, []);
+
+  const getSubmissionById = useCallback((id: string) => {
+      return submissionsRef.current.find(sub => sub.id === id);
+  }, []);
 
 
   return {
@@ -65,5 +76,6 @@ export function useSubmissionStore() {
     submissions,
     addSubmission,
     updateSubmissionStatus,
+    getSubmissionById,
   };
 }
