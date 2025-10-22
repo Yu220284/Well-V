@@ -32,13 +32,13 @@ function formatTime(seconds: number): string {
 }
 
 const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
         <text
             x="12"
             y="12"
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize="10"
+            fontSize="20"
             fill="currentColor"
             fontWeight="bold"
         >
@@ -48,13 +48,13 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
         <text
             x="12"
             y="12"
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize="10"
+            fontSize="20"
             fill="currentColor"
             fontWeight="bold"
         >
