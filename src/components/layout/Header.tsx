@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
 import messages from '@/../messages/ja.json';
 import { Button } from "../ui/button";
-import { PlusCircle, Settings } from "lucide-react";
+import { History, PlusCircle, Settings } from "lucide-react";
 
 export function Header() {
   const t = messages.Header;
@@ -20,6 +20,12 @@ export function Header() {
               <Button variant="ghost" size="sm">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 セッションを追加
+              </Button>
+            </Link>
+            <Link href="/submitted">
+              <Button variant="ghost" size="sm">
+                <History className="mr-2 h-4 w-4" />
+                送信済み
               </Button>
             </Link>
             <Link href="/settings">

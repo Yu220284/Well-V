@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,6 +29,8 @@ import messages from '@/../messages/ja.json';
 import { createSession } from '@/ai/flows/create-session-flow';
 import { Loader2 } from 'lucide-react';
 import { CreateSessionInputSchema } from '@/lib/types';
+import { useSubmissionStore } from '@/lib/hooks/use-submission-store';
+import { useRouter } from 'next/navigation';
 
 const tCat = messages.categories;
 const categories = CATEGORIES.map((c) => ({
@@ -50,6 +51,9 @@ const FormSchema = CreateSessionInputSchema.extend({
 
 export default function AddSessionPage() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { addSubmission, updateSubmissionStatus } = useSubmissionStore();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -66,28 +70,41 @@ export default function AddSessionPage() {
     reader.onload = async () => {
       try {
         const audioDataUri = reader.result as string;
+
+        // Immediately add to store and get ID
+        const submissionId = addSubmission({ title: data.title, category: data.category });
+
+        toast({
+          title: 'セッションを送信しました',
+          description: "バックグラウンドで処理中です。送信済みページで状況を確認できます。",
+        });
         
+        form.reset();
+        router.push('/submitted');
+
+        // Update status to processing
+        updateSubmissionStatus(submissionId, 'processing');
+
+        // Perform AI processing in the background
         const result = await createSession({
           title: data.title,
           category: data.category,
           audioDataUri: audioDataUri,
         });
 
-        toast({
-          title: 'セッションが送信され、分析されました',
-          description: (
-            <div className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <h4 className="font-bold text-white mb-2">分析結果</h4>
-              <pre className='text-xs text-white/80 whitespace-pre-wrap'>
-                承認ステータス: {result.approved ? '自動承認' : '要レビュー'}\n\n
-                文字起こし:\n{result.transcription}
-              </pre>
-            </div>
-          ),
-        });
-        form.reset();
+        // Update with final result
+        updateSubmissionStatus(submissionId, 'completed', result.transcription, result.approved);
+
       } catch (error) {
         console.error("Flow execution error:", error);
+        // Find the submission and update its status to failed
+        // This is a simplification; in a real app you'd need a more robust way to get the ID
+        const submissions = JSON.parse(localStorage.getItem('wellv_submissions') || '[]');
+        const failedSubmission = submissions.find((s: any) => s.title === data.title);
+        if (failedSubmission) {
+            updateSubmissionStatus(failedSubmission.id, 'failed');
+        }
+
         toast({
             variant: "destructive",
             title: "エラー",

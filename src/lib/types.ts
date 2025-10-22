@@ -41,3 +41,13 @@ export const CreateSessionOutputSchema = z.object({
   transcription: z.string().describe('The transcribed text from the audio.'),
 });
 export type CreateSessionOutput = z.infer<typeof CreateSessionOutputSchema>;
+
+export interface SubmittedSession {
+    id: string;
+    title: string;
+    category: SessionCategory;
+    submittedAt: string; // ISO string
+    status: 'pending' | 'processing' | 'completed' | 'failed';
+    transcription?: string;
+    approved?: boolean;
+}
