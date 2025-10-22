@@ -32,25 +32,17 @@ function formatTime(seconds: number): string {
 }
 
 const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-        <path d="M21.5 12a9.5 9.5 0 1 1-6.7-9.1" />
-        <path d="M11.5 8.5 14.8 5 11.5 1.5" />
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M18.498 6.262a9 9 0 1 0 1.523 7.856" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+        <path d="M16.143 4.613l3.355 2.132-3.14 2.33" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         <text
             x="12"
-            y="13.5"
+            y="12.5"
             textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize="8"
+            dominantBaseline="central"
+            fontSize="8.5"
+            fontWeight="bold"
             fill="currentColor"
-            strokeWidth="0"
         >
             10
         </text>
@@ -58,25 +50,17 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-        <path d="M2.5 12a9.5 9.5 0 1 1 6.7 9.1" />
-        <path d="M12.5 15.5 9.2 19l3.3 3" />
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M5.502 6.262a9 9 0 1 1-1.523 7.856" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+        <path d="M7.857 4.613L4.502 6.745l3.14 2.33" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         <text
             x="12"
-            y="13.5"
+            y="12.5"
             textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize="8"
+            dominantBaseline="central"
+            fontSize="8.5"
+            fontWeight="bold"
             fill="currentColor"
-            strokeWidth="0"
         >
             10
         </text>
