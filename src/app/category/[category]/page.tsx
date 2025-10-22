@@ -50,7 +50,7 @@ export default function CategoryPage({ params }: { params: { category: SessionCa
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <Play className="h-12 w-12 text-white fill-white" />
                   </div>
                 </div>
