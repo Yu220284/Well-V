@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import messages from '@/../messages/ja.json';
+
+const t = messages.AddSessionPage;
 
 export type SessionCategory = 'workout' | 'yoga' | 'meditation';
 

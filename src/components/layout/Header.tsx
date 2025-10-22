@@ -19,17 +19,17 @@ export function Header() {
             <Link href="/add-session">
               <Button variant="ghost" size="sm">
                 <PlusCircle className="mr-2 h-4 w-4" />
-                セッションを追加
+                {t.add_session}
               </Button>
             </Link>
             <Link href="/submitted">
               <Button variant="ghost" size="sm">
                 <History className="mr-2 h-4 w-4" />
-                送信済み
+                {t.submitted}
               </Button>
             </Link>
             <Link href="/settings">
-                <Button variant="ghost" size="icon" aria-label="設定">
+                <Button variant="ghost" size="icon" aria-label={t.settings_aria}>
                     <Settings className="h-5 w-5" />
                 </Button>
             </Link>

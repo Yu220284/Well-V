@@ -32,6 +32,7 @@ import { CreateSessionInputSchema } from '@/lib/types';
 import { useSubmissionStore } from '@/lib/hooks/use-submission-store';
 import { useRouter } from 'next/navigation';
 
+const t = messages.AddSessionPage;
 const tCat = messages.categories;
 const categories = CATEGORIES.map((c) => ({
   ...c,
@@ -41,10 +42,10 @@ const categories = CATEGORIES.map((c) => ({
 const FormSchema = CreateSessionInputSchema.extend({
   audio: z
     .any()
-    .refine((files) => files?.length == 1, '音声ファイルを選択してください。')
+    .refine((files) => files?.length == 1, t.form_audio_validation_error)
     .refine(
       (files) => files?.[0]?.type.startsWith('audio/'),
-      '音声ファイルを選択してください。'
+      t.form_audio_validation_error
     ),
 }).omit({ audioDataUri: true });
 
@@ -75,8 +76,8 @@ export default function AddSessionPage() {
         const submissionId = addSubmission({ title: data.title, category: data.category });
 
         toast({
-          title: 'セッションを送信しました',
-          description: "バックグラウンドで処理中です。送信済みページで状況を確認できます。",
+          title: t.toast_submitted_title,
+          description: t.toast_submitted_description,
         });
         
         form.reset();
@@ -107,8 +108,8 @@ export default function AddSessionPage() {
 
         toast({
             variant: "destructive",
-            title: "エラー",
-            description: "セッションの処理中にエラーが発生しました。",
+            title: t.toast_error_title,
+            description: t.toast_error_description,
         });
       } finally {
         setIsSubmitting(false);
@@ -119,8 +120,8 @@ export default function AddSessionPage() {
         console.error("File reading error:", error);
         toast({
             variant: "destructive",
-            title: "エラー",
-            description: "ファイルの読み込みに失敗しました。",
+            title: t.toast_error_title,
+            description: t.toast_file_error_description,
         });
         setIsSubmitting(false);
     }
@@ -132,9 +133,9 @@ export default function AddSessionPage() {
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold font-headline mb-2">新しいセッションを追加</h1>
+            <h1 className="text-4xl font-bold font-headline mb-2">{t.title}</h1>
             <p className="text-lg text-muted-foreground">
-              セッション名、カテゴリ、音声ファイルを指定して、新しいセッションを提案します。AIが内容を分析します。
+              {t.description}
             </p>
           </div>
           <Form {...form}>
@@ -144,9 +145,9 @@ export default function AddSessionPage() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>セッション名</FormLabel>
+                    <FormLabel>{t.form_title_label}</FormLabel>
                     <FormControl>
-                      <Input placeholder="例：10分間モーニングヨガ" {...field} />
+                      <Input placeholder={t.form_title_placeholder} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -157,11 +158,11 @@ export default function AddSessionPage() {
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>カテゴリー</FormLabel>
+                    <FormLabel>{t.form_category_label}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="カテゴリーを選択" />
+                          <SelectValue placeholder={t.form_category_placeholder} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -181,7 +182,7 @@ export default function AddSessionPage() {
                 name="audio"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>音声ファイル</FormLabel>
+                    <FormLabel>{t.form_audio_label}</FormLabel>
                     <FormControl>
                       <Input
                         type="file"
@@ -190,7 +191,7 @@ export default function AddSessionPage() {
                       />
                     </FormControl>
                     <FormDescription>
-                      セッションで使用する音声ファイルをアップロードしてください。
+                      {t.form_audio_description}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -198,7 +199,7 @@ export default function AddSessionPage() {
               />
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isSubmitting ? '送信中...' : 'セッションを送信'}
+                {isSubmitting ? t.submitting_button : t.submit_button}
               </Button>
             </form>
           </Form>

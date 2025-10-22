@@ -4,7 +4,10 @@
     "description": "がんばるあなたに、推しからエール！"
   },
   "Header": {
-    "title": "うぇるぶい"
+    "title": "うぇるぶい",
+    "add_session": "セッションを追加",
+    "submitted": "送信済み",
+    "settings_aria": "設定"
   },
   "Home": {
     "progress": "あなたの記録",
@@ -50,7 +53,9 @@
     "pause_button_aria": "セッションを一時停止",
     "add_to_favorites_button_aria": "お気に入りに追加",
     "remove_from_favorites_button_aria": "お気に入り解除",
-    "stop_button_aria": "セッションを終了してホームへ戻る"
+    "stop_button_aria": "セッションを終了してホームへ戻る",
+    "seek_backward_aria": "10秒巻き戻し",
+    "seek_forward_aria": "10秒早送り"
   },
   "SafetyPrompt": {
     "title": "セッション前の安全チェック",
@@ -67,6 +72,54 @@
     "yoga_description": "呼吸を意識して、体の柔軟性や基礎代謝を高めます。",
     "meditation": "マインドフルネス",
     "meditation_description": "心を落ち着かせ、精神のバランスを整えます。"
+  },
+  "AddSessionPage": {
+    "toast_submitted_title": "セッションを送信しました",
+    "toast_submitted_description": "バックグラウンドで処理中です。送信済みページで状況を確認できます。",
+    "toast_error_title": "エラー",
+    "toast_error_description": "セッションの処理中にエラーが発生しました。",
+    "toast_file_error_description": "ファイルの読み込みに失敗しました。",
+    "title": "新しいセッションを追加",
+    "description": "セッション名、カテゴリ、音声ファイルを指定して、新しいセッションを提案します。AIが内容を分析します。",
+    "form_title_label": "セッション名",
+    "form_title_placeholder": "例：10分間モーニングヨガ",
+    "form_category_label": "カテゴリー",
+    "form_category_placeholder": "カテゴリーを選択",
+    "form_audio_label": "音声ファイル",
+    "form_audio_description": "セッションで使用する音声ファイルをアップロードしてください。",
+    "form_audio_validation_error": "音声ファイルを選択してください。",
+    "submit_button": "セッションを送信",
+    "submitting_button": "送信中..."
+  },
+  "SubmittedPage": {
+    "title": "送信済みセッション",
+    "description": "あなたが追加提案したセッションの処理状況を確認できます。",
+    "no_submissions_title": "まだ提案がありません",
+    "no_submissions_description": "新しいセッションを追加して、アプリをより豊かにしましょう！",
+    "status": {
+      "pending": "待機中",
+      "processing": "処理中",
+      "completed": "完了",
+      "failed": "失敗"
+    },
+    "approval": {
+      "approved": "自動承認",
+      "rejected": "要レビュー"
+    },
+    "analysis_result": "分析結果:",
+    "transcription_label": "文字起こし結果:",
+    "transcription_failed": "文字起こしに失敗しました。"
+  },
+  "SettingsPage": {
+    "title": "設定",
+    "language_card_title": "言語",
+    "language_card_description": "アプリ内で使用される言語を変更します。",
+    "language_select_label": "言語を選択",
+    "language_english": "英語 (English)",
+    "language_japanese": "日本語",
+    "language_chinese": "中国語 (中文)",
+    "profile_card_title": "プロフィール",
+    "profile_card_description": "あなたのプロフィール情報を編集します。（準備中）",
+    "profile_wip": "この機能は現在準備中です。"
   }
 }
-
