@@ -13,8 +13,6 @@ import {
   Volume2,
   VolumeX,
   Loader2,
-  Rewind,
-  FastForward,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -31,6 +29,47 @@ function formatTime(seconds: number): string {
   const secs = Math.floor(seconds % 60);
   return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
+
+const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M14.2 9.8 12.4 12l1.8 2.2" />
+      <path d="M10.4 9.8 8.6 12l1.8 2.2" />
+      <path d="M2.5 12a9.5 9.5 0 1 0 0-1" />
+      <path d="M7 6.4v10.2" />
+    </svg>
+);
+  
+const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+    >
+        <path d="m9.8 9.8 1.8 2.2-1.8 2.2" />
+        <path d="m13.8 9.8 1.8 2.2-1.8 2.2" />
+        <path d="M21.5 12a9.5 9.5 0 1 1 0-1" />
+        <path d="M17 6.4v10.2" />
+    </svg>
+);
+
 
 export function Player({ session }: { session: Session }) {
   const t = messages.SessionPlayer;
@@ -220,13 +259,13 @@ export function Player({ session }: { session: Session }) {
               <div className="flex flex-col gap-4">
                 <div className="flex justify-center items-center gap-4">
                   <Button variant="ghost" size="icon" onClick={() => seek(-10)} className="h-12 w-12" aria-label={t.seek_backward_aria}>
-                      <Rewind className="h-6 w-6" />
+                      <Rewind10Icon className="h-8 w-8" />
                   </Button>
                   <Button variant="default" size="icon" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
                   <Button variant="ghost" size="icon" onClick={() => seek(10)} className="h-12 w-12" aria-label={t.seek_forward_aria}>
-                      <FastForward className="h-6 w-6" />
+                      <FastForward10Icon className="h-8 w-8" />
                   </Button>
                 </div>
 
@@ -256,3 +295,5 @@ export function Player({ session }: { session: Session }) {
     </>
   );
 }
+
+    
