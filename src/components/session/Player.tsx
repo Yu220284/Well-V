@@ -33,8 +33,6 @@ function formatTime(seconds: number): string {
 const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -45,15 +43,13 @@ const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
     >
       <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
       <path d="M3 3v5h5" />
-      <text x="12" y="16" textAnchor="middle" fontSize="9" fill="currentColor" fontWeight="bold">10</text>
+      <text x="12" y="17" textAnchor="middle" fontSize="10" fill="currentColor" fontWeight="bold">10</text>
     </svg>
 );
   
 const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -64,7 +60,7 @@ const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
     >
         <path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
         <path d="M21 3v5h-5" />
-        <text x="12" y="16" textAnchor="middle" fontSize="9" fill="currentColor" fontWeight="bold">10</text>
+        <text x="12" y="17" textAnchor="middle" fontSize="10" fill="currentColor" fontWeight="bold">10</text>
     </svg>
 );
 
@@ -257,13 +253,13 @@ export function Player({ session }: { session: Session }) {
               <div className="flex flex-col gap-4">
                 <div className="flex justify-center items-center gap-4">
                   <Button variant="ghost" size="icon" onClick={() => seek(-10)} className="h-14 w-14" aria-label={t.seek_backward_aria}>
-                      <Rewind10Icon className="h-12 w-12" />
+                      <Rewind10Icon className="h-14 w-14" />
                   </Button>
                   <Button variant="default" size="icon" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
                   <Button variant="ghost" size="icon" onClick={() => seek(10)} className="h-14 w-14" aria-label={t.seek_forward_aria}>
-                      <FastForward10Icon className="h-12 w-12" />
+                      <FastForward10Icon className="h-14 w-14" />
                   </Button>
                 </div>
 
