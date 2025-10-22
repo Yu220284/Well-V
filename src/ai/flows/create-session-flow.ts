@@ -63,7 +63,7 @@ const createSessionFlow = ai.defineFlow(
     // 1. Transcribe the audio
     const { text: transcription } = await ai.generate({
         model: 'googleai/gemini-2.5-flash',
-        prompt: [{ media: { url: wavDataUri } }, { text: '音声データを文字起こししてください。' }],
+        prompt: [{ media: { url: wavDataUri } }, { text: '音声データを日本語で文字起こししてください。' }],
     });
 
     if (!transcription) {
@@ -75,10 +75,10 @@ const createSessionFlow = ai.defineFlow(
         model: 'googleai/gemini-2.5-flash',
         prompt: `あなたは、ユーザーが投稿したコンテンツをレビューするモデレーターです。以下のテキストに、不適切な内容（暴力的、性的、差別的、その他公序良俗に反するもの）が含まれているか確認してください。
 
-        テキスト：
-        "${transcription}"
+テキスト：
+"${transcription}"
 
-        問題がなければ "true"、問題がある可能性がある場合は "false" とだけ回答してください。`,
+問題がなければ "isAppropriate": true、不適切な内容が含まれている可能性がある場合は "isAppropriate": false と、JSON形式で回答してください。`,
         output: {
             schema: z.object({
                 isAppropriate: z.boolean(),
