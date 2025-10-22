@@ -33,53 +33,53 @@ function formatTime(seconds: number): string {
 
 const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M22 12A10 10 0 1 1 12 2" />
-      <path d="M7 2v5h5" />
-      <text
-        x="12"
-        y="14"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize="10"
-        fill="currentColor"
-      >
-        10
-      </text>
+        <path d="M21.5 12a9.5 9.5 0 1 1-6.7-9.1" />
+        <path d="M11.5 8.5 14.8 5 11.5 1.5" />
+        <text
+            x="12"
+            y="13.5"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="8"
+            fill="currentColor"
+            strokeWidth="0"
+        >
+            10
+        </text>
     </svg>
 );
 
 const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       {...props}
     >
-      <path d="M2 12A10 10 0 1 1 12 22" />
-      <path d="M17 22v-5h-5" />
-      <text
-        x="12"
-        y="14"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize="10"
-        fill="currentColor"
-      >
-        10
-      </text>
+        <path d="M2.5 12a9.5 9.5 0 1 1 6.7 9.1" />
+        <path d="M12.5 15.5 9.2 19l3.3 3" />
+        <text
+            x="12"
+            y="13.5"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="8"
+            fill="currentColor"
+            strokeWidth="0"
+        >
+            10
+        </text>
     </svg>
 );
 
@@ -274,7 +274,7 @@ export function Player({ session }: { session: Session }) {
                   <Button variant="ghost" onClick={() => seek(-10)} className="h-12 w-12 p-0" aria-label={t.seek_backward_aria}>
                       <Rewind10Icon className="h-12 w-12" />
                   </Button>
-                  <Button variant="default" size="icon" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
+                  <Button variant="default" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
                     {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
                   </Button>
                   <Button variant="ghost" onClick={() => seek(10)} className="h-12 w-12 p-0" aria-label={t.seek_forward_aria}>
