@@ -37,7 +37,6 @@ export function CategoryCard({
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           {isFavorite && (
              <div className="absolute top-3 right-3 bg-secondary/80 p-2 rounded-full backdrop-blur-sm">
                 <Star className="w-5 h-5 text-primary fill-primary" />
