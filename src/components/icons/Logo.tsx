@@ -7,7 +7,7 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 100 100"
       width="40"
       height="40"
-      aria-label="うぇるぶい Logo"
+      aria-label="Well-V Logo"
       {...props}
     >
       <defs>

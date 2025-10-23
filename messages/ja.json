@@ -1,10 +1,10 @@
 {
   "Metadata": {
-    "title": "うぇるぶい",
+    "title": "Well-V",
     "description": "がんばるあなたに、推しからエール！"
   },
   "Header": {
-    "title": "うぇるぶい",
+    "title": "Well-V",
     "add_session": "セッションを追加",
     "submitted": "送信済み",
     "settings_aria": "設定"
@@ -17,7 +17,7 @@
     "footer_text": "{sparkles} WellV {sparkles}"
   },
   "FirstLaunch": {
-    "title": "うぇるぶいへようこそ！",
+    "title": "Well-Vへようこそ！",
     "description_1": "セッションを開始する前に、注意事項をお読みください。",
     "description_2": "周囲の安全と環境を確認し、痛みや不快感を感じた場合は、セッションを中止してください。",
     "description_3": "推しのボイスと一緒に、心と体をリフレッシュしましょう！",
@@ -120,5 +120,3 @@
     "language_chinese": "中国語 (中文)"
   }
 }
-
-    

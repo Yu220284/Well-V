@@ -1,10 +1,10 @@
 {
   "Metadata": {
-    "title": "Wellv",
+    "title": "Well-V",
     "description": "Find your calm with guided audio sessions."
   },
   "Header": {
-    "title": "Wellv"
+    "title": "Well-V"
   },
   "Home": {
     "progress": "Your Progress",
@@ -14,7 +14,7 @@
     "footer_text": "Made with {sparkles} by Wellv"
   },
   "FirstLaunch": {
-    "title": "Welcome to WellV!",
+    "title": "Welcome to Well-V!",
     "description_1": "Before you begin your first session, please take a moment to read this important safety information.",
     "description_2": "Always ensure you are in a safe and comfortable environment. Stay hydrated and listen to your body. If you experience any pain or discomfort, stop the session immediately and consult a healthcare professional if necessary.",
     "description_3": "Enjoy your journey to mindfulness!",

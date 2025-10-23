@@ -1,10 +1,10 @@
 {
   "Metadata": {
-    "title": "Wellv",
+    "title": "Well-V",
     "description": "通过引导式音频课程寻找您的平静。"
   },
   "Header": {
-    "title": "Wellv"
+    "title": "Well-V"
   },
   "Home": {
     "progress": "您的进度",
@@ -14,7 +14,7 @@
     "footer_text": "由 Wellv 用 {sparkles} 制作"
   },
   "FirstLaunch": {
-    "title": "欢迎来到 Wellv！",
+    "title": "欢迎来到 Well-V！",
     "description_1": "在开始您的第一次课程之前，请花点时间阅读此重要安全信息。",
     "description_2": "始终确保您处于安全舒适的环境中。保持水分，倾听身体的声音。如果您感到任何疼痛或不适，请立即停止课程，并在必要时咨询医疗专业人员。",
     "description_3": "享受您的正念之旅！",
