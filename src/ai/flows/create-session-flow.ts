@@ -62,7 +62,7 @@ const createSessionFlow = ai.defineFlow(
 
     // 1. Transcribe the audio
     const { text: transcription } = await ai.generate({
-        model: 'googleai/gemini-2.5-flash',
+        model: 'googleai/gemini-2.5-flash-transcribe-001',
         prompt: [{ media: { url: wavDataUri } }, { text: '音声データを日本語で文字起こししてください。' }],
     });
 
