@@ -29,7 +29,7 @@ export function CategoryCard({
   return (
     <Link href={href} className="group block">
       <Card className="overflow-hidden transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:-translate-y-1 h-full flex flex-col">
-        <div className="relative h-48 w-full">
+        <div className="relative h-32 md:h-48 w-full">
           <Image
             src={imageUrl}
             alt={description}
@@ -44,11 +44,11 @@ export function CategoryCard({
           )}
         </div>
         <CardHeader className="flex-grow">
-          <CardTitle className="font-headline text-xl flex items-center justify-between">
+          <CardTitle className="font-headline text-lg md:text-xl flex items-center justify-between">
             {name}
             <ArrowRight className="w-5 h-5 text-muted-foreground opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </CardTitle>
-          <CardDescription className="pt-1">{description}</CardDescription>
+          <CardDescription className="pt-1 text-xs md:text-sm">{description}</CardDescription>
         </CardHeader>
       </Card>
     </Link>

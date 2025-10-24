@@ -17,18 +17,29 @@ const FIRST_VISIT_KEY = "wellv_first_visit";
 export function FirstLaunchModal() {
   const t = messages.FirstLaunch;
   const [isOpen, setIsOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const firstVisit = localStorage.getItem(FIRST_VISIT_KEY);
-    if (!firstVisit) {
-      setIsOpen(true);
-    }
+    setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      const firstVisit = localStorage.getItem(FIRST_VISIT_KEY);
+      if (!firstVisit) {
+        setIsOpen(true);
+      }
+    }
+  }, [isMounted]);
 
   const handleAcknowledge = () => {
     localStorage.setItem(FIRST_VISIT_KEY, "false");
     setIsOpen(false);
   };
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
