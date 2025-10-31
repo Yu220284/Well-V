@@ -11,12 +11,18 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import messages from '@/../messages/ja.json';
+import { SubmittedSessions } from '@/components/settings/SubmittedSessions';
 
 export default function SettingsPage() {
   const t = messages.SettingsPage;
+  const tProfile = { // Dummy data for profile card
+    profile_card_title: "プロフィール",
+    profile_card_description: "あなたのプロフィール情報を編集します。",
+    profile_wip: "プロフィール編集機能は現在開発中です。"
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
       <Header />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-2xl mx-auto">
@@ -24,6 +30,15 @@ export default function SettingsPage() {
             <h1 className="text-4xl font-bold font-headline mb-2">{t.title}</h1>
           </div>
           <div className="space-y-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>{tProfile.profile_card_title}</CardTitle>
+                <CardDescription>{tProfile.profile_card_description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">{tProfile.profile_wip}</p>
+              </CardContent>
+            </Card>
             <Card>
               <CardHeader>
                 <CardTitle>{t.language_card_title}</CardTitle>
@@ -45,15 +60,7 @@ export default function SettingsPage() {
                 </div>
               </CardContent>
             </Card>
-             <Card>
-              <CardHeader>
-                <CardTitle>{t.profile_card_title}</CardTitle>
-                <CardDescription>{t.profile_card_description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{t.profile_wip}</p>
-              </CardContent>
-            </Card>
+            <SubmittedSessions />
           </div>
         </div>
       </main>

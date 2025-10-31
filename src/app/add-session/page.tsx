@@ -52,7 +52,7 @@ const FormSchema = CreateSessionInputSchema.extend({
 
 export default function AddSessionPage() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const { addSubmission, updateSubmissionStatus, getSubmissionById } = useSubmissionStore();
+  const { addSubmission, updateSubmissionStatus } = useSubmissionStore();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -73,7 +73,6 @@ export default function AddSessionPage() {
       try {
         const audioDataUri = reader.result as string;
 
-        // Immediately add to store and get ID
         submissionId = addSubmission({ title: data.title, category: data.category });
 
         toast({
@@ -82,19 +81,16 @@ export default function AddSessionPage() {
         });
         
         form.reset();
-        router.push('/submitted');
+        router.push('/settings');
 
-        // Update status to processing
         updateSubmissionStatus(submissionId, 'processing');
 
-        // Perform AI processing in the background
         const result = await createSession({
           title: data.title,
           category: data.category,
           audioDataUri: audioDataUri,
         });
 
-        // Update with final result
         updateSubmissionStatus(submissionId, 'completed', result.transcription, result.approved);
 
       } catch (error) {
@@ -125,7 +121,7 @@ export default function AddSessionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+    <div className="pb-24">
       <Header />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-2xl mx-auto">

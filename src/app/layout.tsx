@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import messages from '@/../messages/ja.json';
+import { BottomNav } from '@/components/layout/BottomNav';
 
 export const metadata: Metadata = {
   title: messages.Metadata.title,
@@ -28,8 +29,11 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        {children}
+        <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+          {children}
+        </div>
         <Toaster />
+        <BottomNav />
       </body>
     </html>
   );
