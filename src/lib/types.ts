@@ -66,3 +66,13 @@ export interface SubmittedSession {
     approved?: boolean;
     thumbnailUrl?: string;
 }
+
+export const GenerateSafetyPromptInputSchema = z.object({
+  sessionType: z.string().describe('The type of session (workout, yoga, meditation).'),
+});
+export type GenerateSafetyPromptInput = z.infer<typeof GenerateSafetyPromptInputSchema>;
+
+export const GenerateSafetyPromptOutputSchema = z.object({
+  safetyPrompt: z.array(z.string()).describe('A list of safety disclaimers.'),
+});
+export type GenerateSafetyPromptOutput = z.infer<typeof GenerateSafetyPromptOutputSchema>;

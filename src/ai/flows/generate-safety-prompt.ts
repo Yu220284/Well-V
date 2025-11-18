@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -10,16 +11,9 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import type { GenerateSafetyPromptInput, GenerateSafetyPromptOutput } from '@/lib/types';
+import { GenerateSafetyPromptInputSchema, GenerateSafetyPromptOutputSchema } from '@/lib/types';
 
-const GenerateSafetyPromptInputSchema = z.object({
-  sessionType: z.string().describe('The type of session (workout, yoga, meditation).'),
-});
-export type GenerateSafetyPromptInput = z.infer<typeof GenerateSafetyPromptInputSchema>;
-
-const GenerateSafetyPromptOutputSchema = z.object({
-  safetyPrompt: z.string().describe('A variation of the safety disclaimer.'),
-});
-export type GenerateSafetyPromptOutput = z.infer<typeof GenerateSafetyPromptOutputSchema>;
 
 export async function generateSafetyPrompt(input: GenerateSafetyPromptInput): Promise<GenerateSafetyPromptOutput> {
   return generateSafetyPromptFlow(input);
@@ -36,10 +30,12 @@ const prompt = ai.definePrompt({
   セッションの種類: {{{sessionType}}}
 
   基本的な注意事項はこちらです:
-  "セッションを始める前に、周囲の安全を確かめてください。水分補給を忘れずに、ご自身の体の声に耳を傾けましょう。痛みや不快感があった場合はすぐに中止してください。"
+  - セッションを始める前に、周囲の安全を確かめてください。
+  - 水分補給を忘れずに、ご自身の体の声に耳を傾けましょう。
+  - 痛みや不快感があった場合はすぐに中止してください。
 
-  生成するプロンプトは、セッションの種類に関連する重要な安全上の注意点を簡潔にまとめたものにしてください。
-  生成するプロンプTプとは3文以内としてください。
+  生成するプロンプトは、セッションの種類に関連する重要な安全上の注意点を簡潔にまとめた箇条書きにしてください。
+  箇条書きは3項目までとします。
   トーンは、励ますような、穏やかで思いやりのあるものにしてください。
 `,
 });
