@@ -29,11 +29,6 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
         fill="hsl(var(--accent))"
         clipPath="url(#clip-right)"
       />
-      
-      <path
-        d="M75,30 L78,22 L81,30 L89,33 L81,36 L78,44 L75,36 L67,33 Z"
-        fill="hsl(var(--primary-foreground))"
-      />
     </svg>
   );
 }
