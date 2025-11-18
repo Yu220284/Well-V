@@ -31,7 +31,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <FirebaseClientProvider>
-          <div className="min-h-screen bg-gradient-to-br from-secondary to-accent/50">
+          <div className="min-h-screen bg-gradient-to-br from-accent to-secondary/30">
             {children}
           </div>
           <Toaster />
