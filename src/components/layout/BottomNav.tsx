@@ -38,11 +38,11 @@ export function BottomNav() {
             return (
               <div key={item.href} className="flex items-center justify-center">
                 <Link href={item.href} className={cn(
-                  "inline-flex flex-col items-center justify-center -mt-8 rounded-full h-16 w-16 shadow-lg border-4 border-background transition-colors duration-300",
+                  "inline-flex flex-col items-center justify-center -mt-7 rounded-full h-14 w-14 shadow-lg border-4 border-background transition-colors duration-300",
                   isActive ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-muted"
                 )}>
-                  <Icon className={cn("h-8 w-8", isActive ? "text-primary-foreground" : "text-primary" )} />
-                  <span className="sr-only">{item.label}</span>
+                  <Icon className={cn("h-7 w-7", isActive ? "text-primary-foreground" : "text-primary" )} />
+                  <span className="text-[10px] whitespace-nowrap">{item.label}</span>
                 </Link>
               </div>
             );
