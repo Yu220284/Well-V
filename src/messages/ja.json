@@ -105,7 +105,14 @@
     },
     "analysis_result": "分析結果:",
     "transcription_label": "文字起こし結果:",
-    "transcription_failed": "文字起こしに失敗しました。"
+    "transcription_failed": "文字起こしに失敗しました。",
+    "clear_all_button": "すべて消去",
+    "clear_all_dialog_title": "すべての履歴を消去しますか？",
+    "clear_all_dialog_description": "この操作は元に戻せません。送信済みのセッション履歴がすべて削除されます。",
+    "delete_dialog_title": "履歴を消去しますか？",
+    "delete_dialog_description": "の履歴を完全に削除します。この操作は元に戻せません。",
+    "cancel_button": "キャンセル",
+    "confirm_delete_button": "削除"
   },
   "SettingsPage": {
     "title": "設定",

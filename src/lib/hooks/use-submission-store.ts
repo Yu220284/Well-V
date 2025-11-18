@@ -66,6 +66,19 @@ export function useSubmissionStore() {
     });
   }, []);
 
+  const removeSubmission = useCallback((id: string) => {
+    setSubmissions(prevSubmissions => {
+      const newSubmissions = prevSubmissions.filter(sub => sub.id !== id);
+      localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(newSubmissions));
+      return newSubmissions;
+    });
+  }, []);
+
+  const clearSubmissions = useCallback(() => {
+    setSubmissions([]);
+    localStorage.removeItem(SUBMISSIONS_KEY);
+  }, []);
+
   const getSubmissionById = useCallback((id: string) => {
       return submissionsRef.current.find(sub => sub.id === id);
   }, []);
@@ -77,5 +90,7 @@ export function useSubmissionStore() {
     addSubmission,
     updateSubmissionStatus,
     getSubmissionById,
+    removeSubmission,
+    clearSubmissions,
   };
 }
