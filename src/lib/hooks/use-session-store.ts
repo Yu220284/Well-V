@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { isToday, isYesterday, differenceInCalendarDays, parseISO } from 'date-fns';
+import { isToday, isYesterday, differenceInCalendarDays, parseISO, startOfToday } from 'date-fns';
 import type { LoggedSession } from '@/lib/types';
 
 const SESSION_HISTORY_KEY = 'wellv_session_history';
@@ -64,19 +65,26 @@ export function useSessionStore() {
     return sessionHistory.filter(s => isToday(parseISO(s.completedAt))).length;
   }, [sessionHistory, isLoaded]);
 
+  const getUniqueSortedDates = useCallback(() => {
+    return [...new Set(sessionHistory.map(s => s.completedAt.split('T')[0]))]
+      .map(dateStr => parseISO(dateStr))
+      .sort((a, b) => b.getTime() - a.getTime());
+  }, [sessionHistory]);
+
   const getCurrentStreak = useCallback(() => {
     if (!isLoaded || sessionHistory.length === 0) return 0;
   
-    const uniqueDates = [...new Set(sessionHistory.map(s => s.completedAt.split('T')[0]))]
-      .map(dateStr => parseISO(dateStr))
-      .sort((a, b) => b.getTime() - a.getTime());
-
+    const uniqueDates = getUniqueSortedDates();
     if (uniqueDates.length === 0) return 0;
 
     let streak = 0;
-    const today = new Date();
+    const today = startOfToday();
     
-    if (isToday(uniqueDates[0]) || isYesterday(uniqueDates[0])) {
+    // Check if the last session was today or yesterday
+    const lastSessionDate = uniqueDates[0];
+    const diffFromToday = differenceInCalendarDays(today, lastSessionDate);
+
+    if (diffFromToday <= 1) {
         streak = 1;
         for (let i = 0; i < uniqueDates.length - 1; i++) {
             const diff = differenceInCalendarDays(uniqueDates[i], uniqueDates[i+1]);
@@ -87,18 +95,23 @@ export function useSessionStore() {
             }
         }
     }
-    
-    // If last session was not today, and the streak is still running, check if today breaks it.
-    if (!isToday(uniqueDates[0]) && streak > 0) {
-      if (!isYesterday(uniqueDates[0])) {
-         // if the last session was before yesterday, the streak is broken
-         const diffFromToday = differenceInCalendarDays(today, uniqueDates[0]);
-         if(diffFromToday > 1) return 0;
-      }
-    }
   
     return streak;
-  }, [sessionHistory, isLoaded]);
+  }, [sessionHistory, isLoaded, getUniqueSortedDates]);
+
+  const isStreakBroken = useCallback(() => {
+    if (!isLoaded || sessionHistory.length === 0) return false;
+    
+    const uniqueDates = getUniqueSortedDates();
+    if (uniqueDates.length === 0) return false;
+
+    const lastSessionDate = uniqueDates[0];
+    const diffFromToday = differenceInCalendarDays(startOfToday(), lastSessionDate);
+    
+    // If the last session was more than a day ago, the streak is broken.
+    return diffFromToday > 1;
+
+  }, [sessionHistory, isLoaded, getUniqueSortedDates]);
 
   return {
     isLoaded,
@@ -106,6 +119,7 @@ export function useSessionStore() {
     addSession,
     getTodayCount,
     getCurrentStreak,
+    isStreakBroken,
     favorites,
     toggleFavorite,
     isFavorite,

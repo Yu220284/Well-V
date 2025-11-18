@@ -1,12 +1,14 @@
+
 "use client";
 
-import { Flame, Target } from "lucide-react";
+import { Flame, Target, RotateCcw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSessionStore } from "@/lib/hooks/use-session-store";
 import { Skeleton } from "@/components/ui/skeleton";
 import messages from '@/../messages/ja.json';
+import { Button } from "../ui/button";
 
-function StatCard({ icon, title, value, unit }: { icon: React.ReactNode; title: string; value: number; unit: string; }) {
+function StatCard({ icon, title, value, unit, children }: { icon: React.ReactNode; title: string; value: number; unit: string; children?: React.ReactNode; }) {
   return (
     <Card className="bg-white/70 backdrop-blur-sm border-none shadow-lg">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -18,6 +20,7 @@ function StatCard({ icon, title, value, unit }: { icon: React.ReactNode; title: 
           {value}
           <span className="text-sm font-normal text-muted-foreground ml-1">{unit}</span>
         </div>
+        {children}
       </CardContent>
     </Card>
   );
@@ -25,10 +28,11 @@ function StatCard({ icon, title, value, unit }: { icon: React.ReactNode; title: 
 
 export function ProgressTracker() {
   const t = messages.ProgressTracker;
-  const { getTodayCount, getCurrentStreak, isLoaded } = useSessionStore();
+  const { getTodayCount, getCurrentStreak, isStreakBroken, isLoaded } = useSessionStore();
 
   const sessionsToday = getTodayCount();
   const currentStreak = getCurrentStreak();
+  const streakBroken = isStreakBroken();
 
   if (!isLoaded) {
     return (
@@ -48,11 +52,21 @@ export function ProgressTracker() {
         unit={t.done}
       />
       <StatCard
-        icon={<Flame className="h-5 w-5 text-secondary" />}
+        icon={<Flame className="h-5 w-5 text-primary" />}
         title={t.current_streak}
         value={currentStreak}
         unit={currentStreak === 1 ? t.day : t.days}
-      />
+      >
+        {streakBroken && currentStreak === 0 && (
+            <div className="mt-2 text-center">
+                <p className="text-xs text-muted-foreground">記録が途絶えちゃったけど、またここから始めよう！</p>
+                <Button variant="outline" size="sm" className="mt-2 text-xs">
+                    <RotateCcw className="h-3 w-3 mr-1" />
+                    再スタート
+                </Button>
+            </div>
+        )}
+      </StatCard>
     </div>
   );
 }
