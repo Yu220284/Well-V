@@ -1,3 +1,4 @@
+
 {
   "Metadata": {
     "title": "Well-V",
@@ -77,11 +78,13 @@
     "toast_error_description": "セッションの処理中にエラーが発生しました。",
     "toast_file_error_description": "ファイルの読み込みに失敗しました。",
     "title": "新しいセッションを追加",
-    "description": "セッション名、カテゴリ、音声ファイルを指定して、新しいセッションを提案します。AIが内容を分析します。",
+    "description": "セッション名、カテゴリ、音声ファイルなどを指定して、新しいセッションを提案します。AIが内容を分析します。",
     "form_title_label": "セッション名",
     "form_title_placeholder": "例：10分間モーニングヨガ",
     "form_category_label": "カテゴリー",
     "form_category_placeholder": "カテゴリーを選択",
+    "form_thumbnail_label": "サムネイル画像",
+    "form_thumbnail_description": "セッションのサムネイルです。16:9を推奨します。任意です。",
     "form_audio_label": "音声ファイル",
     "form_audio_description": "セッションで使用する音声ファイルをアップロードしてください。",
     "form_audio_validation_error": "音声ファイルを選択してください。",

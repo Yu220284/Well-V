@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useSubmissionStore } from '@/lib/hooks/use-submission-store';
@@ -33,6 +34,7 @@ import { Loader2, CheckCircle, XCircle, AlertTriangle, FileText, Trash2, Chevron
 import React from 'react';
 import messages from '@/../messages/ja.json';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const t = messages.SubmittedPage;
 
@@ -130,13 +132,18 @@ export function SubmittedSessions() {
                 <div className="space-y-4">
                 {sortedSubmissions.map((sub) => {
                     const statusInfo = StatusInfo[sub.status];
-                    const approvalInfo = sub.approved ? ApprovalInfo.approved : ApprovalInfo.rejected;
+                    const approvalInfo = sub.approved === undefined ? null : (sub.approved ? ApprovalInfo.approved : ApprovalInfo.rejected);
                     return (
                     <Collapsible key={sub.id} asChild>
                       <Card className="bg-background/50 group">
                           <div className="flex items-center pr-4">
                             <CollapsibleTrigger asChild className="flex-1">
                               <div className="p-4 flex items-center cursor-pointer">
+                                {sub.thumbnailUrl && (
+                                    <div className="relative w-16 h-9 rounded-md overflow-hidden mr-4 shrink-0">
+                                        <Image src={sub.thumbnailUrl} alt={sub.title} fill className="object-cover"/>
+                                    </div>
+                                )}
                                 <div className='flex-1'>
                                   <div className="flex justify-between items-start">
                                       <div>
@@ -176,7 +183,7 @@ export function SubmittedSessions() {
                           </div>
                           
                           <CollapsibleContent>
-                            {sub.status === 'completed' && (
+                            {sub.status === 'completed' && approvalInfo && (
                             <div className="px-4 pb-4 space-y-3 text-xs">
                                 <div className={`p-2 border rounded-md flex items-center gap-2 ${approvalInfo.color}`}>
                                     {approvalInfo.icon}

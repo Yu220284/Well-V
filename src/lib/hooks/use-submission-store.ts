@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import type { SubmittedSession } from '@/lib/types';
+import type { SubmittedSession, CreateSessionOutput } from '@/lib/types';
 import { v4 as uuidv4 } from 'uuid';
 
 const SUBMISSIONS_KEY = 'wellv_submissions';
@@ -52,12 +53,18 @@ export function useSubmissionStore() {
     return id;
   }, []);
 
-  const updateSubmissionStatus = useCallback((id: string, status: SubmittedSession['status'], transcription?: string, approved?: boolean) => {
+  const updateSubmissionStatus = useCallback((id: string, status: SubmittedSession['status'], result?: CreateSessionOutput) => {
     // Use functional update to ensure we have the latest state
     setSubmissions(prevSubmissions => {
         const newSubmissions = prevSubmissions.map(sub => {
             if (sub.id === id) {
-                return { ...sub, status, transcription, approved };
+                return { 
+                    ...sub, 
+                    status, 
+                    transcription: result?.transcription, 
+                    approved: result?.approved,
+                    thumbnailUrl: result?.thumbnailUrl,
+                };
             }
             return sub;
         });

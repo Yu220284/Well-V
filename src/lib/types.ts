@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 import messages from '@/../messages/ja.json';
 
@@ -42,12 +43,16 @@ export const CreateSessionInputSchema = z.object({
     .describe(
       "A recording of the session audio, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
+  thumbnailDataUri: z.string().optional().describe(
+    "A thumbnail image for the session, as a data URI. Optional."
+  ),
 });
 export type CreateSessionInput = z.infer<typeof CreateSessionInputSchema>;
 
 export const CreateSessionOutputSchema = z.object({
   approved: z.boolean().describe('Whether the session was automatically approved.'),
   transcription: z.string().describe('The transcribed text from the audio.'),
+  thumbnailUrl: z.string().url().describe('The URL of the thumbnail image to use.'),
 });
 export type CreateSessionOutput = z.infer<typeof CreateSessionOutputSchema>;
 
@@ -59,4 +64,5 @@ export interface SubmittedSession {
     status: 'pending' | 'processing' | 'completed' | 'failed';
     transcription?: string;
     approved?: boolean;
+    thumbnailUrl?: string;
 }

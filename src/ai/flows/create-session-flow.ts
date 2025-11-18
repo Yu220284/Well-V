@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -7,7 +8,7 @@
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 import wav from 'wav';
 import type { CreateSessionInput, CreateSessionOutput } from '@/lib/types';
 import { CreateSessionInputSchema, CreateSessionOutputSchema } from '@/lib/types';
@@ -100,9 +101,15 @@ const createSessionFlow = ai.defineFlow(
         throw new Error('Content check failed.');
     }
 
+    // 3. Handle thumbnail
+    // In a real app, you'd upload this to a storage bucket and get a URL.
+    // For now, we'll just return the data URI or a default placeholder.
+    const thumbnailUrl = input.thumbnailDataUri || 'https://placehold.co/1600x900/fffbe8/302c55?text=Well-V';
+
     return {
         approved: contentCheck.isAppropriate,
         transcription: transcription,
+        thumbnailUrl: thumbnailUrl,
     };
   }
 );

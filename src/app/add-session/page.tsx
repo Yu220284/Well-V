@@ -1,3 +1,4 @@
+
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -47,7 +48,10 @@ const FormSchema = CreateSessionInputSchema.extend({
       (files) => files?.[0]?.type.startsWith('audio/'),
       t.form_audio_validation_error
     ),
-}).omit({ audioDataUri: true });
+  thumbnail: z
+    .any()
+    .optional(),
+}).omit({ audioDataUri: true, thumbnailDataUri: true });
 
 
 export default function AddSessionPage() {
@@ -63,16 +67,23 @@ export default function AddSessionPage() {
     }
   });
 
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file);
+    });
+  }
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsSubmitting(true);
-    const reader = new FileReader();
-    reader.readAsDataURL(data.audio[0]);
-    
-    reader.onload = async () => {
-      let submissionId : string | null = null;
-      try {
-        const audioDataUri = reader.result as string;
+    let submissionId : string | null = null;
 
+    try {
+        const audioDataUri = await readFileAsDataURL(data.audio[0]);
+        const thumbnailDataUri = data.thumbnail?.[0] ? await readFileAsDataURL(data.thumbnail[0]) : undefined;
+        
         submissionId = addSubmission({ title: data.title, category: data.category });
 
         toast({
@@ -89,12 +100,13 @@ export default function AddSessionPage() {
           title: data.title,
           category: data.category,
           audioDataUri: audioDataUri,
+          thumbnailDataUri: thumbnailDataUri
         });
 
-        updateSubmissionStatus(submissionId, 'completed', result.transcription, result.approved);
+        updateSubmissionStatus(submissionId, 'completed', result);
 
-      } catch (error) {
-        console.error("Flow execution error:", error);
+    } catch (error) {
+        console.error("Flow execution or file reading error:", error);
         if (submissionId) {
             updateSubmissionStatus(submissionId, 'failed');
         }
@@ -104,18 +116,7 @@ export default function AddSessionPage() {
             title: t.toast_error_title,
             description: t.toast_error_description,
         });
-      } finally {
-        setIsSubmitting(false);
-      }
-    };
-
-    reader.onerror = (error) => {
-        console.error("File reading error:", error);
-        toast({
-            variant: "destructive",
-            title: t.toast_error_title,
-            description: t.toast_file_error_description,
-        });
+    } finally {
         setIsSubmitting(false);
     }
   }
@@ -166,6 +167,26 @@ export default function AddSessionPage() {
                         ))}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
+                name="thumbnail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t.form_thumbnail_label}</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => field.onChange(e.target.files)}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {t.form_thumbnail_description}
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
