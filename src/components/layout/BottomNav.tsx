@@ -7,7 +7,7 @@ import { Home, Layers, Users, Settings, Contact } from "lucide-react";
 import { cn } from "@/lib/utils";
 import messages from '@/../messages/ja.json';
 
-const t = (messages as any).BottomNav;
+const t = messages.BottomNav;
 
 const navItems = [
   { href: "/community", label: t.group, icon: Users },
