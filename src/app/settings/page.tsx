@@ -2,28 +2,67 @@
 'use client';
 
 import { Header } from '@/components/layout/Header';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import messages from '@/../messages/ja.json';
-import { SubmittedSessions } from '@/components/settings/SubmittedSessions';
 import Link from 'next/link';
-import { PlusCircle } from 'lucide-react';
+import { User, Bell, Heart, Star, Award, Settings as SettingsIcon, Mail, ChevronRight } from 'lucide-react';
+import messages from '@/../messages/ja.json';
+
+const settingsItems = [
+    { 
+        id: 'profile',
+        title: "プロフィール", 
+        description: "アカウント情報や表示名の変更", 
+        icon: User,
+        href: null
+    },
+    { 
+        id: 'notifications',
+        title: "お知らせ", 
+        description: "運営からのお知らせを確認",
+        icon: Bell,
+        href: null
+    },
+    { 
+        id: 'following',
+        title: "フォロー", 
+        description: "フォローしているトレーナーの確認", 
+        icon: Heart,
+        href: null 
+    },
+    { 
+        id: 'favorites',
+        title: "お気に入り", 
+        description: "お気に入りしたセッション",
+        icon: Star,
+        href: '/favorites'
+    },
+    { 
+        id: 'membership',
+        title: "メンバーシップ", 
+        description: "プランの確認・変更",
+        icon: Award,
+        href: null
+    },
+    { 
+        id: 'advanced',
+        title: "詳細設定",
+        description: "言語設定や通知設定など",
+        icon: SettingsIcon,
+        href: null
+    },
+    { 
+        id: 'contact',
+        title: "お問い合わせ",
+        description: "ご意見・ご要望はこちらへ",
+        icon: Mail,
+        href: null
+    },
+];
+
+const WIP_MESSAGE = "この機能は現在開発中です。";
 
 export default function SettingsPage() {
   const t = messages.SettingsPage;
-  const tProfile = { // Dummy data for profile card
-    profile_card_title: "プロフィール",
-    profile_card_description: "あなたのプロフィール情報を編集します。",
-    profile_wip: "プロフィール編集機能は現在開発中です。"
-  }
-  const tAddSession = messages.AddSessionPage;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
@@ -33,52 +72,44 @@ export default function SettingsPage() {
           <div className="mb-8">
             <h1 className="text-4xl font-bold font-headline mb-2">{t.title}</h1>
           </div>
-          <div className="space-y-8">
-            <Link href="/add-session" className="block">
-              <Card className="hover:bg-muted/50 transition-colors">
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle>{tAddSession.title}</CardTitle>
-                    <CardDescription>{tAddSession.description}</CardDescription>
+          <div className="space-y-4">
+            {settingsItems.map((item) => {
+              const content = (
+                <Card className="hover:bg-muted/50 transition-colors">
+                  <CardHeader className="flex flex-row items-center justify-between p-4">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-accent/80 p-3 rounded-lg">
+                        <item.icon className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-base">{item.title}</CardTitle>
+                        <CardDescription className="text-xs">{item.description}</CardDescription>
+                      </div>
+                    </div>
+                    {item.href ? (
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    ) : null}
+                  </CardHeader>
+                </Card>
+              );
+
+              if (item.href) {
+                return (
+                  <Link href={item.href} key={item.id} className="block">
+                    {content}
+                  </Link>
+                );
+              }
+
+              return (
+                <div key={item.id} className="relative cursor-not-allowed">
+                  {content}
+                  <div className="absolute inset-0 bg-white/50 dark:bg-black/50 flex items-center justify-center rounded-lg">
+                     <p className="text-xs font-semibold bg-primary/20 text-primary-foreground backdrop-blur-sm px-2 py-1 rounded-full">{WIP_MESSAGE}</p>
                   </div>
-                  <PlusCircle className="h-8 w-8 text-primary" />
-                </CardHeader>
-              </Card>
-            </Link>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>{tProfile.profile_card_title}</CardTitle>
-                <CardDescription>{tProfile.profile_card_description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{tProfile.profile_wip}</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>{t.language_card_title}</CardTitle>
-                <CardDescription>{t.language_card_description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-2">
-                    <Label htmlFor="language-select">{t.language_select_label}</Label>
-                    <Select defaultValue="ja">
-                        <SelectTrigger id="language-select">
-                            <SelectValue placeholder={t.language_select_label} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="en">{t.language_english}</SelectItem>
-                            <SelectItem value="ja">{t.language_japanese}</SelectItem>
-                            <SelectItem value="zh">{t.language_chinese}</SelectItem>
-                        </SelectContent>
-                    </Select>
                 </div>
-              </CardContent>
-            </Card>
-            
-            <SubmittedSessions />
+              );
+            })}
           </div>
         </div>
       </main>
