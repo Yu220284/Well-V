@@ -1,13 +1,24 @@
+'use client';
+
 import { Header } from "@/components/layout/Header";
 import { CategoryCard } from "@/components/home/CategoryCard";
 import { CATEGORIES } from "@/lib/data";
 import { Sparkles } from "lucide-react";
 import messages from '@/../messages/ja.json';
 import React from "react";
+import { useCollection } from "@/firebase";
+import { collection } from "firebase/firestore";
+import type { Session } from "@/lib/types";
+import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import Image from "next/image";
 
 export default function SessionsPage() {
   const t = messages.Home;
   const tCat = messages.categories;
+
+  // This is a placeholder for when we fetch dynamic categories from Firestore
   const categories = CATEGORIES.map(c => ({
     ...c,
     name: (tCat as any)[c.id],

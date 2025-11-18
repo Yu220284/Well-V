@@ -5,15 +5,21 @@ const t = messages.AddSessionPage;
 
 export type SessionCategory = 'workout' | 'yoga' | 'meditation';
 
-export interface Session {
-  id: string;
-  title: string;
-  category: SessionCategory;
-  duration: number; // in seconds
-  audioUrl: string;
-  imageUrl: string;
-  imageHint: string;
-}
+// Zod schema for a Session, used for validation
+export const SessionSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string().optional(),
+  category: z.enum(['workout', 'yoga', 'meditation']),
+  duration: z.number().positive(), // in seconds
+  audioUrl: z.string().url(),
+  imageUrl: z.string().url(),
+  imageHint: z.string(),
+});
+
+// TypeScript type derived from the schema
+export type Session = z.infer<typeof SessionSchema>;
+
 
 export interface Category {
   id: SessionCategory;
