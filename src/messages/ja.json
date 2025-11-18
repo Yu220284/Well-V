@@ -125,5 +125,12 @@
     "language_english": "英語 (English)",
     "language_japanese": "日本語",
     "language_chinese": "中国語 (中文)"
+  },
+  "BottomNav": {
+    "group": "グループ",
+    "sessions": "セッション",
+    "home": "ホーム",
+    "trainers": "トレーナー",
+    "settings": "設定"
   }
 }

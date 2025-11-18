@@ -3,15 +3,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Layers, Users, Settings } from "lucide-react";
+import { Home, Layers, Users, Settings, Contact } from "lucide-react";
 import { cn } from "@/lib/utils";
+import messages from '@/../messages/ja.json';
+
+const t = (messages as any).BottomNav;
 
 const navItems = [
-  { href: "/community", label: "コミュニティ", icon: Users },
-  { href: "/sessions", label: "セッション", icon: Layers },
-  { href: "/", label: "ホーム", icon: Home, isCentral: true },
-  { href: "/trainers", label: "トレーナー", icon: Users },
-  { href: "/settings", label: "設定", icon: Settings },
+  { href: "/community", label: t.group, icon: Users },
+  { href: "/sessions", label: t.sessions, icon: Layers },
+  { href: "/", label: t.home, icon: Home, isCentral: true },
+  { href: "/trainers", label: t.trainers, icon: Contact },
+  { href: "/settings", label: t.settings, icon: Settings },
 ];
 
 export function BottomNav() {
@@ -38,9 +41,6 @@ export function BottomNav() {
             );
           }
 
-          // Use a different icon for trainers for clarity
-          const FinalIcon = item.href === '/trainers' ? Layers : Icon;
-
           return (
             <Link
               key={item.href}
@@ -51,7 +51,7 @@ export function BottomNav() {
               )}
             >
               <Icon className="w-5 h-5 mb-1" />
-              <span className="text-xs">{item.label}</span>
+              <span className="text-[10px]">{item.label}</span>
             </Link>
           );
         })}
