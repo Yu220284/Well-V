@@ -29,6 +29,12 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
         fill="hsl(var(--accent))"
         clipPath="url(#clip-right)"
       />
+      
+      {/* White star motif on the top-right of the heart */}
+      <path 
+        d="M80 20 L82.5 15 L85 20 L90 22.5 L85 25 L82.5 30 L80 25 L75 22.5 Z"
+        fill="hsl(var(--primary-foreground))"
+      />
     </svg>
   );
 }

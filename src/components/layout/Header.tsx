@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Logo } from "@/components/icons/Logo";
 import messages from '@/../messages/ja.json';
 
 export function Header() {
@@ -8,7 +7,6 @@ export function Header() {
     <header className="py-4 px-4 sm:px-6 lg:px-8 bg-transparent">
       <div className="container mx-auto flex items-center justify-center gap-3">
         <Link href="/" className="flex items-center gap-3 group">
-          <Logo className="group-hover:scale-110 transition-transform duration-300 ease-in-out" />
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-primary font-headline whitespace-nowrap">
             {t.title}
           </h1>
