@@ -32,7 +32,7 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
       
       {/* White star motif on the top-right of the heart */}
       <path 
-        d="M75 25 L77.5 20 L80 25 L85 27.5 L80 30 L77.5 35 L75 30 L70 27.5 Z"
+        d="M72 28 L75 22 L78 28 L84 31 L78 34 L75 40 L72 34 L66 31 Z"
         fill="hsl(var(--primary-foreground))"
       />
     </svg>
