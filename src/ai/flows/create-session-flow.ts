@@ -113,6 +113,9 @@ const createSessionFlow = ai.defineFlow(
             case 'yoga':
                 thumbnailUrl = 'https://storage.googleapis.com/a-story-of-dev-images/B2D38A5.png';
                 break;
+            case 'meditation':
+                thumbnailUrl = 'https://storage.googleapis.com/a-story-of-dev-images/B2D38A6.png';
+                break;
             default:
                 thumbnailUrl = 'https://placehold.co/1600x900/fffbe8/302c55?text=Well-V';
         }
