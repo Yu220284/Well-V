@@ -46,7 +46,7 @@ export function FirstLaunchModal() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t.title}</AlertDialogTitle>
-          <AlertDialogDescription className="space-y-4 pt-4 text-foreground/80">
+          <AlertDialogDescription className="space-y-6 pt-4 text-foreground/80">
             <p>
               {t.description_1}
             </p>
