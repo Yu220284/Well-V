@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,7 +9,7 @@ body {
 
 @layer base {
   :root {
-    --background: 45 100% 95%; /* #fffbe8 */
+    --background: 45 100% 98%; /* Lighter yellow-ish white */
     --foreground: 247 28% 26%; /* #302c55 */
     --card: 0 0% 100%; /* #FFFFFF */
     --card-foreground: 247 28% 26%;
@@ -16,11 +17,11 @@ body {
     --popover-foreground: 247 28% 26%;
     --primary: 215 28% 57%; /* #748dae */
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 73% 88%; /* #f5cbcb */
+    --secondary: 350 100% 95%; /* Light Pink */
     --secondary-foreground: 247 28% 26%;
     --muted: 356 100% 96%; /* #ffeaeb */
     --muted-foreground: 0 0% 45.1%;
-    --accent: 195 35% 70%; /* #9ecad6 */
+    --accent: 195 53% 90%; /* Light Blue */
     --accent-foreground: 247 28% 26%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -51,11 +52,11 @@ body {
     --popover-foreground: 45 100% 95%;
     --primary: 215 28% 57%; /* #748dae */
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 73% 88%; /* #f5cbcb */
+    --secondary: 350 100% 95%; /* Light Pink */
     --secondary-foreground: 247 28% 26%;
     --muted: 356 100% 96%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 195 35% 70%; /* #9ecad6 */
+    --accent: 195 53% 90%; /* Light Blue */
     --accent-foreground: 247 28% 26%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
