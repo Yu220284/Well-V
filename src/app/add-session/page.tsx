@@ -91,22 +91,25 @@ export default function AddSessionPage() {
           description: t.toast_submitted_description,
         });
         
-        form.reset();
         router.push('/settings');
+        form.reset();
 
-        updateSubmissionStatus(submissionId, 'processing');
-
-        const result = await createSession({
+        // No need to await here, run in the background
+        createSession({
           title: data.title,
           category: data.category,
           audioDataUri: audioDataUri,
           thumbnailDataUri: thumbnailDataUri
+        }).then(result => {
+          updateSubmissionStatus(submissionId!, 'completed', result);
+        }).catch(error => {
+          console.error("Flow execution error:", error);
+          updateSubmissionStatus(submissionId!, 'failed');
+          // Optionally show another toast for failure
         });
 
-        updateSubmissionStatus(submissionId, 'completed', result);
-
     } catch (error) {
-        console.error("Flow execution or file reading error:", error);
+        console.error("File reading error or initial submission error:", error);
         if (submissionId) {
             updateSubmissionStatus(submissionId, 'failed');
         }
@@ -114,9 +117,10 @@ export default function AddSessionPage() {
         toast({
             variant: "destructive",
             title: t.toast_error_title,
-            description: t.toast_error_description,
+            description: t.toast_file_error_description,
         });
     } finally {
+        // This runs before the background process finishes, which is fine.
         setIsSubmitting(false);
     }
   }
