@@ -34,7 +34,7 @@ export default function CategoryPage({ params }: { params: { category: SessionCa
       <Header />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold font-headline mb-2">{category.name}</h1>
+          <h1 className="text-3xl font-bold font-headline mb-6">{category.name}</h1>
           <p className="text-lg text-muted-foreground">{category.description}</p>
         </div>
 
