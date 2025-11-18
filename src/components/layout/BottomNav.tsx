@@ -1,14 +1,15 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Layers, Users, Globe, Settings, PlusCircle } from "lucide-react";
+import { Home, Layers, Users, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/", label: "ホーム", icon: Home },
+  { href: "/community", label: "コミュニティ", icon: Users },
   { href: "/sessions", label: "セッション", icon: Layers },
-  { href: "/add-session", label: "追加", icon: PlusCircle, isCentral: true },
+  { href: "/", label: "ホーム", icon: Home, isCentral: true },
   { href: "/trainers", label: "トレーナー", icon: Users },
   { href: "/settings", label: "設定", icon: Settings },
 ];
@@ -26,13 +27,19 @@ export function BottomNav() {
           if (item.isCentral) {
             return (
               <div key={item.href} className="flex items-center justify-center">
-                <Link href={item.href} className="inline-flex flex-col items-center justify-center -mt-8 bg-primary text-primary-foreground rounded-full h-16 w-16 shadow-lg border-4 border-background">
+                <Link href={item.href} className={cn(
+                  "inline-flex flex-col items-center justify-center -mt-8 rounded-full h-16 w-16 shadow-lg border-4 border-background transition-colors duration-300",
+                  isActive ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-muted"
+                )}>
                   <Icon className="h-6 w-6" />
                   <span className="sr-only">{item.label}</span>
                 </Link>
               </div>
             );
           }
+
+          // Use a different icon for trainers for clarity
+          const FinalIcon = item.href === '/trainers' ? Layers : Icon;
 
           return (
             <Link

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Header } from '@/components/layout/Header';
@@ -12,6 +13,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import messages from '@/../messages/ja.json';
 import { SubmittedSessions } from '@/components/settings/SubmittedSessions';
+import Link from 'next/link';
+import { PlusCircle } from 'lucide-react';
 
 export default function SettingsPage() {
   const t = messages.SettingsPage;
@@ -20,6 +23,7 @@ export default function SettingsPage() {
     profile_card_description: "あなたのプロフィール情報を編集します。",
     profile_wip: "プロフィール編集機能は現在開発中です。"
   }
+  const tAddSession = messages.AddSessionPage;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
@@ -30,6 +34,18 @@ export default function SettingsPage() {
             <h1 className="text-4xl font-bold font-headline mb-2">{t.title}</h1>
           </div>
           <div className="space-y-8">
+            <Link href="/add-session" className="block">
+              <Card className="hover:bg-muted/50 transition-colors">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle>{tAddSession.title}</CardTitle>
+                    <CardDescription>{tAddSession.description}</CardDescription>
+                  </div>
+                  <PlusCircle className="h-8 w-8 text-primary" />
+                </CardHeader>
+              </Card>
+            </Link>
+
             <Card>
               <CardHeader>
                 <CardTitle>{tProfile.profile_card_title}</CardTitle>
@@ -39,6 +55,7 @@ export default function SettingsPage() {
                 <p className="text-sm text-muted-foreground">{tProfile.profile_wip}</p>
               </CardContent>
             </Card>
+
             <Card>
               <CardHeader>
                 <CardTitle>{t.language_card_title}</CardTitle>
@@ -60,6 +77,7 @@ export default function SettingsPage() {
                 </div>
               </CardContent>
             </Card>
+            
             <SubmittedSessions />
           </div>
         </div>

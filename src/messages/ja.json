@@ -78,7 +78,7 @@
     "toast_error_description": "セッションの処理中にエラーが発生しました。",
     "toast_file_error_description": "ファイルの読み込みに失敗しました。",
     "title": "新しいセッションを追加",
-    "description": "セッション名、カテゴリ、音声ファイルなどを指定して、新しいセッションを提案します。AIが内容を分析します。",
+    "description": "運営者向けのセッション追加機能です。",
     "form_title_label": "セッション名",
     "form_title_placeholder": "例：10分間モーニングヨガ",
     "form_category_label": "カテゴリー",
