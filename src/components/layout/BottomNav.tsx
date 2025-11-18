@@ -1,23 +1,20 @@
-
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Users, Layers, Settings, Contact } from "lucide-react";
 import { cn } from "@/lib/utils";
-import messages from '@/../messages/ja.json';
 import { Logo } from "../icons/Logo";
 
 export function BottomNav() {
   const pathname = usePathname();
-  const t = messages.BottomNav;
 
   const navItems = [
-    { href: "/sessions", label: t.sessions, icon: Layers },
-    { href: "/trainers", label: t.trainers, icon: Contact },
-    { href: "/", label: t.home, icon: Logo, isCentral: true },
-    { href: "/community", label: t.group, icon: Users },
-    { href: "/settings", label: t.settings, icon: Settings },
+    { href: "/sessions", label: "Sessions", icon: Layers },
+    { href: "/trainers", label: "Trainers", icon: Contact },
+    { href: "/", label: "Home", icon: Logo, isCentral: true },
+    { href: "/community", label: "Group", icon: Users },
+    { href: "/settings", label: "Settings", icon: Settings },
   ];
 
   return (

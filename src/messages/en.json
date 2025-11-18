@@ -68,12 +68,5 @@
     "yoga_description": "Find your flow and connect with your breath.",
     "meditation": "Meditation",
     "meditation_description": "Calm your mind and find inner peace."
-  },
-  "BottomNav": {
-    "group": "Group",
-    "sessions": "Sessions",
-    "home": "Home",
-    "trainers": "Trainers",
-    "settings": "Settings"
   }
 }
