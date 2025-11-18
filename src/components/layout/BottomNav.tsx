@@ -3,9 +3,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, Layers, Settings, Contact } from "lucide-react";
+import { Users, Layers, Settings, Contact, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import messages from '@/../messages/ja.json';
+import { Logo } from "../icons/Logo";
 
 export function BottomNav() {
   const pathname = usePathname();
@@ -14,16 +15,38 @@ export function BottomNav() {
   const navItems = [
     { href: "/sessions", label: t.sessions, icon: Layers },
     { href: "/trainers", label: t.trainers, icon: Contact },
+    { href: "/", label: t.home, icon: Logo, isCentral: true },
     { href: "/community", label: t.group, icon: Users },
     { href: "/settings", label: t.settings, icon: Settings },
   ];
 
   return (
     <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-card border-t border-border">
-      <div className="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
+      <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">
         {navItems.map((item) => {
-          const isActive = pathname.startsWith(item.href);
+          const isActive = (item.href === "/" && pathname === "/") || (item.href !== "/" && pathname.startsWith(item.href));
           const Icon = item.icon;
+
+          if (item.isCentral) {
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-label={item.label}
+                className="relative flex justify-center"
+              >
+                <div className={cn(
+                    "absolute -top-7 flex h-16 w-16 items-center justify-center rounded-full border-4 border-background bg-card shadow-md transition-transform duration-300 hover:scale-110",
+                    isActive ? "bg-primary" : "bg-card"
+                )}>
+                  <Icon className={cn(
+                    "h-8 w-8 transition-colors",
+                    isActive ? "text-primary-foreground" : "text-primary"
+                  )} />
+                </div>
+              </Link>
+            )
+          }
 
           return (
             <Link
@@ -35,8 +58,8 @@ export function BottomNav() {
                 isActive ? "text-primary" : "text-muted-foreground"
               )}
             >
-              <Icon className="w-6 h-6 mb-1" />
-              <span className="text-xs">{item.label}</span>
+              <Icon className="w-6 h-6" />
+              <span className="sr-only">{item.label}</span>
             </Link>
           );
         })}
