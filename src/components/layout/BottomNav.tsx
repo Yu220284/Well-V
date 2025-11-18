@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, Layers, Settings, Contact, Home } from "lucide-react";
+import { Users, Layers, Settings, Contact } from "lucide-react";
 import { cn } from "@/lib/utils";
 import messages from '@/../messages/ja.json';
 import { Logo } from "../icons/Logo";
