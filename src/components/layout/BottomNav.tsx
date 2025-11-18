@@ -3,8 +3,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Layers, Users, Settings, Contact } from "lucide-react";
+import { Users, Layers, Settings, Contact } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Logo } from "../icons/Logo";
 
 export function BottomNav() {
   const pathname = usePathname();
@@ -21,7 +22,7 @@ export function BottomNav() {
   const navItems = [
     { href: "/community", label: t.group, icon: Users },
     { href: "/sessions", label: t.sessions, icon: Layers },
-    { href: "/", label: t.home, icon: Home, isCentral: true },
+    { href: "/", label: t.home, icon: Logo, isCentral: true },
     { href: "/trainers", label: t.trainers, icon: Contact },
     { href: "/settings", label: t.settings, icon: Settings },
   ];
@@ -40,7 +41,7 @@ export function BottomNav() {
                   "inline-flex flex-col items-center justify-center -mt-8 rounded-full h-16 w-16 shadow-lg border-4 border-background transition-colors duration-300",
                   isActive ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-muted"
                 )}>
-                  <Icon className="h-6 w-6" />
+                  <Icon className={cn("h-8 w-8", isActive ? "text-primary-foreground" : "text-primary" )} />
                   <span className="sr-only">{item.label}</span>
                 </Link>
               </div>
