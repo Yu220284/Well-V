@@ -102,9 +102,19 @@ const createSessionFlow = ai.defineFlow(
     }
 
     // 3. Handle thumbnail
-    // In a real app, you'd upload this to a storage bucket and get a URL.
-    // For now, we'll just return the data URI or a default placeholder.
-    const thumbnailUrl = input.thumbnailDataUri || 'https://placehold.co/1600x900/fffbe8/302c55?text=Well-V';
+    let thumbnailUrl: string;
+    if (input.thumbnailDataUri) {
+        thumbnailUrl = input.thumbnailDataUri;
+    } else {
+        switch (input.category) {
+            case 'workout':
+                thumbnailUrl = 'https://storage.googleapis.com/a-story-of-dev-images/B2D38A4.png';
+                break;
+            default:
+                thumbnailUrl = 'https://placehold.co/1600x900/fffbe8/302c55?text=Well-V';
+        }
+    }
+
 
     return {
         approved: contentCheck.isAppropriate,
