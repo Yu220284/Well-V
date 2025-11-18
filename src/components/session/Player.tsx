@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -228,10 +227,21 @@ export function Player({ session }: { session: Session }) {
 
       <div className="absolute inset-0 flex items-center justify-center p-4">
         <Card className="w-full max-w-md bg-card/80 backdrop-blur-lg border-white/20 shadow-2xl">
-          <div className="p-6 space-y-6">
+          <div className="p-6 space-y-4">
+            <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-4">
+              <Image
+                src={session.imageUrl}
+                alt={session.title}
+                data-ai-hint={session.imageHint}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+
             <div className="text-center">
               <p className="text-sm uppercase tracking-wider text-primary font-semibold">{session.category}</p>
-              <h1 className="text-3xl font-bold font-headline mt-1">{session.title}</h1>
+              <h1 className="text-2xl font-bold font-headline mt-1">{session.title}</h1>
             </div>
 
             <div className="space-y-2">
