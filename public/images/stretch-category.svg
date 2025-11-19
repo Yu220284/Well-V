@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="600" height="400">
+  <rect width="1280" height="720" fill="#f5f1eb"/>
+  <!-- Lotus flower illustration -->
+  <g transform="translate(640, 360)" fill="none" stroke="#c4b5a0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Center lotus -->
+    <path d="M0,-80 C-30,-60 -40,-20 -20,0 C-40,20 -30,60 0,80 C30,60 40,20 20,0 C40,-20 30,-60 0,-80 Z"/>
+    <path d="M-60,-40 C-80,-20 -80,20 -60,40 C-40,60 0,60 20,40 C40,20 40,-20 20,-40 C0,-60 -40,-60 -60,-40 Z"/>
+    <path d="M60,-40 C80,-20 80,20 60,40 C40,60 0,60 -20,40 C-40,20 -40,-20 -20,-40 C0,-60 40,-60 60,-40 Z"/>
+    <!-- Flowing lines -->
+    <path d="M-200,100 C-150,80 -100,60 -50,40 C0,20 50,40 100,60 C150,80 200,100"/>
+    <path d="M-180,120 C-130,100 -80,80 -30,60 C20,40 70,60 120,80 C170,100 220,120"/>
+  </g>
+</svg>

@@ -37,11 +37,7 @@ export function CategoryCard({
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
-          {isFavorite && (
-             <div className="absolute top-3 right-3 bg-secondary/80 p-2 rounded-full backdrop-blur-sm">
-                <Star className="w-5 h-5 text-primary fill-primary" />
-            </div>
-          )}
+
         </div>
         <CardHeader className="flex-grow">
           <CardTitle className="font-headline text-lg md:text-xl flex items-center justify-between">

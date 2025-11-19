@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,47 +10,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { generateSafetyPrompt } from "@/ai/flows/generate-safety-prompt";
-import type { SessionCategory } from "@/lib/types";
-import { Loader2, ShieldCheck, Dot } from "lucide-react";
+import { ShieldCheck, Dot } from "lucide-react";
 import messages from '@/../messages/ja.json';
 
 interface SafetyPromptDialogProps {
   open: boolean;
   onStart: () => void;
-  sessionType: SessionCategory;
 }
 
-const defaultSafetyPrompt = [
-    "セッションを始める前に、周囲の安全を確かめてください。",
-    "水分補給を忘れずに、ご自身の体の声に耳を傾けましょう。",
-    "痛みや不快感があった場合はすぐに中止してください。",
+const safetyPrompt = [
+    "足元や周囲に物がないかを確認し、転倒や事故を防ぎましょう。",
+    "運動前後には十分な水分を摂取してください。",
+    "痛み・強い不快感・めまいなどを感じた場合はすぐに中止し、必要に応じて医療機関へ相談してください。",
 ];
 
-
-export function SafetyPromptDialog({ open, onStart, sessionType }: SafetyPromptDialogProps) {
+export function SafetyPromptDialog({ open, onStart }: SafetyPromptDialogProps) {
   const t = messages.SafetyPrompt;
-  const [safetyPrompt, setSafetyPrompt] = useState<string[]>(defaultSafetyPrompt);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (open) {
-      setIsLoading(true);
-      setSafetyPrompt(defaultSafetyPrompt); // Reset to default when opening
-
-      generateSafetyPrompt({ sessionType })
-        .then(response => {
-          setSafetyPrompt(response.safetyPrompt);
-        })
-        .catch(error => {
-          console.error("Failed to generate safety prompt:", error);
-          // Keep default prompt on error
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [open, sessionType]);
 
   return (
     <Dialog open={open}>
@@ -72,15 +46,9 @@ export function SafetyPromptDialog({ open, onStart, sessionType }: SafetyPromptD
             </ul>
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex-col gap-2">
-            {isLoading && (
-                 <div className="flex items-center justify-center text-xs text-muted-foreground">
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    <p>AIがあなたに合わせたアドバイスを生成中...</p>
-                </div>
-            )}
-          <Button onClick={onStart} disabled={isLoading} className="w-full">
-            {isLoading ? t.loading : t.start_button}
+        <DialogFooter>
+          <Button onClick={onStart} className="w-full">
+            {t.start_button}
           </Button>
         </DialogFooter>
       </DialogContent>

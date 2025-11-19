@@ -30,14 +30,16 @@ export default function HomePage() {
     for (let i = 0; i < 7; i++) {
       const date = new Date(monday);
       date.setDate(monday.getDate() + i);
-      const hasSession = Math.random() > 0.3; // Mock session data
       const isToday = date.toDateString() === today.toDateString();
+      const isPast = date < today && !isToday;
+      const hasSession = isPast || isToday ? Math.random() > 0.3 : false; // Only past/today can have sessions
       
       days.push({
         date: date.getDate(),
         day: dayNames[i],
         hasSession,
         isToday,
+        isPast,
         fullDate: date
       });
     }
@@ -49,6 +51,7 @@ export default function HomePage() {
   // Calculate weekly stats
   const weeklyMinutes = 145; // Mock data
   const daysWithSessions = weeklyCalendar.filter(day => day.hasSession).length;
+  const weeklyDays = daysWithSessions; // New: days with sessions this week
   const isGreatWeek = weeklyMinutes >= 60;
   const isPerfectWeek = daysWithSessions === 7;
   const weekStatus = isPerfectWeek ? 'Perfect Week' : isGreatWeek ? 'Great Week' : null;
@@ -77,19 +80,25 @@ export default function HomePage() {
       <AdBanner />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-6">
-          {/* 連続記録 & 今週の分数 */}
+          {/* 週間統計 3列表示 */}
           <section>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               <Card>
-                <CardContent className="p-4 text-center">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <div className="text-2xl font-bold text-primary">{weeklyStreak}</div>
-                    {hasDiamond && <span className="text-lg">💎</span>}
+                <CardContent className="p-3 text-center">
+                  <div className="text-xl font-bold text-primary">{weeklyDays}日</div>
+                  <div className="text-xs text-muted-foreground">今週実施</div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-3 text-center">
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    <div className="text-xl font-bold text-primary">{weeklyStreak}</div>
+                    {hasDiamond && <span className="text-sm">💎</span>}
                   </div>
-                  <div className="text-sm text-muted-foreground">連続達成週</div>
+                  <div className="text-xs text-muted-foreground">連続達成週</div>
                   {weekStatus && (
                     <div className={cn(
-                      "text-xs px-2 py-1 rounded-full mt-2",
+                      "text-xs px-1 py-0.5 rounded-full mt-1",
                       isPerfectWeek ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" :
                       "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                     )}>
@@ -99,12 +108,9 @@ export default function HomePage() {
                 </CardContent>
               </Card>
               <Card>
-                <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-bold text-primary">{weeklyMinutes}分</div>
-                  <div className="text-sm text-muted-foreground">今週のセッション</div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {daysWithSessions}/7日 達成
-                  </div>
+                <CardContent className="p-3 text-center">
+                  <div className="text-xl font-bold text-primary">{weeklyMinutes}分</div>
+                  <div className="text-xs text-muted-foreground">今週のセッション</div>
                 </CardContent>
               </Card>
             </div>
@@ -112,19 +118,23 @@ export default function HomePage() {
 
           {/* ウィークリーカレンダー */}
           <section>
-            <h2 className="text-lg font-bold mb-3">今週のアクティビティ</h2>
+            <div className="relative mb-3">
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+              <h2 className="relative text-lg font-bold py-2 pl-2">今週のアクティビティ</h2>
+            </div>
             <Card>
               <CardContent className="p-4">
                 <div className="grid grid-cols-7 gap-2">
                   {weeklyCalendar.map((day, index) => (
-                    <div key={index} className="text-center">
+                    <div key={index} className="flex flex-col items-center">
                       <div className="text-xs text-muted-foreground mb-1 font-medium">{day.day}</div>
                       <div className={cn(
-                        "w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium border-2 transition-all",
+                        "relative w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium border-2 transition-all",
                         day.isToday && day.hasSession ? "bg-primary text-primary-foreground border-primary shadow-lg scale-110" :
                         day.isToday ? "bg-primary/20 text-primary border-primary" :
                         day.hasSession ? "bg-green-100 text-green-800 border-green-300 dark:bg-green-900 dark:text-green-200 dark:border-green-700" :
-                        "bg-muted text-muted-foreground border-muted"
+                        day.isPast ? "bg-muted text-muted-foreground border-muted" :
+                        "bg-gray-50 text-gray-400 border-gray-200 dark:bg-gray-800 dark:text-gray-500 dark:border-gray-700"
                       )}>
                         {day.date}
                         {day.hasSession && (
@@ -154,7 +164,10 @@ export default function HomePage() {
           {/* 中断したセッション */}
           {interruptedSession && (
             <section>
-              <h2 className="text-lg font-bold mb-3">中断したセッション</h2>
+              <div className="relative mb-3">
+                <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+                <h2 className="relative text-lg font-bold py-2 pl-2">中断したセッション</h2>
+              </div>
               <Link href={`/session/${interruptedSession.id}`}>
                 <Card className="hover:bg-muted/50 transition-colors">
                   <CardContent className="p-4">
@@ -182,7 +195,10 @@ export default function HomePage() {
 
           {/* 前回のグループ投稿 */}
           <section>
-            <h2 className="text-lg font-bold mb-3">最新の投稿</h2>
+            <div className="relative mb-3">
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+              <h2 className="relative text-lg font-bold py-2 pl-2">最新の投稿</h2>
+            </div>
             <Card>
               <CardContent className="p-4">
                 <p className="text-sm mb-3">{lastPost.content}</p>
@@ -204,7 +220,10 @@ export default function HomePage() {
 
           {/* セッション履歴 */}
           <section>
-            <h2 className="text-lg font-bold mb-3">最近のセッション</h2>
+            <div className="relative mb-3">
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+              <h2 className="relative text-lg font-bold py-2 pl-2">最近のセッション</h2>
+            </div>
             <div className="space-y-3">
               {recentSessions.length > 0 ? (
                 recentSessions.map((session, index) => (

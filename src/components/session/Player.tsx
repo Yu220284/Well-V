@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -116,9 +115,10 @@ export function Player({ session }: { session: Session }) {
   };
 
   const handleSliderChange = (value: number[]) => {
-    if (!audioRef.current) return;
     const newTime = value[0];
-    audioRef.current.currentTime = newTime;
+    if (session.audioUrl && audioRef.current) {
+      audioRef.current.currentTime = newTime;
+    }
     setCurrentTime(newTime);
   };
 
@@ -181,7 +181,6 @@ export function Player({ session }: { session: Session }) {
       <SafetyPromptDialog
         open={isSafetyPromptOpen}
         onStart={handleStartSession}
-        sessionType={session.category}
       />
       {session.audioUrl && <audio ref={audioRef} src={session.audioUrl} preload="auto" />}
       <div className="relative h-screen w-screen overflow-hidden">
@@ -222,6 +221,7 @@ export function Player({ session }: { session: Session }) {
                 onValueChange={handleSliderChange}
                 aria-label={t.progress_label}
                 disabled={!isReady}
+                className="cursor-pointer"
               />
               <div className="flex justify-between text-xs text-muted-foreground font-mono">
                 <span>{formatTime(currentTime)}</span>
@@ -241,11 +241,11 @@ export function Player({ session }: { session: Session }) {
                   <Button
                     variant="ghost"
                     onClick={() => seek(-10)}
-                    className="relative h-12 w-12 flex items-center justify-center"
+                    className="relative h-16 w-16 flex flex-col items-center justify-center"
                     aria-label={t.seek_backward_aria}
                   >
-                    <Rewind className="h-8 w-8" />
-                    <span className="absolute text-xs font-bold text-white mix-blend-difference -top-1">10</span>
+                    <span className="text-sm font-bold mb-0">10</span>
+                    <Rewind className="h-7 w-7" />
                   </Button>
                   <Button
                     variant="default"
@@ -262,42 +262,41 @@ export function Player({ session }: { session: Session }) {
                   <Button
                     variant="ghost"
                     onClick={() => seek(10)}
-                    className="relative h-12 w-12 flex items-center justify-center"
+                    className="relative h-16 w-16 flex flex-col items-center justify-center"
                     aria-label={t.seek_forward_aria}
                   >
-                    <FastForward className="h-8 w-8" />
-                    <span className="absolute text-xs font-bold text-white mix-blend-difference -top-1">10</span>
+                    <span className="text-sm font-bold mb-0">10</span>
+                    <FastForward className="h-7 w-7" />
                   </Button>
                 </div>
 
                 <div className="grid grid-cols-5 items-center gap-2">
                   <Button
                     variant="ghost"
-                    size="icon"
                     onClick={toggleMute}
+                    className="h-16 w-16"
                     aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria}
                     disabled={!session.audioUrl}
                   >
-                    {isMuted ? <VolumeX /> : <Volume2 />}
+                    {isMuted ? <VolumeX className="h-8 w-8" /> : <Volume2 className="h-8 w-8" />}
                   </Button>
 
                   <div className="col-span-3 flex justify-center items-center gap-4">
-                    <Button variant="ghost" size="icon" onClick={restart} className="h-12 w-12" aria-label={t.restart_button_aria}>
-                      <RotateCcw className="h-6 w-6" />
+                    <Button variant="ghost" onClick={restart} className="h-16 w-16" aria-label={t.restart_button_aria}>
+                      <RotateCcw className="h-8 w-8" />
                     </Button>
                     <Button
                       variant="ghost"
-                      size="icon"
                       onClick={handleFavoriteToggle}
-                      className="h-12 w-12"
+                      className="h-16 w-16"
                       aria-label={isFav ? t.remove_from_favorites_button_aria : t.add_to_favorites_button_aria}
                     >
-                      <Heart className={cn("h-6 w-6 transition-colors", isFav && "fill-secondary text-secondary")} />
+                      <Heart className={cn("h-8 w-8 transition-colors", isFav && "fill-red-500 text-red-500")} />
                     </Button>
                   </div>
 
-                  <Button variant="ghost" size="icon" onClick={stop} aria-label={t.stop_button_aria}>
-                    <X />
+                  <Button variant="ghost" onClick={stop} className="h-16 w-16" aria-label={t.stop_button_aria}>
+                    <X className="h-8 w-8" />
                   </Button>
                 </div>
               </div>

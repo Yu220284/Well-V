@@ -10,7 +10,7 @@ import { AdBanner } from "@/components/layout/AdBanner";
 import { Button } from "@/components/ui/button";
 
 export default function TrainerPage({ params }: { params: { trainerId: string } }) {
-  const trainer = TRAINERS.find((t) => t.id === params.trainerId);
+  const trainer = TRAINERS.find((t) => t.id.toString() === params.trainerId);
   const sessions = SESSIONS.filter((s) => s.trainerId === params.trainerId);
 
   if (!trainer) {
@@ -86,6 +86,6 @@ export default function TrainerPage({ params }: { params: { trainerId: string } 
 
 export function generateStaticParams() {
   return TRAINERS.map((trainer) => ({
-    trainerId: trainer.id,
+    trainerId: trainer.id.toString(),
   }));
 }

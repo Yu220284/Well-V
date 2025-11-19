@@ -58,7 +58,10 @@ export default function CommunityPage() {
       <AdBanner />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-2xl mx-auto">
-            <h1 className="text-3xl font-bold font-headline mb-6">グループ</h1>
+            <div className="relative mb-6">
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+              <h1 className="relative text-xl font-bold font-headline py-2 pl-2">グループ</h1>
+            </div>
 
             <Tabs defaultValue={TRAINERS[0].groupId}>
               <TabsList className="grid w-full grid-cols-3">
