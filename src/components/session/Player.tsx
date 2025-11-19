@@ -245,7 +245,7 @@ export function Player({ session }: { session: Session }) {
                     aria-label={t.seek_backward_aria}
                   >
                     <Rewind className="h-8 w-8" />
-                    <span className="absolute text-xs font-bold text-white mix-blend-difference">10</span>
+                    <span className="absolute text-xs font-bold text-white mix-blend-difference -top-1">10</span>
                   </Button>
                   <Button
                     variant="default"
@@ -266,7 +266,7 @@ export function Player({ session }: { session: Session }) {
                     aria-label={t.seek_forward_aria}
                   >
                     <FastForward className="h-8 w-8" />
-                    <span className="absolute text-xs font-bold text-white mix-blend-difference">10</span>
+                    <span className="absolute text-xs font-bold text-white mix-blend-difference -top-1">10</span>
                   </Button>
                 </div>
 

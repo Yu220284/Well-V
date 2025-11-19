@@ -91,7 +91,7 @@ export default function AddSessionPage() {
           description: t.toast_submitted_description,
         });
         
-        router.push('/settings');
+        router.push('/menu');
         form.reset();
 
         // No need to await here, run in the background

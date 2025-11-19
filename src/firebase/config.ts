@@ -15,8 +15,17 @@ const firebaseConfig = {
 };
 
 export function getFirebaseConfig() {
+  // Development mode: return mock config if no API key is provided
   if (!firebaseConfig.apiKey) {
-    throw new Error('Missing Firebase config: `NEXT_PUBLIC_FIREBASE_API_KEY`');
+    console.warn('Firebase config not found, using mock configuration for development');
+    return {
+      apiKey: 'mock-api-key',
+      authDomain: 'mock-project.firebaseapp.com',
+      projectId: 'mock-project',
+      storageBucket: 'mock-project.appspot.com',
+      messagingSenderId: '123456789',
+      appId: 'mock-app-id',
+    };
   }
   return firebaseConfig;
 }

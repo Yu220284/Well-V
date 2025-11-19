@@ -1,72 +1,60 @@
-
 'use client';
 
 import { Header } from '@/components/layout/Header';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import Link from 'next/link';
-import { User, Bell, Heart, Star, Award, Settings as SettingsIcon, Mail, ChevronRight, PlusCircle } from 'lucide-react';
+import { Globe, Bell, User, CreditCard, Cloud, FileText, Info, AlarmClock } from 'lucide-react';
 import messages from '@/../messages/ja.json';
 
 const settingsItems = [
     { 
-        id: 'profile',
-        title: "プロフィール", 
-        description: "アカウント情報や表示名の変更", 
+        id: 'account',
+        title: "アカウント情報", 
+        description: "メールアドレス、パスワード変更、SNS連携", 
         icon: User,
-        href: '/settings/profile'
+    },
+    { 
+        id: 'subscription',
+        title: "サブスクリプション管理", 
+        description: "プラン確認、更新、解約、支払い履歴",
+        icon: CreditCard,
+    },
+    { 
+        id: 'language',
+        title: "言語設定", 
+        description: "日本語／英語／中国語切り替え", 
+        icon: Globe,
     },
     { 
         id: 'notifications',
-        title: "お知らせ", 
-        description: "運営からのお知らせを確認",
+        title: "通知設定", 
+        description: "プッシュ通知やお知らせの設定",
         icon: Bell,
-        href: '/settings/notifications'
     },
     { 
-        id: 'following',
-        title: "フォロー", 
-        description: "フォローしているトレーナーの確認", 
-        icon: Heart,
-        href: null 
+        id: 'reminders',
+        title: "セッション開始リマインダー", 
+        description: "定期的なセッション開始の通知設定",
+        icon: AlarmClock,
     },
     { 
-        id: 'favorites',
-        title: "お気に入り", 
-        description: "お気に入りしたセッション",
-        icon: Star,
-        href: '/favorites'
+        id: 'backup',
+        title: "バックアップ／復元", 
+        description: "クラウド保存、端末移行", 
+        icon: Cloud,
     },
     { 
-        id: 'membership',
-        title: "メンバーシップ", 
-        description: "プランの確認・変更",
-        icon: Award,
-        href: null
+        id: 'legal',
+        title: "利用規約／プライバシーポリシー", 
+        description: "法的文書の確認",
+        icon: FileText,
     },
     { 
-        id: 'add-session',
-        title: "新規セッションを追加",
-        description: "新しいセッションを作成・提案する",
-        icon: PlusCircle,
-        href: '/add-session'
-    },
-    { 
-        id: 'advanced',
-        title: "詳細設定",
-        description: "言語設定や通知設定など",
-        icon: SettingsIcon,
-        href: null
-    },
-    { 
-        id: 'contact',
-        title: "お問い合わせ",
-        description: "ご意見・ご要望はこちらへ",
-        icon: Mail,
-        href: null
+        id: 'version',
+        title: "アプリバージョン情報", 
+        description: "現在のバージョンとアップデート情報",
+        icon: Info,
     },
 ];
-
-const WIP_MESSAGE = "この機能は現在開発中です。";
 
 export default function SettingsPage() {
   const t = messages.SettingsPage;
@@ -77,12 +65,12 @@ export default function SettingsPage() {
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold font-headline mb-6">{t.title}</h1>
+            <h1 className="text-3xl font-bold font-headline mb-6">詳細設定</h1>
           </div>
           <div className="space-y-4">
-            {settingsItems.map((item) => {
-              const content = (
-                <Card className="hover:bg-muted/50 transition-colors">
+            {settingsItems.map((item) => (
+              <div key={item.id} className="relative">
+                <Card className="hover:bg-muted/50 transition-colors cursor-not-allowed">
                   <CardHeader className="flex flex-row items-center justify-between p-4">
                     <div className="flex items-center gap-4">
                       <div className="bg-accent/80 p-3 rounded-lg">
@@ -93,30 +81,13 @@ export default function SettingsPage() {
                         <CardDescription className="text-xs">{item.description}</CardDescription>
                       </div>
                     </div>
-                    {item.href ? (
-                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                    ) : null}
                   </CardHeader>
                 </Card>
-              );
-
-              if (item.href) {
-                return (
-                  <Link href={item.href} key={item.id} className="block">
-                    {content}
-                  </Link>
-                );
-              }
-
-              return (
-                <div key={item.id} className="relative cursor-not-allowed">
-                  {content}
-                  <div className="absolute inset-0 bg-white/50 dark:bg-black/50 flex items-center justify-center rounded-lg">
-                     <p className="text-xs font-semibold bg-primary/20 text-primary-foreground backdrop-blur-sm px-2 py-1 rounded-full">{WIP_MESSAGE}</p>
-                  </div>
+                <div className="absolute inset-0 bg-white/50 dark:bg-black/50 flex items-center justify-center rounded-lg">
+                  <p className="text-xs font-semibold bg-primary/20 text-primary-foreground backdrop-blur-sm px-2 py-1 rounded-full">この機能は現在開発中です。</p>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </main>

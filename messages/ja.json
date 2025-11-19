@@ -117,13 +117,16 @@
     "cancel_button": "キャンセル",
     "confirm_delete_button": "削除"
   },
-  "SettingsPage": {
-    "title": "設定",
+  "MenuPage": {
+    "title": "メニュー",
     "language_card_title": "言語",
     "language_card_description": "アプリ内で使用される言語を変更します。",
     "language_select_label": "言語を選択",
     "language_english": "英語 (English)",
     "language_japanese": "日本語",
     "language_chinese": "中国語 (中文)"
+  },
+  "SettingsPage": {
+    "title": "詳細設定"
   }
 }
