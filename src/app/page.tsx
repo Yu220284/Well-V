@@ -119,7 +119,7 @@ export default function HomePage() {
           {/* ウィークリーカレンダー */}
           <section>
             <div className="relative mb-3">
-              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
               <h2 className="relative text-lg font-bold py-2 pl-2">今週のアクティビティ</h2>
             </div>
             <Card>
@@ -165,7 +165,7 @@ export default function HomePage() {
           {interruptedSession && (
             <section>
               <div className="relative mb-3">
-                <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+                <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
                 <h2 className="relative text-lg font-bold py-2 pl-2">中断したセッション</h2>
               </div>
               <Link href={`/session/${interruptedSession.id}`}>
@@ -196,7 +196,7 @@ export default function HomePage() {
           {/* 前回のグループ投稿 */}
           <section>
             <div className="relative mb-3">
-              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
               <h2 className="relative text-lg font-bold py-2 pl-2">最新の投稿</h2>
             </div>
             <Card>
@@ -221,7 +221,7 @@ export default function HomePage() {
           {/* セッション履歴 */}
           <section>
             <div className="relative mb-3">
-              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
               <h2 className="relative text-lg font-bold py-2 pl-2">最近のセッション</h2>
             </div>
             <div className="space-y-3">
@@ -242,7 +242,10 @@ export default function HomePage() {
                           </div>
                           <div className="flex-1">
                             <div className="font-medium text-sm">{session.title}</div>
-                            <div className="text-xs text-muted-foreground">{session.duration}</div>
+                            <div className="text-xs text-muted-foreground flex items-center">
+                              <Clock className="h-3 w-3 mr-1" />
+                              {Math.floor(session.duration / 60)}分
+                            </div>
                           </div>
                           <Play className="h-4 w-4 text-muted-foreground" />
                         </div>

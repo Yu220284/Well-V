@@ -83,4 +83,7 @@ export interface Trainer {
   imageUrl: string;
   imageHint: string;
   groupId: string;
+  specialty: string;
+  bio: string;
+  followers: number;
 }

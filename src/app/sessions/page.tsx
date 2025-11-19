@@ -22,8 +22,8 @@ export default function SessionsPage() {
   // This is a placeholder for when we fetch dynamic categories from Firestore
   const categories = CATEGORIES.map(c => ({
     ...c,
-    name: (tCat as any)[c.id],
-    description: (tCat as any)[`${c.id}_description`],
+    name: c.name,
+    description: c.description,
   }));
 
   const footerText = t.footer_text.replace('{sparkles}', '');
@@ -36,8 +36,8 @@ export default function SessionsPage() {
         <div className="space-y-8">
           <section>
             <div className="relative mb-4">
-              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-xl font-bold font-headline py-2 pl-2">セッション</h2>
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
+              <h2 className="relative text-lg font-bold font-headline py-2 pl-2">セッション</h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-4 md:gap-6">
               <CategoryCard
