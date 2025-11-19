@@ -72,22 +72,23 @@ export default function HomePage() {
             {lastInterruptedSession ? (
               <Link href={`/session/${lastInterruptedSession.id}`} className="group block">
                 <Card className="overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg">
-                  <div className="flex">
-                    <div className="relative h-full w-24 flex-shrink-0">
+                  <div className="flex h-24">
+                    <div className="relative w-24 flex-shrink-0">
                       <Image
                         src={lastInterruptedSession.imageUrl}
                         alt={lastInterruptedSession.title}
                         data-ai-hint={lastInterruptedSession.imageHint}
                         fill
+                        sizes="100px"
                         className="object-cover"
                       />
                     </div>
-                    <div className="p-4">
+                    <div className="p-4 flex flex-col justify-center">
                       <CardTitle className="text-base font-bold">{lastInterruptedSession.title}</CardTitle>
                       <CardDescription className="text-xs mt-1">
                         続きから再開できます
                       </CardDescription>
-                      <Button size="sm" className="mt-2">セッションを再開</Button>
+                      <Button size="sm" className="mt-2 self-start">セッションを再開</Button>
                     </div>
                   </div>
                 </Card>
