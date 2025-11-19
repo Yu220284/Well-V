@@ -4,14 +4,14 @@ import messages from '@/../messages/ja.json';
 
 const t = messages.AddSessionPage;
 
-export type SessionCategory = 'workout' | 'yoga' | 'meditation';
+export type SessionCategory = 'workout' | 'yoga' | 'stretch';
 
 // Zod schema for a Session, used for validation
 export const SessionSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string().optional(),
-  category: z.enum(['workout', 'yoga', 'meditation']),
+  category: z.enum(['workout', 'yoga', 'stretch']),
   duration: z.number().positive(), // in seconds
   audioUrl: z.string().url(),
   imageUrl: z.string().url(),
@@ -37,7 +37,7 @@ export interface LoggedSession {
 
 export const CreateSessionInputSchema = z.object({
   title: z.string().min(2, { message: 'セッション名は2文字以上で入力してください。'}),
-  category: z.enum(['workout', 'yoga', 'meditation'], { required_error: 'カテゴリーを選択してください。'}),
+  category: z.enum(['workout', 'yoga', 'stretch'], { required_error: 'カテゴリーを選択してください。'}),
   audioDataUri: z
     .string()
     .describe(
@@ -68,7 +68,7 @@ export interface SubmittedSession {
 }
 
 export const GenerateSafetyPromptInputSchema = z.object({
-  sessionType: z.string().describe('The type of session (workout, yoga, meditation).'),
+  sessionType: z.string().describe('The type of session (workout, yoga, stretch).'),
 });
 export type GenerateSafetyPromptInput = z.infer<typeof GenerateSafetyPromptInputSchema>;
 

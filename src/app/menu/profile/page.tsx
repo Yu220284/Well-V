@@ -3,6 +3,7 @@
 
 import { Header } from '@/components/layout/Header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserAvatar } from '@/components/ui/user-avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -20,10 +21,7 @@ export default function ProfilePage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex flex-col items-center space-y-4">
-                <Avatar className="h-24 w-24">
-                  <AvatarImage src="https://picsum.photos/seed/me/200" />
-                  <AvatarFallback>ME</AvatarFallback>
-                </Avatar>
+                <UserAvatar size="lg" userId="profile-user" />
                 <Button variant="outline">画像を変更</Button>
               </div>
 

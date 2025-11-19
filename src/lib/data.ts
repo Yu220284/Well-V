@@ -17,11 +17,11 @@ export const CATEGORIES: Category[] = [
     imageHint: 'yoga pose illustration',
   },
   {
-    id: 'meditation',
-    name: 'Meditation',
-    description: 'Calm your mind and find inner peace.',
-    imageUrl: 'https://picsum.photos/seed/stylish-meditation/600/400',
-    imageHint: 'calm mind illustration',
+    id: 'stretch',
+    name: 'Stretch',
+    description: 'Gentle stretching to improve flexibility and relaxation.',
+    imageUrl: 'https://picsum.photos/seed/stylish-stretch/600/400',
+    imageHint: 'stretching illustration',
   },
 ];
 
@@ -64,24 +64,24 @@ export const SESSIONS: Session[] = [
     imageUrl: 'https://picsum.photos/seed/y02-yoga/600/400',
     imageHint: 'yoga class',
   },
-  // Meditation
+  // Stretch
   {
-    id: 'm-01',
-    title: '3分で集中力アップ！マインドフル呼吸法',
-    category: 'meditation',
+    id: 's-01',
+    title: '3分で疲労回復！首・肩ストレッチ',
+    category: 'stretch',
     duration: 180,
     audioUrl: '',
-    imageUrl: 'https://picsum.photos/seed/m01-meditation/600/400',
-    imageHint: 'zen garden',
+    imageUrl: 'https://picsum.photos/seed/s01-stretch/600/400',
+    imageHint: 'neck shoulder stretch',
   },
   {
-    id: 'm-02',
-    title: '10分でリラックス。ボディスキャン瞑想',
-    category: 'meditation',
+    id: 's-02',
+    title: '10分で全身リフレッシュ！フルボディストレッチ',
+    category: 'stretch',
     duration: 600,
     audioUrl: '',
-    imageUrl: 'https://picsum.photos/seed/m02-meditation/600/400',
-    imageHint: 'stacked stones',
+    imageUrl: 'https://picsum.photos/seed/s02-stretch/600/400',
+    imageHint: 'full body stretching',
   },
 ];
 

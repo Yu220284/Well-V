@@ -68,8 +68,8 @@
     "workout_description": "体を動かして筋力やスタミナをつけましょう。",
     "yoga": "ヨガ",
     "yoga_description": "呼吸を意識して、体の柔軟性や基礎代謝を高めます。",
-    "meditation": "マインドフルネス",
-    "meditation_description": "心を落ち着かせ、精神のバランスを整えます。"
+    "stretch": "ストレッチ",
+    "stretch_description": "穏やかなストレッチで柔軟性を高め、リラックスします。"
   },
   "AddSessionPage": {
     "toast_submitted_title": "セッションを送信しました",

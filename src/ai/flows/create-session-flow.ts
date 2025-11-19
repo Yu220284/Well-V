@@ -113,7 +113,7 @@ const createSessionFlow = ai.defineFlow(
             case 'yoga':
                 thumbnailUrl = 'https://storage.googleapis.com/a-story-of-dev-images/B2D38A5.png';
                 break;
-            case 'meditation':
+            case 'stretch':
                 thumbnailUrl = 'https://storage.googleapis.com/a-story-of-dev-images/B2D38A6.png';
                 break;
             default:

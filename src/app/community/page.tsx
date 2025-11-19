@@ -3,6 +3,7 @@
 
 import { Header } from "@/components/layout/Header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -71,10 +72,7 @@ export default function CommunityPage() {
                   {/* Post creation card */}
                   <Card className="my-6">
                       <CardContent className="p-4 flex items-center gap-4">
-                          <Avatar>
-                              <AvatarImage src="https://picsum.photos/seed/me/100" />
-                              <AvatarFallback>Me</AvatarFallback>
-                          </Avatar>
+                          <UserAvatar userId="me" />
                           <div className="flex-1">
                               <input
                                   type="text"
@@ -93,10 +91,7 @@ export default function CommunityPage() {
                       <Card key={index} className="overflow-hidden">
                         <CardHeader className="p-4">
                           <div className="flex items-start gap-4">
-                            <Avatar>
-                              <AvatarImage src={item.user.avatar} alt={item.user.name} />
-                              <AvatarFallback>{item.user.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
+                            <UserAvatar userId={item.user.name} />
                             <div className="flex-1">
                               <div className="flex items-center gap-2">
                                 <p className="font-semibold">{item.user.name}</p>
