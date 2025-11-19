@@ -13,55 +13,24 @@ import {
   Volume2,
   VolumeX,
   Loader2,
+  Rewind,
+  FastForward,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
 import { useSessionStore } from "@/lib/hooks/use-session-store";
 import type { Session } from "@/lib/types";
 import { SafetyPromptDialog } from "./SafetyPromptDialog";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import messages from '@/../messages/ja.json';
+import messages from "@/../messages/ja.json";
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
-  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 }
-
-const Rewind10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <text
-            x="12"
-            y="12"
-            textAnchor="middle"
-            dominantBaseline="central"
-            fontSize="20"
-            fill="currentColor"
-            fontWeight="bold"
-        >
-            -10
-        </text>
-    </svg>
-);
-
-const FastForward10Icon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <text
-            x="12"
-            y="12"
-            textAnchor="middle"
-            dominantBaseline="central"
-            fontSize="20"
-            fill="currentColor"
-            fontWeight="bold"
-        >
-            +10
-        </text>
-    </svg>
-);
-
 
 export function Player({ session }: { session: Session }) {
   const t = messages.SessionPlayer;
@@ -77,12 +46,12 @@ export function Player({ session }: { session: Session }) {
   const [isReady, setIsReady] = useState(false);
 
   const isFav = isLoaded ? isFavorite(session.id) : false;
-  
+
   const handleStartSession = () => {
     setIsSafetyPromptOpen(false);
     if (session.audioUrl) {
-      if(audioRef.current) {
-        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+      if (audioRef.current) {
+        audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
       }
     } else {
       setIsPlaying(true);
@@ -91,13 +60,13 @@ export function Player({ session }: { session: Session }) {
   };
 
   const handleCanPlay = () => setIsReady(true);
-  
+
   const togglePlayPause = () => {
     if (session.audioUrl && audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+        audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
       }
     } else {
       setIsPlaying(!isPlaying);
@@ -108,8 +77,8 @@ export function Player({ session }: { session: Session }) {
     setCurrentTime(0);
     if (session.audioUrl && audioRef.current) {
       audioRef.current.currentTime = 0;
-      if(!isPlaying) {
-          audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+      if (!isPlaying) {
+        audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
       }
     } else if (!isPlaying) {
       setIsPlaying(true);
@@ -123,13 +92,13 @@ export function Player({ session }: { session: Session }) {
     }
     router.push("/");
   };
-  
+
   const toggleMute = () => {
-      if(audioRef.current) {
-          audioRef.current.muted = !audioRef.current.muted;
-          setIsMuted(audioRef.current.muted);
-      }
-  }
+    if (audioRef.current) {
+      audioRef.current.muted = !audioRef.current.muted;
+      setIsMuted(audioRef.current.muted);
+    }
+  };
 
   const handleFavoriteToggle = () => {
     toggleFavorite(session.id);
@@ -138,29 +107,34 @@ export function Player({ session }: { session: Session }) {
       description: session.title,
     });
   };
-  
+
   const seek = (delta: number) => {
-    const newTime = Math.max(0, Math.min(session.duration, currentTime + delta));
+    if (!audioRef.current) return;
+    const newTime = Math.max(0, Math.min(session.duration, audioRef.current.currentTime + delta));
+    audioRef.current.currentTime = newTime;
     setCurrentTime(newTime);
-    if (audioRef.current) {
-      audioRef.current.currentTime = newTime;
-    }
   };
 
+  const handleSliderChange = (value: number[]) => {
+    if (!audioRef.current) return;
+    const newTime = value[0];
+    audioRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
 
   useEffect(() => {
     if (isPlaying && !session.audioUrl) {
       const timer = setInterval(() => {
-        setCurrentTime(prevTime => {
+        setCurrentTime((prevTime) => {
           if (prevTime >= session.duration) {
             clearInterval(timer);
             addSession(session.id);
             setIsPlaying(false);
             toast({
               title: t.session_complete_title,
-              description: t.session_complete_description.replace('{sessionTitle}', session.title),
+              description: t.session_complete_description.replace("{sessionTitle}", session.title),
             });
-            setTimeout(() => router.push('/'), 2000);
+            setTimeout(() => router.push(`/session/${session.id}/result`), 2000);
             return session.duration;
           }
           return prevTime + 1;
@@ -169,7 +143,6 @@ export function Player({ session }: { session: Session }) {
       return () => clearInterval(timer);
     }
   }, [isPlaying, session.duration, session.id, session.audioUrl, addSession, router, toast, t, session.title]);
-
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -183,9 +156,9 @@ export function Player({ session }: { session: Session }) {
       setIsPlaying(false);
       toast({
         title: t.session_complete_title,
-        description: t.session_complete_description.replace('{sessionTitle}', session.title),
+        description: t.session_complete_description.replace("{sessionTitle}", session.title),
       });
-      setTimeout(() => router.push('/'), 2000);
+      setTimeout(() => router.push(`/session/${session.id}/result`), 2000);
     };
 
     audio.addEventListener("timeupdate", updateCurrentTime);
@@ -202,8 +175,6 @@ export function Player({ session }: { session: Session }) {
       audio.removeEventListener("canplay", handleCanPlay);
     };
   }, [addSession, session.id, router, toast, t, session.title, session.audioUrl]);
-
-  const progress = (currentTime / session.duration) * 100;
 
   return (
     <>
@@ -245,7 +216,13 @@ export function Player({ session }: { session: Session }) {
             </div>
 
             <div className="space-y-2">
-              <Progress value={progress} aria-label={t.progress_label} />
+              <Slider
+                value={[currentTime]}
+                max={session.duration}
+                onValueChange={handleSliderChange}
+                aria-label={t.progress_label}
+                disabled={!isReady}
+              />
               <div className="flex justify-between text-xs text-muted-foreground font-mono">
                 <span>{formatTime(currentTime)}</span>
                 <span>-{formatTime(session.duration - currentTime)}</span>
@@ -254,26 +231,53 @@ export function Player({ session }: { session: Session }) {
 
             {!isReady && !isSafetyPromptOpen && (
               <div className="flex items-center justify-center h-24">
-                  <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
               </div>
             )}
 
             {isReady && (
               <div className="flex flex-col gap-4">
                 <div className="flex justify-center items-center gap-4">
-                  <Button variant="ghost" onClick={() => seek(-10)} className="h-12 w-12 p-0" aria-label={t.seek_backward_aria}>
-                      <Rewind10Icon className="h-12 w-12" />
+                  <Button
+                    variant="ghost"
+                    onClick={() => seek(-10)}
+                    className="relative h-12 w-12 flex items-center justify-center"
+                    aria-label={t.seek_backward_aria}
+                  >
+                    <Rewind className="h-8 w-8" />
+                    <span className="absolute text-xs font-bold text-white mix-blend-difference">10</span>
                   </Button>
-                  <Button variant="default" onClick={togglePlayPause} className="h-20 w-20 rounded-full shadow-lg" aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}>
-                    {isPlaying ? <Pause className="h-10 w-10 fill-primary-foreground" /> : <Play className="h-10 w-10 fill-primary-foreground" />}
+                  <Button
+                    variant="default"
+                    onClick={togglePlayPause}
+                    className="h-20 w-20 rounded-full shadow-lg"
+                    aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}
+                  >
+                    {isPlaying ? (
+                      <Pause className="h-10 w-10 fill-primary-foreground" />
+                    ) : (
+                      <Play className="h-10 w-10 fill-primary-foreground" />
+                    )}
                   </Button>
-                  <Button variant="ghost" onClick={() => seek(10)} className="h-12 w-12 p-0" aria-label={t.seek_forward_aria}>
-                      <FastForward10Icon className="h-12 w-12" />
+                  <Button
+                    variant="ghost"
+                    onClick={() => seek(10)}
+                    className="relative h-12 w-12 flex items-center justify-center"
+                    aria-label={t.seek_forward_aria}
+                  >
+                    <FastForward className="h-8 w-8" />
+                    <span className="absolute text-xs font-bold text-white mix-blend-difference">10</span>
                   </Button>
                 </div>
 
                 <div className="grid grid-cols-5 items-center gap-2">
-                  <Button variant="ghost" size="icon" onClick={toggleMute} aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria} disabled={!session.audioUrl}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={toggleMute}
+                    aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria}
+                    disabled={!session.audioUrl}
+                  >
                     {isMuted ? <VolumeX /> : <Volume2 />}
                   </Button>
 
@@ -281,13 +285,19 @@ export function Player({ session }: { session: Session }) {
                     <Button variant="ghost" size="icon" onClick={restart} className="h-12 w-12" aria-label={t.restart_button_aria}>
                       <RotateCcw className="h-6 w-6" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={handleFavoriteToggle} className="h-12 w-12" aria-label={isFav ? t.remove_from_favorites_button_aria : t.add_to_favorites_button_aria}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleFavoriteToggle}
+                      className="h-12 w-12"
+                      aria-label={isFav ? t.remove_from_favorites_button_aria : t.add_to_favorites_button_aria}
+                    >
                       <Heart className={cn("h-6 w-6 transition-colors", isFav && "fill-secondary text-secondary")} />
                     </Button>
                   </div>
-                  
+
                   <Button variant="ghost" size="icon" onClick={stop} aria-label={t.stop_button_aria}>
-                      <X />
+                    <X />
                   </Button>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 
-import type { Category, Session } from './types';
+import type { Category, Session, Trainer } from './types';
 
 export const CATEGORIES: Category[] = [
   {
@@ -83,6 +83,12 @@ export const SESSIONS: Session[] = [
     imageUrl: 'https://picsum.photos/seed/m02-meditation/600/400',
     imageHint: 'stacked stones',
   },
+];
+
+export const TRAINERS: Trainer[] = [
+    { id: 1, name: 'Sora', imageUrl: 'https://picsum.photos/seed/trainer1/800/600', imageHint: 'female trainer portrait', groupId: 'sora-group' },
+    { id: 2, name: 'Kaito', imageUrl: 'https://picsum.photos/seed/trainer2/800/600', imageHint: 'male trainer portrait', groupId: 'kaito-group' },
+    { id: 3, name: 'Yui', imageUrl: 'https://picsum.photos/seed/trainer3/800/600', imageHint: 'female trainer smiling', groupId: 'yui-group' },
 ];
 
 // NOTE: The audio files are placeholders. In a real app, these would point to files in Firebase Storage.

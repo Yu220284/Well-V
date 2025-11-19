@@ -76,3 +76,11 @@ export const GenerateSafetyPromptOutputSchema = z.object({
   safetyPrompt: z.array(z.string()).describe('A list of safety disclaimers.'),
 });
 export type GenerateSafetyPromptOutput = z.infer<typeof GenerateSafetyPromptOutputSchema>;
+
+export interface Trainer {
+  id: number;
+  name: string;
+  imageUrl: string;
+  imageHint: string;
+  groupId: string;
+}

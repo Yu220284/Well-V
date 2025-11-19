@@ -12,6 +12,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { SESSIONS } from '@/lib/data';
 import { useSessionStore } from '@/lib/hooks/use-session-store';
+import { AdBanner } from "@/components/layout/AdBanner";
 
 type Goal = 'rest' | 'light' | 'normal' | 'intense';
 
@@ -32,6 +33,7 @@ export default function HomePage() {
   return (
     <div className="pb-24">
       <Header />
+      <AdBanner />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
           <section>

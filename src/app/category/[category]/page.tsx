@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Play } from "lucide-react";
 import type { SessionCategory } from "@/lib/types";
 import messages from '@/../messages/ja.json';
+import { AdBanner } from "@/components/layout/AdBanner";
 
 export default function CategoryPage({ params }: { params: { category: SessionCategory } }) {
   const { category: categoryId } = params;
@@ -32,6 +33,7 @@ export default function CategoryPage({ params }: { params: { category: SessionCa
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
       <Header />
+      <AdBanner />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold font-headline mb-6">{category.name}</h1>

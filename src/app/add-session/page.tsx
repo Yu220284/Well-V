@@ -180,7 +180,7 @@ export default function AddSessionPage() {
                 name="thumbnail"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t.form_thumbnail_label}</FormLabel>
+                    <FormLabel>サムネイル画像</FormLabel>
                     <FormControl>
                       <Input
                         type="file"
@@ -189,7 +189,7 @@ export default function AddSessionPage() {
                       />
                     </FormControl>
                     <FormDescription>
-                      {t.form_thumbnail_description}
+                      セッションのサムネイル画像をアップロードしてください。
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

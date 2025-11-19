@@ -2,9 +2,9 @@
 'use client';
 
 import { Header } from '@/components/layout/Header';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
-import { User, Bell, Heart, Star, Award, Settings as SettingsIcon, Mail, ChevronRight } from 'lucide-react';
+import { User, Bell, Heart, Star, Award, Settings as SettingsIcon, Mail, ChevronRight, PlusCircle } from 'lucide-react';
 import messages from '@/../messages/ja.json';
 
 const settingsItems = [
@@ -13,14 +13,14 @@ const settingsItems = [
         title: "プロフィール", 
         description: "アカウント情報や表示名の変更", 
         icon: User,
-        href: null
+        href: '/settings/profile'
     },
     { 
         id: 'notifications',
         title: "お知らせ", 
         description: "運営からのお知らせを確認",
         icon: Bell,
-        href: null
+        href: '/settings/notifications'
     },
     { 
         id: 'following',
@@ -42,6 +42,13 @@ const settingsItems = [
         description: "プランの確認・変更",
         icon: Award,
         href: null
+    },
+    { 
+        id: 'add-session',
+        title: "新規セッションを追加",
+        description: "新しいセッションを作成・提案する",
+        icon: PlusCircle,
+        href: '/add-session'
     },
     { 
         id: 'advanced',

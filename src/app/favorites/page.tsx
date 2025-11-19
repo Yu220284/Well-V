@@ -9,6 +9,7 @@ import { Clock, Play, HeartCrack } from "lucide-react";
 import { useSessionStore } from "@/lib/hooks/use-session-store";
 import { Skeleton } from "@/components/ui/skeleton";
 import messages from '@/../messages/ja.json';
+import { AdBanner } from "@/components/layout/AdBanner";
 
 export default function FavoritesPage() {
   const t = messages.FavoritesPage;
@@ -23,6 +24,7 @@ export default function FavoritesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
       <Header />
+      <AdBanner />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold font-headline mb-6">{t.title}</h1>
@@ -57,6 +59,7 @@ export default function FavoritesPage() {
                       alt={session.title}
                       data-ai-hint={session.imageHint}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
