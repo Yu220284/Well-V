@@ -44,7 +44,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           <p className="text-lg text-muted-foreground">{category.description}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {sessions.map((session) => (
             <Link key={session.id} href={`/session/${session.id}`} className="group">
               <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">

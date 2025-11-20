@@ -44,7 +44,11 @@ export async function getUserFavorites(userId: string) {
     .select('session_id')
     .eq('user_id', userId)
   
-  return { data: data?.map(f => f.session_id) || [], error }
+  if (error) {
+    return { data: [], error }
+  }
+  
+  return { data: data?.map(f => f.session_id) || [], error: null }
 }
 
 export async function addFavorite(userId: string, sessionId: string) {
