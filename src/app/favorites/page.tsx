@@ -6,15 +6,19 @@ import { Header } from "@/components/layout/Header";
 import { SESSIONS } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Play, HeartCrack } from "lucide-react";
-import { useSessionStore } from "@/lib/hooks/use-session-store";
+import { useSupabaseSessions } from "@/lib/hooks/use-supabase-sessions";
+import { useSupabaseFavorites } from "@/lib/hooks/use-supabase-favorites";
 import { Skeleton } from "@/components/ui/skeleton";
 import messages from '@/../messages/ja.json';
 import { AdBanner } from "@/components/layout/AdBanner";
 
 export default function FavoritesPage() {
   const t = messages.FavoritesPage;
-  const { favorites, isLoaded } = useSessionStore();
-  const favoriteSessions = SESSIONS.filter(session => favorites.includes(session.id));
+  const { favorites, isLoaded } = useSupabaseFavorites();
+  const { sessions: supabaseSessions, loading } = useSupabaseSessions();
+  
+  const allSessions = supabaseSessions.length > 0 ? supabaseSessions : SESSIONS;
+  const favoriteSessions = allSessions.filter(session => favorites.includes(session.id));
 
   const formatDuration = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);

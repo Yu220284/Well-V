@@ -8,22 +8,30 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { SESSIONS, TRAINERS } from '@/lib/data';
 import { Twitter, Instagram, Copy, UserPlus, Heart, Users, CheckCircle, Home } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useSessionStore } from '@/lib/hooks/use-session-store';
+import { useSupabaseFavorites } from '@/lib/hooks/use-supabase-favorites';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 export default function SessionResultPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const session = SESSIONS.find(s => s.id === params.slug);
+  const [session, setSession] = useState(null);
+  
+  React.useEffect(() => {
+    params.then(({ slug }) => {
+      const foundSession = SESSIONS.find(s => s.id === slug);
+      setSession(foundSession);
+    });
+  }, [params]);
   const trainer = TRAINERS.find(t => t.id === 1); // Mock trainer
   const [isFollowing, setIsFollowing] = useState(false);
   const [groupPost, setGroupPost] = useState('');
   const [isPosting, setIsPosting] = useState(false);
-  const { toggleFavorite, isFavorite } = useSessionStore();
+  const { toggleFavorite: toggleSupabaseFavorite, isFavorite } = useSupabaseFavorites();
   const { toast } = useToast();
   
   const isFav = isFavorite(session?.id || '');
@@ -91,7 +99,7 @@ export default function SessionResultPage({
               <Button 
                 onClick={() => {
                   if (session) {
-                    toggleFavorite(session.id);
+                    toggleSupabaseFavorite(session.id);
                     toast({ 
                       title: isFav ? "お気に入り解除" : "お気に入り追加", 
                       description: session.title 

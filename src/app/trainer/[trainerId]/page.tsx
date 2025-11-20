@@ -9,9 +9,10 @@ import { Clock, Play, Dumbbell, Zap, Shield } from "lucide-react";
 import { AdBanner } from "@/components/layout/AdBanner";
 import { Button } from "@/components/ui/button";
 
-export default function TrainerPage({ params }: { params: { trainerId: string } }) {
-  const trainer = TRAINERS.find((t) => t.id.toString() === params.trainerId);
-  const sessions = SESSIONS.filter((s) => s.trainerId === params.trainerId);
+export default async function TrainerPage({ params }: { params: Promise<{ trainerId: string }> }) {
+  const { trainerId } = await params;
+  const trainer = TRAINERS.find((t) => t.id.toString() === trainerId);
+  const sessions = SESSIONS.filter((s) => s.trainerId === trainerId);
 
   if (!trainer) {
     notFound();

@@ -11,10 +11,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { SESSIONS } from '@/lib/data';
 import { useSessionStore } from '@/lib/hooks/use-session-store';
+import { useSupabaseSessions } from '@/lib/hooks/use-supabase-sessions';
 import { AdBanner } from "@/components/layout/AdBanner";
 
 export default function HomePage() {
   const { sessionHistory, isLoaded } = useSessionStore();
+  const { sessions: supabaseSessions, loading: sessionsLoading } = useSupabaseSessions();
+  
+  // Supabaseセッションが利用可能な場合は使用、そうでなければ静的データ
+  const sessions = supabaseSessions.length > 0 ? supabaseSessions : SESSIONS;
 
   // Generate Monday-starting weekly calendar
   const generateWeeklyCalendar = () => {
@@ -71,8 +76,8 @@ export default function HomePage() {
   };
   
   // Mock interrupted session (set to null if no interrupted session)
-  const interruptedSession = Math.random() > 0.5 ? SESSIONS[1] : null;
-  const recentSessions = sessionHistory.slice(-3).map(h => SESSIONS.find(s => s.id === h.sessionId)).filter(Boolean);
+  const interruptedSession = Math.random() > 0.5 ? sessions[1] : null;
+  const recentSessions = sessionHistory.slice(-3).map(h => sessions.find(s => s.id === h.sessionId)).filter(Boolean);
 
   return (
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">

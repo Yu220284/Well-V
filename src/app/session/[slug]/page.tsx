@@ -5,11 +5,12 @@ import type { Metadata } from "next";
 import messages from '@/../messages/ja.json';
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const session = SESSIONS.find((s) => s.id === params.slug);
+  const { slug } = await params;
+  const session = SESSIONS.find((s) => s.id === slug);
   const t = messages.Metadata;
 
   if (!session) {
@@ -23,8 +24,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function SessionPage({ params }: Props) {
-  const session = SESSIONS.find((s) => s.id === params.slug);
+export default async function SessionPage({ params }: Props) {
+  const { slug } = await params;
+  const session = SESSIONS.find((s) => s.id === slug);
 
   if (!session) {
     notFound();

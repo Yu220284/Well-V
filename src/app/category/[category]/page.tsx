@@ -9,8 +9,9 @@ import type { SessionCategory } from "@/lib/types";
 import messages from '@/../messages/ja.json';
 import { AdBanner } from "@/components/layout/AdBanner";
 
-export default function CategoryPage({ params }: { params: { category: SessionCategory } }) {
-  const { category: categoryId } = params;
+
+export default async function CategoryPage({ params }: { params: Promise<{ category: SessionCategory }> }) {
+  const { category: categoryId } = await params;
   
   const categoryData = CATEGORIES.find((c) => c.id === categoryId);
   const sessions = SESSIONS.filter((s) => s.category === categoryId);

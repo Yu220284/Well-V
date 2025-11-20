@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Settings, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AuthButton } from "@/components/auth/AuthButton";
 import messages from '@/../messages/ja.json';
 
 export function Header() {
@@ -20,12 +21,15 @@ export function Header() {
           </h1>
         </Link>
         
-        <Link href="/menu/notifications">
-          <Button variant="ghost" size="icon" className="h-10 w-10 relative">
-            <Bell className="h-5 w-5" />
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <AuthButton />
+          <Link href="/menu/notifications">
+            <Button variant="ghost" size="icon" className="h-10 w-10 relative">
+              <Bell className="h-5 w-5" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
+            </Button>
+          </Link>
+        </div>
       </div>
     </header>
   );

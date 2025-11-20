@@ -7,8 +7,7 @@ import { CATEGORIES } from "@/lib/data";
 import { Sparkles } from "lucide-react";
 import messages from '@/../messages/ja.json';
 import React from "react";
-import { useCollection } from "@/firebase";
-import { collection } from "firebase/firestore";
+import { useSupabaseSessions } from "@/lib/hooks/use-supabase-sessions";
 import type { Session } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
@@ -19,7 +18,8 @@ export default function SessionsPage() {
   const t = messages.Home;
   const tCat = messages.categories;
 
-  // This is a placeholder for when we fetch dynamic categories from Firestore
+  const { sessions, loading } = useSupabaseSessions();
+  
   const categories = CATEGORIES.map(c => ({
     ...c,
     name: c.name,

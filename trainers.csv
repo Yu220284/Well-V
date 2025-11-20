@@ -1,0 +1,4 @@
+id,name,specialty,bio,followers,image_url,image_hint,group_id
+1,Sora,ヨガ・ストレッチ,10年以上のヨガ指導経験を持つインストラクター。心と体のバランスを大切にしたレッスンを提供します。,12500,https://picsum.photos/seed/trainer1/800/600,female trainer portrait,sora-group
+2,Kaito,ワークアウト・筋トレ,パーソナルトレーナーとして多くのクライアントをサポート。効率的で楽しいトレーニングが得意です。,8900,https://picsum.photos/seed/trainer2/800/600,male trainer portrait,kaito-group
+3,Yui,ストレッチ・リラクゼーション,リハビリテーション専門の理学療法士。体の不調改善と予防に特化したプログラムを提供します。,15200,https://picsum.photos/seed/trainer3/800/600,female trainer smiling,yui-group

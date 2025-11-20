@@ -1,0 +1,16 @@
+id,title,category,duration,audio_url,image_url,image_hint
+w-01,朝のエナジーブースト筋トレ,workout,300,,https://picsum.photos/seed/w01-workout/600/400,morning energy workout
+w-02,スクワットで下半身強化,workout,480,,https://picsum.photos/seed/w02-workout/600/400,squat exercise
+w-03,腹筋3分チャレンジ,workout,180,,https://picsum.photos/seed/w03-workout/600/400,abs workout
+w-04,ヒップアップワークアウト,workout,600,,https://picsum.photos/seed/w04-workout/600/400,hip up workout
+w-05,サーキットトレーニング（短時間）,workout,720,,https://picsum.photos/seed/w05-workout/600/400,circuit training
+y-01,朝の目覚めヨガ,yoga,600,,https://picsum.photos/seed/y01-yoga/600/400,morning yoga
+y-02,肩こり改善ヨガ,yoga,480,,https://picsum.photos/seed/y02-yoga/600/400,shoulder relief yoga
+y-03,夜の安眠ヨガ,yoga,720,,https://picsum.photos/seed/y03-yoga/600/400,bedtime yoga
+y-04,太陽礼拝ショートフロー,yoga,900,,https://picsum.photos/seed/y04-yoga/600/400,sun salutation flow
+y-05,体幹を鍛えるヨガ,yoga,1080,,https://picsum.photos/seed/y05-yoga/600/400,core strengthening yoga
+s-01,朝の全身ストレッチ,stretch,480,,https://picsum.photos/seed/s01-stretch/600/400,morning full body stretch
+s-02,首・肩こり解消ストレッチ,stretch,300,,https://picsum.photos/seed/s02-stretch/600/400,neck shoulder stretch
+s-03,夜のリラックスストレッチ,stretch,600,,https://picsum.photos/seed/s03-stretch/600/400,evening relaxation stretch
+s-04,背骨を伸ばすストレッチ,stretch,720,,https://picsum.photos/seed/s04-stretch/600/400,spine stretching
+s-05,股関節を柔らかくするストレッチ,stretch,900,,https://picsum.photos/seed/s05-stretch/600/400,hip flexibility stretch

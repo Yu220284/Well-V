@@ -1,0 +1,4 @@
+id,trainer_id,community_name,description,specialty,image_url,member_count,created_at
+gen_random_uuid(),sora_ch,そらのヨガスタジオ,心と体のバランスを大切にするヨガ愛好者のためのコミュニティです。初心者から上級者まで、みんなで一緒にヨガを楽しみましょう。,ヨガ・ストレッチ,https://picsum.photos/seed/sora-community/600/400,125,2024-01-01T08:30:00Z
+gen_random_uuid(),kaito_fit,カイトの筋トレ部,効率的で楽しいトレーニングを通じて、理想の体を目指すコミュニティ。筋トレ初心者も大歓迎！みんなで最強になろう！,ワークアウト・筋トレ,https://picsum.photos/seed/kaito-community/600/400,89,2024-01-05T11:00:00Z
+gen_random_uuid(),yui_wellness,ゆいのウェルネス部屋,体の不調改善と健康維持を目的としたストレッチとリラクゼーションのコミュニティ。理学療法士の視点から安全で効果的な方法をお伝えします。,ストレッチ・リラクゼーション,https://picsum.photos/seed/yui-community/600/400,152,2024-01-03T13:00:00Z
