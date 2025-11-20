@@ -65,6 +65,24 @@ export async function removeFavorite(userId: string, sessionId: string) {
   return { error }
 }
 
+export async function toggleUserFavorite(userId: string, sessionId: string) {
+  // 既存のお気に入りをチェック
+  const { data: existing } = await supabase
+    .from('user_favorites')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('session_id', sessionId)
+    .single()
+  
+  if (existing) {
+    // 削除
+    return await removeFavorite(userId, sessionId)
+  } else {
+    // 追加
+    return await addFavorite(userId, sessionId)
+  }
+}
+
 // ユーザープロフィール取得（UUIDで）
 export async function getUserProfile(authUserId: string) {
   const { data, error } = await supabase

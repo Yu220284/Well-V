@@ -100,11 +100,16 @@ export function Player({ session }: { session: Session }) {
   };
 
   const handleFavoriteToggle = () => {
+    const wasIsFav = isFav;
     toggleFavorite(session.id);
-    toast({
-      title: isFav ? t.removed_from_favorites : t.added_to_favorites,
-      description: session.title,
-    });
+    
+    // toast呼び出しを次のレンダリングサイクルまで遅延
+    setTimeout(() => {
+      toast({
+        title: wasIsFav ? t.removed_from_favorites : t.added_to_favorites,
+        description: session.title,
+      });
+    }, 0);
   };
 
   const seek = (delta: number) => {

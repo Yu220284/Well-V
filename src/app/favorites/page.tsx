@@ -14,7 +14,7 @@ import { AdBanner } from "@/components/layout/AdBanner";
 
 export default function FavoritesPage() {
   const t = messages.FavoritesPage;
-  const { favorites, isLoaded } = useSupabaseFavorites();
+  const { favorites, isLoaded, user } = useSupabaseFavorites();
   const { sessions: supabaseSessions, loading } = useSupabaseSessions();
   
   const allSessions = supabaseSessions.length > 0 ? supabaseSessions : SESSIONS;
@@ -44,7 +44,18 @@ export default function FavoritesPage() {
             </div>
         )}
 
-        {isLoaded && favoriteSessions.length === 0 && (
+        {isLoaded && !user && (
+          <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed rounded-xl bg-card">
+              <HeartCrack className="w-16 h-16 text-muted-foreground/50 mb-4" />
+              <h2 className="text-2xl font-bold">ログインが必要です</h2>
+              <p className="text-muted-foreground mt-2">お気に入り機能を使用するにはログインしてください</p>
+              <Link href="/auth/login" className="mt-6 inline-block px-6 py-2 text-sm font-semibold text-primary-foreground bg-primary rounded-full shadow-lg hover:scale-105 transition-transform">
+                ログイン
+              </Link>
+          </div>
+        )}
+        
+        {isLoaded && user && favoriteSessions.length === 0 && (
           <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed rounded-xl bg-card">
               <HeartCrack className="w-16 h-16 text-muted-foreground/50 mb-4" />
               <h2 className="text-2xl font-bold">{t.no_favorites_title}</h2>
