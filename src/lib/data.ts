@@ -32,7 +32,7 @@ export const SESSIONS: Session[] = [
     title: '朝のエナジーブースト筋トレ',
     category: 'workout',
     duration: 300,
-    audioUrl: '',
+    audioUrl: '/audio/w01-workout.mp3',
     imageUrl: 'https://picsum.photos/seed/w01-workout/600/400',
     imageHint: 'morning energy workout',
   },

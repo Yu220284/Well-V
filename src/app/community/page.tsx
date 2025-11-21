@@ -18,7 +18,7 @@ const feedItems = {
     {
         type: 'trainer_post',
         user: { name: 'Sora (トレーナー)', avatar: 'https://picsum.photos/seed/trainer1/100' },
-        content: '皆さん、週末のトレーニングお疲れ様でした！来週は新しいワークアウト動画を公開予定です。お楽しみに！💪',
+        content: 'みんな、週末のトレーニングお疲れ様だよ✨来週は新しいワークアウト動画を公開予定！お楽しみに💪',
         time: '2時間前',
         likes: 152,
         comments: 28,
@@ -26,7 +26,7 @@ const feedItems = {
       {
         type: 'achievement',
         user: { name: 'Emi', avatar: 'https://picsum.photos/seed/user1/100' },
-        content: '「10分で脂肪燃焼！カーディオブラスト」を完了しました！',
+        content: '「朝のエナジーブースト筋トレ」を完了しました！',
         time: '5分前',
         likes: 12,
         comments: 3,
@@ -113,9 +113,8 @@ export default function CommunityPage() {
                         <CardFooter className="p-2 bg-card/50 flex justify-between">
                             <div className="flex gap-1">
                                 {reactions.map(reaction => (
-                                    <Button key={reaction.label} variant="ghost" size="sm" className="flex items-center gap-1 text-muted-foreground px-2">
+                                    <Button key={reaction.label} variant="ghost" size="sm" className="flex items-center text-muted-foreground px-2">
                                         <span className="text-lg">{reaction.icon}</span>
-                                        <span className="text-xs hidden sm:inline">{reaction.label}</span>
                                     </Button>
                                 ))}
                             </div>

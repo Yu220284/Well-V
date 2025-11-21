@@ -135,10 +135,12 @@ export function Player({ session }: { session: Session }) {
             clearInterval(timer);
             addSession(session.id);
             setIsPlaying(false);
-            toast({
-              title: t.session_complete_title,
-              description: t.session_complete_description.replace("{sessionTitle}", session.title),
-            });
+            setTimeout(() => {
+              toast({
+                title: t.session_complete_title,
+                description: t.session_complete_description.replace("{sessionTitle}", session.title),
+              });
+            }, 0);
             setTimeout(() => router.push(`/session/${session.id}/result`), 2000);
             return session.duration;
           }
@@ -159,10 +161,12 @@ export function Player({ session }: { session: Session }) {
     const onEnded = () => {
       addSession(session.id);
       setIsPlaying(false);
-      toast({
-        title: t.session_complete_title,
-        description: t.session_complete_description.replace("{sessionTitle}", session.title),
-      });
+      setTimeout(() => {
+        toast({
+          title: t.session_complete_title,
+          description: t.session_complete_description.replace("{sessionTitle}", session.title),
+        });
+      }, 0);
       setTimeout(() => router.push(`/session/${session.id}/result`), 2000);
     };
 

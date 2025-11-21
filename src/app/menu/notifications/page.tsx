@@ -9,20 +9,26 @@ import { cn } from '@/lib/utils';
 const notifications = [
   {
     id: 1,
+    title: '「ユメカタリ 学生生成AIコンテスト」に参加しました！',
+    date: '2025年11月21日',
+    read: false,
+  },
+  {
+    id: 4,
+    title: 'ホリデー期間中の特別セッションに参加しよう！',
+    date: '2025年11月1日',
+    read: true,
+  },
+  {
+    id: 2,
     title: '新しいワークアウトシリーズが追加されました！',
     date: '2024年5月18日',
     read: false,
   },
   {
-    id: 2,
+    id: 3,
     title: 'システムメンテナンスのお知らせ（5月20日 2:00-4:00）',
     date: '2024年5月17日',
-    read: true,
-  },
-  {
-    id: 3,
-    title: 'ゴールデンウィーク中の特別セッションに参加しよう！',
-    date: '2024年4月28日',
     read: true,
   },
 ];
