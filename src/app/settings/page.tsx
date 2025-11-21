@@ -1,9 +1,14 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { PageTransition } from '@/components/layout/PageTransition';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Globe, Bell, User, CreditCard, Cloud, FileText, Info, AlarmClock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Globe, Bell, User, CreditCard, Cloud, FileText, Info, AlarmClock, LogOut, Trash2 } from 'lucide-react';
+import { useLocalAuth } from '@/lib/hooks/use-local-auth';
 import messages from '@/../messages/ja.json';
 
 const settingsItems = [
@@ -58,7 +63,24 @@ const settingsItems = [
 ];
 
 export default function SettingsPage() {
+  const router = useRouter();
+  const { signOut, user } = useLocalAuth();
+  const [isDeleting, setIsDeleting] = useState(false);
   const t = messages.SettingsPage;
+
+  const handleLogout = () => {
+    signOut();
+    router.push('/auth/login');
+  };
+
+  const handleDeleteAccount = () => {
+    setIsDeleting(true);
+    const storedUsers = JSON.parse(localStorage.getItem('wellv_users') || '[]');
+    const filteredUsers = storedUsers.filter((u: any) => u.email !== user?.email);
+    localStorage.setItem('wellv_users', JSON.stringify(filteredUsers));
+    signOut();
+    router.push('/auth/signup');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
@@ -94,6 +116,48 @@ export default function SettingsPage() {
                 </div>
               </div>
             ))}
+
+            <div className="pt-8 space-y-3">
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                className="w-full justify-start"
+                size="lg"
+              >
+                <LogOut className="h-5 w-5 mr-3" />
+                ログアウト
+              </Button>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    className="w-full justify-start"
+                    size="lg"
+                  >
+                    <Trash2 className="h-5 w-5 mr-3" />
+                    アカウントを削除
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>アカウントを削除しますか？</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      この操作は元に戻せません。すべてのデータが完全に削除されます。
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDeleteAccount}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      削除する
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </div>
         </div>
       </main>

@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import messages from '@/../messages/ja.json';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { TutorialOverlay } from '@/components/tutorial/TutorialOverlay';
 
 export const metadata: Metadata = {
   title: messages.Metadata.title,
@@ -34,6 +35,7 @@ export default function RootLayout({
           <div className="min-h-screen bg-gradient-to-br from-accent to-secondary/30">
             {children}
           </div>
+          <TutorialOverlay />
           <Toaster />
           <BottomNav />
         </FirebaseClientProvider>

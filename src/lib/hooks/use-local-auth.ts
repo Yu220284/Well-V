@@ -7,9 +7,12 @@ const AUTH_KEY = 'wellv_auth_user';
 interface User {
   email: string;
   displayName: string;
+  userId?: string;
   profileImage?: string;
   isTrainer?: boolean;
   streamLinks?: { platform: string; url: string }[];
+  tags?: string[];
+  onboardingCompleted?: boolean;
 }
 
 export function useLocalAuth() {
@@ -42,17 +45,18 @@ export function useLocalAuth() {
     return { success: false, error: 'Invalid credentials' };
   };
 
-  const signUp = (email: string, password: string, displayName: string) => {
+  const signUp = (email: string, password: string, displayName: string, userId?: string) => {
     const storedUsers = JSON.parse(localStorage.getItem('wellv_users') || '[]');
     
     if (storedUsers.find((u: any) => u.email === email)) {
       return { success: false, error: 'Email already exists' };
     }
     
-    storedUsers.push({ email, password, displayName });
+    const generatedUserId = userId || `user_${Date.now()}`;
+    storedUsers.push({ email, password, displayName, userId: generatedUserId, onboardingCompleted: false });
     localStorage.setItem('wellv_users', JSON.stringify(storedUsers));
     
-    const authUser = { email, displayName };
+    const authUser = { email, displayName, userId: generatedUserId, onboardingCompleted: false };
     localStorage.setItem(AUTH_KEY, JSON.stringify(authUser));
     setUser(authUser);
     return { success: true };

@@ -1,7 +1,9 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { getSelectedLanguage } from '@/lib/i18n/language-pack';
 import { Header } from "@/components/layout/Header";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -16,8 +18,19 @@ import { useSupabaseSessions } from '@/lib/hooks/use-supabase-sessions';
 import { AdBanner } from "@/components/layout/AdBanner";
 
 export default function HomePage() {
+  const router = useRouter();
   const { sessionHistory, isLoaded } = useSessionStore();
   const { sessions: supabaseSessions, loading: sessionsLoading } = useSupabaseSessions();
+  
+  useEffect(() => {
+    const selectedLang = getSelectedLanguage();
+    if (!selectedLang || selectedLang === 'ja') {
+      const hasSelected = typeof window !== 'undefined' && localStorage.getItem('wellv_selected_language');
+      if (!hasSelected) {
+        router.push('/language-select');
+      }
+    }
+  }, [router]);
   
   // Supabaseセッションが利用可能な場合は使用、そうでなければ静的データ
   const sessions = supabaseSessions.length > 0 ? supabaseSessions : SESSIONS;
