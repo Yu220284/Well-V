@@ -9,13 +9,13 @@ import { useSupabaseFavorites } from "@/lib/hooks/use-supabase-favorites";
 export function Header() {
   const { user } = useSupabaseFavorites();
   return (
-    <header className="py-4 px-4 sm:px-6 lg:px-8 bg-transparent">
+    <header className="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8 bg-background/80 backdrop-blur-md border-b border-border/20">
       <div className="container mx-auto relative flex items-center">
         {/* 左側エリア */}
         <div className="flex items-center gap-4 flex-1">
           <Link href="/settings">
-            <Button variant="ghost" size="icon" className="h-10 w-10">
-              <Settings className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="h-12 w-12">
+              <Settings className="h-6 w-6" />
             </Button>
           </Link>
           <AuthButton />
@@ -37,8 +37,8 @@ export function Header() {
             </div>
           )}
           <Link href="/menu/notifications">
-            <Button variant="ghost" size="icon" className="h-10 w-10 relative">
-              <Bell className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="h-12 w-12 relative">
+              <Bell className="h-6 w-6" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
             </Button>
           </Link>

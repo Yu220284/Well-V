@@ -2,6 +2,7 @@
 'use client';
 
 import { Header } from '@/components/layout/Header';
+import { PageTransition } from '@/components/layout/PageTransition';
 import { AdBanner } from '@/components/layout/AdBanner';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
@@ -75,8 +76,10 @@ export default function MenuPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
       <Header />
-      <AdBanner />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <PageTransition>
+        <div className="pt-24">
+          <AdBanner />
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
             <div className="relative mb-6">
@@ -125,6 +128,8 @@ export default function MenuPage() {
           </div>
         </div>
       </main>
+        </div>
+      </PageTransition>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 'use client';
 
 import { Header } from "@/components/layout/Header";
+import { PageTransition } from "@/components/layout/PageTransition";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
@@ -55,8 +56,10 @@ export default function CommunityPage() {
   return (
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
-      <AdBanner />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <PageTransition>
+        <div className="pt-24">
+          <AdBanner />
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-2xl mx-auto">
             <div className="relative mb-6">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
@@ -134,6 +137,8 @@ export default function CommunityPage() {
             </Tabs>
         </div>
       </main>
+        </div>
+      </PageTransition>
     </div>
   );
 }

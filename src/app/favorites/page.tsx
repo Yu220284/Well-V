@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
+import { PageTransition } from "@/components/layout/PageTransition";
 import { SESSIONS } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Play, HeartCrack } from "lucide-react";
@@ -18,7 +19,7 @@ export default function FavoritesPage() {
   const { sessions: supabaseSessions, loading } = useSupabaseSessions();
   
   const allSessions = supabaseSessions.length > 0 ? supabaseSessions : SESSIONS;
-  const favoriteSessions = allSessions.filter(session => favorites.includes(session.id));
+  const favoriteSessions = allSessions.filter(session => session && favorites.includes(session.id));
 
   const formatDuration = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -28,7 +29,9 @@ export default function FavoritesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
       <Header />
-      <AdBanner />
+      <PageTransition>
+        <div className="pt-24">
+          <AdBanner />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <div className="relative mb-6">
@@ -99,6 +102,8 @@ export default function FavoritesPage() {
           </div>
         )}
       </main>
+        </div>
+      </PageTransition>
     </div>
   );
 }

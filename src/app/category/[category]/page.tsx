@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
+import { PageTransition } from "@/components/layout/PageTransition";
 import { CATEGORIES, SESSIONS } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Play } from "lucide-react";
@@ -34,8 +35,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
       <Header />
-      <AdBanner />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <PageTransition>
+        <div className="pt-24">
+          <AdBanner />
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <div className="relative mb-6">
             <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
@@ -44,7 +47,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           <p className="text-lg text-muted-foreground">{category.description}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {sessions.map((session) => (
             <Link key={session.id} href={`/session/${session.id}`} className="group">
               <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
@@ -74,6 +77,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           ))}
         </div>
       </main>
+        </div>
+      </PageTransition>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
+import { PageTransition } from "@/components/layout/PageTransition";
 import { TRAINERS, SESSIONS } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, Play, Dumbbell, Zap, Shield } from "lucide-react";
@@ -26,8 +27,10 @@ export default async function TrainerPage({ params }: { params: Promise<{ traine
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <AdBanner />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <PageTransition>
+        <div className="pt-24">
+          <AdBanner />
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Trainer Profile Section */}
         <section className="mb-12">
             <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-card to-card/60 shadow-lg">
@@ -51,9 +54,13 @@ export default async function TrainerPage({ params }: { params: Promise<{ traine
 
         {/* Sessions by this Trainer Section */}
         <section>
-          <h2 className="text-2xl font-bold font-headline mb-6">{`${trainer.name}のセッション`}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sessions.map((session) => (
+          <div className="relative mb-6">
+            <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
+            <h2 className="relative text-2xl font-bold font-headline py-2 pl-2">{`${trainer.name}のセッション`}</h2>
+          </div>
+          {sessions.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sessions.map((session) => (
               <Link key={session.id} href={`/session/${session.id}`} className="group">
                 <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
                   <div className="relative h-40 w-full">
@@ -77,10 +84,17 @@ export default async function TrainerPage({ params }: { params: Promise<{ traine
                   </CardContent>
                 </Card>
               </Link>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">このトレーナーのセッションはまだありません。</p>
+            </div>
+          )}
         </section>
       </main>
+        </div>
+      </PageTransition>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { Header } from '@/components/layout/Header';
+import { PageTransition } from '@/components/layout/PageTransition';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Globe, Bell, User, CreditCard, Cloud, FileText, Info, AlarmClock } from 'lucide-react';
 import messages from '@/../messages/ja.json';
@@ -62,7 +63,9 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
       <Header />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <PageTransition>
+        <div className="pt-24">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
             <div className="relative mb-6">
@@ -94,6 +97,8 @@ export default function SettingsPage() {
           </div>
         </div>
       </main>
+        </div>
+      </PageTransition>
     </div>
   );
 }

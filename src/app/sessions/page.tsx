@@ -1,6 +1,7 @@
 'use client';
 
 import { Header } from "@/components/layout/Header";
+import { PageTransition } from "@/components/layout/PageTransition";
 import { AdBanner } from "@/components/layout/AdBanner";
 import { CategoryCard } from "@/components/home/CategoryCard";
 import { CATEGORIES } from "@/lib/data";
@@ -31,7 +32,9 @@ export default function SessionsPage() {
   return (
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
-      <AdBanner />
+      <PageTransition>
+        <div className="pt-24">
+          <AdBanner />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
           <section>
@@ -69,6 +72,8 @@ export default function SessionsPage() {
             {footerText.split(' ')[1]}
           </p>
       </footer>
+        </div>
+      </PageTransition>
     </div>
   );
 }
