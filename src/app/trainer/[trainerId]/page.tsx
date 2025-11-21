@@ -90,7 +90,7 @@ export default function TrainerPage() {
         </section>
 
         {/* Sessions by this Trainer Section */}
-        <section>
+        <section data-tutorial="session-list">
           <div className="relative mb-6">
             <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
             <h2 className="relative text-2xl font-bold font-headline py-2 pl-2">{`${trainer.name}のセッション`}</h2>

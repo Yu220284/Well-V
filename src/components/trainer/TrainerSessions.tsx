@@ -36,9 +36,9 @@ export function TrainerSessions({ sessions }: TrainerSessionsProps) {
           <TabsContent key={category} value={category} className="mt-6">
             {categorySessions.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categorySessions.map((session) => (
+                {categorySessions.map((session, index) => (
                   <Link key={session.id} href={`/session/${session.id}`} className="group">
-                    <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
+                    <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1" data-tutorial={index === 0 ? "session-card" : undefined}>
                       <div className="relative h-40 w-full">
                         <Image
                           src={session.imageUrl}

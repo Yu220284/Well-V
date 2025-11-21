@@ -243,6 +243,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                 aria-label={t.progress_label}
                 disabled={!isReady}
                 className="cursor-pointer"
+                data-tutorial="progress"
               />
               <div className="flex justify-between text-xs text-muted-foreground font-mono">
                 <span>{formatTime(currentTime)}</span>
@@ -264,6 +265,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                     onClick={() => seek(-10)}
                     className="relative h-16 w-16 flex flex-col items-center justify-center"
                     aria-label={t.seek_backward_aria}
+                    data-tutorial="rewind"
                   >
                     <span className="text-sm font-bold mb-0">10</span>
                     <Rewind className="h-7 w-7" />
@@ -273,6 +275,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                     onClick={togglePlayPause}
                     className="h-20 w-20 rounded-full shadow-lg"
                     aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}
+                    data-tutorial="play-button"
                   >
                     {isPlaying ? (
                       <Pause className="h-10 w-10 fill-primary-foreground" />
@@ -285,6 +288,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                     onClick={() => seek(10)}
                     className="relative h-16 w-16 flex flex-col items-center justify-center"
                     aria-label={t.seek_forward_aria}
+                    data-tutorial="forward"
                   >
                     <span className="text-sm font-bold mb-0">10</span>
                     <FastForward className="h-7 w-7" />
@@ -298,6 +302,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                     className="h-16 w-16"
                     aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria}
                     disabled={!audioUrl}
+                    data-tutorial="volume"
                   >
                     {isMuted ? <VolumeX className="h-8 w-8" /> : <Volume2 className="h-8 w-8" />}
                   </Button>
@@ -311,6 +316,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                       onClick={handleFavoriteToggle}
                       className="h-16 w-16"
                       aria-label={isFav ? t.remove_from_favorites_button_aria : t.add_to_favorites_button_aria}
+                      data-tutorial="favorite"
                     >
                       <Heart className={cn("h-8 w-8 transition-colors", isFav && "fill-red-500 text-red-500")} />
                     </Button>

@@ -220,7 +220,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
               <h2 className="relative text-lg font-bold py-2 pl-2">最新の投稿</h2>
             </div>
-            <Card>
+            <Card data-tutorial="post">
               <CardContent className="p-4">
                 <p className="text-sm mb-3">{lastPost.content}</p>
                 <div className="flex items-center justify-between">
@@ -245,11 +245,11 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
               <h2 className="relative text-lg font-bold py-2 pl-2">最近のセッション</h2>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3" data-tutorial="session-list">
               {recentSessions.length > 0 ? (
                 recentSessions.map((session, index) => (
                   <Link key={index} href={`/session/${session.id}`}>
-                    <Card className="hover:bg-muted/50 transition-colors">
+                    <Card className="hover:bg-muted/50 transition-colors" data-tutorial={index === 0 ? "session-card" : undefined}>
                       <CardContent className="p-4">
                         <div className="flex items-center gap-3">
                           <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">

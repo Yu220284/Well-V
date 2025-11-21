@@ -115,7 +115,7 @@ export default function SessionResultPage({
           </div>
 
           <div className="space-y-4 mb-6">
-            <div className="bg-muted/50 rounded-lg p-4">
+            <div className="bg-muted/50 rounded-lg p-4" data-tutorial="post">
               <div className="flex items-center gap-2 mb-3">
                 <Users className="w-4 h-4 text-primary" />
                 <span className="font-medium text-sm">グループに投稿</span>
@@ -139,7 +139,7 @@ export default function SessionResultPage({
           </div>
           <div className="mb-6">
             <p className="text-center text-sm font-medium text-muted-foreground mb-3">シェアする</p>
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-4" data-tutorial="share">
               <Button 
                 onClick={async () => {
                   const text = `${session.title}を完了しました！ #WellV`;
