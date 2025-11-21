@@ -5,20 +5,21 @@ import { Button } from '@/components/ui/button';
 import { useTutorial } from '@/lib/hooks/use-tutorial';
 import { useRouter } from 'next/navigation';
 import { useLocalAuth } from '@/lib/hooks/use-local-auth';
+import { useEffect, useState } from 'react';
 
 const TUTORIAL_STEPS = [
-  { message: 'フォローしたトレーナーを見てみましょう' },
-  { message: '先ほどフォローしたトレーナーがいますね！試しにこの人のプロフィールを見てみましょう' },
-  { message: 'このトレーナーのセッションを見てみましょう' },
-  { message: '早速セッションを聞いてみましょう！' },
-  { message: '再生や一時停止ができます' },
-  { message: '音量を調整できます' },
-  { message: '10秒戻せます' },
-  { message: '10秒送れます' },
-  { message: 'お気に入りに追加できます' },
-  { message: 'バーを最後まで動かしてセッションを終了してみましょう' },
-  { message: 'コミュニティに感想を投稿できます' },
-  { message: 'SNSでシェアできます' },
+  { message: 'フォローしたトレーナーを見てみましょう', target: '[data-tutorial="trainer-list"]' },
+  { message: '先ほどフォローしたトレーナーがいますね！試しにこの人のプロフィールを見てみましょう', target: '[data-tutorial="trainer-card"]' },
+  { message: 'このトレーナーのセッションを見てみましょう', target: '[data-tutorial="session-list"]' },
+  { message: '早速セッションを聞いてみましょう！', target: '[data-tutorial="session-card"]' },
+  { message: '再生や一時停止ができます', target: '[data-tutorial="play-button"]' },
+  { message: '音量を調整できます', target: '[data-tutorial="volume"]' },
+  { message: '10秒戻せます', target: '[data-tutorial="rewind"]' },
+  { message: '10秒送れます', target: '[data-tutorial="forward"]' },
+  { message: 'お気に入りに追加できます', target: '[data-tutorial="favorite"]' },
+  { message: 'バーを最後まで動かしてセッションを終了してみましょう', target: '[data-tutorial="progress"]' },
+  { message: 'コミュニティに感想を投稿できます', target: '[data-tutorial="post"]' },
+  { message: 'SNSでシェアできます', target: '[data-tutorial="share"]' },
   { message: 'お疲れさまでした！これでチュートリアルは終了です。' },
 ];
 
@@ -26,8 +27,28 @@ export function TutorialOverlay() {
   const { isActive, currentStep, nextStep, endTutorial } = useTutorial();
   const { updateProfile } = useLocalAuth();
   const router = useRouter();
+  const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
-  console.log('Tutorial overlay:', { isActive, currentStep });
+  useEffect(() => {
+    if (!isActive) return;
+    
+    const step = TUTORIAL_STEPS[currentStep];
+    if (!step?.target) {
+      setTargetRect(null);
+      return;
+    }
+
+    const checkElement = () => {
+      const element = document.querySelector(step.target!);
+      if (element) {
+        setTargetRect(element.getBoundingClientRect());
+      }
+    };
+
+    checkElement();
+    const interval = setInterval(checkElement, 100);
+    return () => clearInterval(interval);
+  }, [isActive, currentStep]);
 
   if (!isActive) return null;
 
@@ -46,9 +67,23 @@ export function TutorialOverlay() {
 
   return (
     <>
-      <div className="fixed inset-0 bg-gray-400/20 z-[9998] pointer-events-none" />
+      <div className="fixed inset-0 bg-black/50 z-[9998]" onClick={handleNext} />
       
-      <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-full px-4" onClick={handleNext}>
+      {targetRect && (
+        <div
+          className="fixed z-[9999] pointer-events-none"
+          style={{
+            top: targetRect.top - 4,
+            left: targetRect.left - 4,
+            width: targetRect.width + 8,
+            height: targetRect.height + 8,
+            boxShadow: '0 0 0 4px rgba(255,255,255,0.8), 0 0 0 9999px rgba(0,0,0,0.5)',
+            borderRadius: '8px',
+          }}
+        />
+      )}
+      
+      <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[10000] max-w-md w-full px-4" onClick={handleNext}>
         <Card className="bg-primary text-primary-foreground shadow-lg cursor-pointer">
           <CardContent className="p-4 text-center">
             <p className="font-medium">{step?.message}</p>
@@ -60,7 +95,7 @@ export function TutorialOverlay() {
       </div>
 
       {isLastStep && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999]">
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[10000]">
           <Button onClick={handleNext} size="lg">
             ホームへ進む
           </Button>
