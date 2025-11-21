@@ -41,13 +41,18 @@ export function TutorialOverlay() {
     const checkElement = () => {
       const element = document.querySelector(step.target!);
       if (element) {
-        setTargetRect(element.getBoundingClientRect());
+        const rect = element.getBoundingClientRect();
+        setTargetRect(rect);
       }
     };
 
     checkElement();
     const interval = setInterval(checkElement, 100);
-    return () => clearInterval(interval);
+    window.addEventListener('scroll', checkElement, true);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('scroll', checkElement, true);
+    };
   }, [isActive, currentStep]);
 
   if (!isActive) return null;
@@ -72,23 +77,22 @@ export function TutorialOverlay() {
       {targetRect && (
         <>
           <div
-            className="fixed bg-white z-[9999] pointer-events-auto cursor-pointer"
+            className="fixed bg-transparent z-[9999] pointer-events-auto cursor-pointer"
             style={{
-              top: targetRect.top,
-              left: targetRect.left,
-              width: targetRect.width,
-              height: targetRect.height,
-              opacity: 0.01,
+              top: `${targetRect.top}px`,
+              left: `${targetRect.left}px`,
+              width: `${targetRect.width}px`,
+              height: `${targetRect.height}px`,
             }}
             onClick={handleNext}
           />
           <div
-            className="fixed z-[9999] pointer-events-none border-4 border-white rounded-lg"
+            className="fixed z-[9999] pointer-events-none border-4 border-white rounded-lg animate-pulse"
             style={{
-              top: targetRect.top - 4,
-              left: targetRect.left - 4,
-              width: targetRect.width + 8,
-              height: targetRect.height + 8,
+              top: `${targetRect.top - 4}px`,
+              left: `${targetRect.left - 4}px`,
+              width: `${targetRect.width + 8}px`,
+              height: `${targetRect.height + 8}px`,
               boxShadow: '0 0 20px rgba(255,255,255,0.8), inset 0 0 20px rgba(255,255,255,0.3)',
             }}
           />
