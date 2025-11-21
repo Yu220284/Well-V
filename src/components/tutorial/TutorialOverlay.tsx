@@ -67,23 +67,35 @@ export function TutorialOverlay() {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/50 z-[9998]" onClick={handleNext} />
+      <div className="fixed inset-0 bg-black/70 z-[9998]" />
       
       {targetRect && (
-        <div
-          className="fixed z-[9999] pointer-events-none"
-          style={{
-            top: targetRect.top - 4,
-            left: targetRect.left - 4,
-            width: targetRect.width + 8,
-            height: targetRect.height + 8,
-            boxShadow: '0 0 0 4px rgba(255,255,255,0.8), 0 0 0 9999px rgba(0,0,0,0.5)',
-            borderRadius: '8px',
-          }}
-        />
+        <>
+          <div
+            className="fixed bg-white z-[9999] pointer-events-auto cursor-pointer"
+            style={{
+              top: targetRect.top,
+              left: targetRect.left,
+              width: targetRect.width,
+              height: targetRect.height,
+              opacity: 0.01,
+            }}
+            onClick={handleNext}
+          />
+          <div
+            className="fixed z-[9999] pointer-events-none border-4 border-white rounded-lg"
+            style={{
+              top: targetRect.top - 4,
+              left: targetRect.left - 4,
+              width: targetRect.width + 8,
+              height: targetRect.height + 8,
+              boxShadow: '0 0 20px rgba(255,255,255,0.8), inset 0 0 20px rgba(255,255,255,0.3)',
+            }}
+          />
+        </>
       )}
       
-      <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[10000] max-w-md w-full px-4" onClick={handleNext}>
+      <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[10000] max-w-md w-full px-4">
         <Card className="bg-primary text-primary-foreground shadow-lg cursor-pointer">
           <CardContent className="p-4 text-center">
             <p className="font-medium">{step?.message}</p>
