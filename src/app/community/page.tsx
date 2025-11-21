@@ -1,58 +1,63 @@
 
 'use client';
 
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { TRAINERS } from "@/lib/data";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, ChevronRight, Users, ShoppingBag } from "lucide-react";
 import { AdBanner } from "@/components/layout/AdBanner";
+import { useTrainerStore } from "@/lib/hooks/use-trainer-store";
 
-// Dummy data for community feed
-const feedItems = {
-  'sora-group': [
-    {
-        type: 'trainer_post',
-        user: { name: 'Sora (トレーナー)', avatar: 'https://picsum.photos/seed/trainer1/100' },
-        content: 'みんな、週末のトレーニングお疲れ様だよ✨来週は新しいワークアウト動画を公開予定！お楽しみに💪',
-        time: '2時間前',
-        likes: 152,
-        comments: 28,
-      },
-      {
-        type: 'achievement',
-        user: { name: 'Emi', avatar: 'https://picsum.photos/seed/user1/100' },
-        content: '「朝のエナジーブースト筋トレ」を完了しました！',
-        time: '5分前',
-        likes: 12,
-        comments: 3,
-      },
-  ],
-  'kaito-group': [
-    {
-        type: 'post',
-        user: { name: 'Kaito', avatar: 'https://picsum.photos/seed/user2/100' },
-        content: '今日のヨガ、すごく気持ちよかった！新しいポーズにも挑戦できた。',
-        time: '30分前',
-        likes: 25,
-        comments: 8,
-      },
-  ],
-  'yui-group': [],
-};
-
-const reactions = [
-    { label: 'すごい！', icon: '👏' },
-    { label: 'おつかれさま！', icon: '👍' },
-    { label: 'がんばったね！', icon: '🔥' },
-    { label: 'わかる！', icon: '🙌' },
+const generateCommunityPosts = (trainerId: number, trainerName: string) => [
+  {
+    user: { name: `${trainerName} (トレーナー)`, avatar: 'https://picsum.photos/seed/trainer/100', isTrainer: true },
+    content: 'みんな、今週もお疲れ様！来週は新しいセッションを公開予定だよ✨',
+    time: '2時間前',
+    likes: 152,
+    comments: 28,
+  },
+  {
+    user: { name: 'ゆうか', avatar: 'https://picsum.photos/seed/user1/100' },
+    content: '今日のセッション、すごく良かったです！明日も頑張ります💪',
+    time: '30分前',
+    likes: 45,
+    comments: 12,
+  },
+  {
+    user: { name: 'たくみ', avatar: 'https://picsum.photos/seed/user2/100' },
+    content: '初めて完走できました！このコミュニティのみんなのおかげです。ありがとうございます！',
+    time: '1時間前',
+    likes: 67,
+    comments: 15,
+  },
+  {
+    user: { name: 'みさき', avatar: 'https://picsum.photos/seed/user3/100' },
+    content: '毎日続けて100日達成！継続は力なりですね✨',
+    time: '3時間前',
+    likes: 89,
+    comments: 22,
+  },
 ];
 
+
+
+
+
 export default function CommunityPage() {
+  const searchParams = useSearchParams();
+  const communityId = searchParams.get('tab');
+  const { followedTrainers, isLoaded } = useTrainerStore();
+  const followedTrainersList = TRAINERS.filter(t => followedTrainers.includes(t.id));
+  const currentTrainer = communityId ? TRAINERS.find(t => t.communityId === communityId) : null;
+  const posts = currentTrainer ? generateCommunityPosts(currentTrainer.id, currentTrainer.name) : [];
+
   return (
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
@@ -63,77 +68,105 @@ export default function CommunityPage() {
         <div className="max-w-2xl mx-auto">
             <div className="relative mb-6">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-              <h1 className="relative text-xl font-bold font-headline py-2 pl-2">グループ</h1>
+              <h1 className="relative text-xl font-bold font-headline py-2 pl-2">コミュニティ</h1>
             </div>
 
-            <Tabs defaultValue={TRAINERS[0].groupId}>
-              <TabsList className="grid w-full grid-cols-3">
-                {TRAINERS.map((trainer) => (
-                  <TabsTrigger key={trainer.id} value={trainer.groupId}>{trainer.name}</TabsTrigger>
-                ))}
-              </TabsList>
+            {currentTrainer ? (
+              <div className="my-6">
+                <Link href="/community" className="text-sm text-muted-foreground hover:text-primary mb-4 inline-block">
+                  ← コミュニティ一覧に戻る
+                </Link>
+                
+                <Card className="mb-6 overflow-hidden">
+                  <div className="h-32 bg-gradient-to-r from-primary/20 to-primary/10" />
+                  <CardContent className="-mt-12 pb-6">
+                    <div className="flex items-end gap-4 mb-4">
+                      <Link href={`/trainer/${currentTrainer.id}`}>
+                        <Avatar className="h-24 w-24 border-4 border-background cursor-pointer hover:opacity-80 transition-opacity">
+                          <AvatarImage src={currentTrainer.imageUrl} alt={currentTrainer.name} />
+                          <AvatarFallback>{currentTrainer.name[0]}</AvatarFallback>
+                        </Avatar>
+                      </Link>
+                      <div className="flex-1 pb-2">
+                        <div className="flex items-center gap-2">
+                          <h2 className="text-2xl font-bold">{currentTrainer.name}のコミュニティ</h2>
+                          <Link href={`/community/${currentTrainer.communityId}/shop`}>
+                            <Button size="icon" variant="ghost" className="h-8 w-8">
+                              <ShoppingBag className="h-5 w-5" />
+                            </Button>
+                          </Link>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{currentTrainer.followers.toLocaleString()}人のメンバー</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{currentTrainer.bio}</p>
+                  </CardContent>
+                </Card>
 
-              {TRAINERS.map((trainer) => (
-                <TabsContent key={trainer.id} value={trainer.groupId}>
-                  {/* Post creation card */}
-                  <Card className="my-6">
-                      <CardContent className="p-4 flex items-center gap-4">
-                          <UserAvatar userId="me" />
-                          <div className="flex-1">
-                              <input
-                                  type="text"
-                                  placeholder="今日の調子はどうですか？"
-                                  className="w-full bg-transparent outline-none"
-                              />
-                          </div>
-                          <Button size="sm">投稿する</Button>
-                      </CardContent>
-                  </Card>
-
-                  {/* Feed items */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">最近の投稿</h3>
                   <div className="space-y-4">
-                  {feedItems[trainer.groupId].length > 0 ? (
-                    feedItems[trainer.groupId].map((item, index) => (
-                      <Card key={index} className="overflow-hidden">
-                        <CardHeader className="p-4">
-                          <div className="flex items-start gap-4">
-                            <UserAvatar userId={item.user.name} />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2">
-                                <p className="font-semibold">{item.user.name}</p>
-                                {item.type === 'trainer_post' && <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full">トレーナー</span>}
-                              </div>
-                              <p className="text-xs text-muted-foreground">{item.time}</p>
+                    {posts.map((post: any, idx: number) => (
+                      <Card key={idx}>
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10">
+                              <AvatarImage src={post.user.avatar} />
+                              <AvatarFallback>{post.user.name[0]}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-semibold text-sm">{post.user.name}</p>
+                              <p className="text-xs text-muted-foreground">{post.time}</p>
                             </div>
                           </div>
                         </CardHeader>
-                        <CardContent className="px-4 pb-2">
-                          <p className="text-sm">{item.content}</p>
+                        <CardContent className="pb-3">
+                          <p className="text-sm">{post.content}</p>
                         </CardContent>
-                        <CardFooter className="p-2 bg-card/50 flex justify-between">
-                            <div className="flex gap-1">
-                                {reactions.map(reaction => (
-                                    <Button key={reaction.label} variant="ghost" size="sm" className="flex items-center text-muted-foreground px-2">
-                                        <span className="text-lg">{reaction.icon}</span>
-                                    </Button>
-                                ))}
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
-                                    <MessageSquare className="h-4 w-4" />
-                                </Button>
-                                <span className="text-xs text-muted-foreground">{item.comments}</span>
-                            </div>
+                        <CardFooter className="flex gap-4 text-sm text-muted-foreground">
+                          <button className="flex items-center gap-1 hover:text-primary">
+                            👍 {post.likes}
+                          </button>
+                          <button className="flex items-center gap-1 hover:text-primary">
+                            <MessageSquare className="h-4 w-4" />
+                            {post.comments}
+                          </button>
                         </CardFooter>
                       </Card>
-                    ))
-                  ) : (
-                    <p className="text-center text-muted-foreground py-10">まだ投稿がありません。</p>
-                  )}
+                    ))}
                   </div>
-                </TabsContent>
-              ))}
-            </Tabs>
+                </div>
+              </div>
+            ) : !isLoaded ? (
+              <p className="text-center text-muted-foreground py-10">読み込み中...</p>
+            ) : followedTrainersList.length === 0 ? (
+              <Card className="my-6">
+                <CardContent className="p-8 text-center">
+                  <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-muted-foreground mb-4">まだトレーナーをフォローしていません</p>
+                  <Link href="/trainers">
+                    <Button>トレーナーを探す</Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="my-6">
+                <h2 className="text-lg font-semibold mb-4">フォロー中のトレーナー</h2>
+                <div className="space-y-2">
+                  {followedTrainersList.map((trainer) => (
+                    <Link key={trainer.id} href={`/community?tab=${trainer.communityId}`}>
+                      <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent transition-colors">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={trainer.imageUrl} alt={trainer.name} />
+                          <AvatarFallback>{trainer.name[0]}</AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium">{trainer.name}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
         </div>
       </main>
         </div>

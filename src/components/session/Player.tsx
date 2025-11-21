@@ -23,6 +23,7 @@ import type { Session } from "@/lib/types";
 import { SafetyPromptDialog } from "./SafetyPromptDialog";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { TRAINERS } from "@/lib/data";
 import messages from "@/../messages/ja.json";
 
 function formatTime(seconds: number): string {
@@ -31,11 +32,21 @@ function formatTime(seconds: number): string {
   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 }
 
-export function Player({ session }: { session: Session }) {
+export function Player({ session, trainerId = 1 }: { session: Session; trainerId?: number }) {
   const t = messages.SessionPlayer;
   const router = useRouter();
   const { addSession, toggleFavorite, isFavorite, isLoaded } = useSessionStore();
   const { toast } = useToast();
+  const selectedTrainer = TRAINERS.find(trainer => trainer.id === trainerId) || TRAINERS[0];
+  
+  const getAudioUrl = () => {
+    if (selectedTrainer.id === 1 && session.audioUrl) {
+      return session.audioUrl;
+    }
+    return '';
+  };
+  
+  const audioUrl = getAudioUrl();
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isSafetyPromptOpen, setIsSafetyPromptOpen] = useState(true);
@@ -48,7 +59,7 @@ export function Player({ session }: { session: Session }) {
 
   const handleStartSession = () => {
     setIsSafetyPromptOpen(false);
-    if (session.audioUrl) {
+    if (audioUrl) {
       if (audioRef.current) {
         audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
       }
@@ -61,7 +72,7 @@ export function Player({ session }: { session: Session }) {
   const handleCanPlay = () => setIsReady(true);
 
   const togglePlayPause = () => {
-    if (session.audioUrl && audioRef.current) {
+    if (audioUrl && audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
@@ -74,7 +85,7 @@ export function Player({ session }: { session: Session }) {
 
   const restart = () => {
     setCurrentTime(0);
-    if (session.audioUrl && audioRef.current) {
+    if (audioUrl && audioRef.current) {
       audioRef.current.currentTime = 0;
       if (!isPlaying) {
         audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
@@ -85,7 +96,7 @@ export function Player({ session }: { session: Session }) {
   };
 
   const stop = () => {
-    if (session.audioUrl && audioRef.current) {
+    if (audioUrl && audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
@@ -121,14 +132,14 @@ export function Player({ session }: { session: Session }) {
 
   const handleSliderChange = (value: number[]) => {
     const newTime = value[0];
-    if (session.audioUrl && audioRef.current) {
+    if (audioUrl && audioRef.current) {
       audioRef.current.currentTime = newTime;
     }
     setCurrentTime(newTime);
   };
 
   useEffect(() => {
-    if (isPlaying && !session.audioUrl) {
+    if (isPlaying && !audioUrl) {
       const timer = setInterval(() => {
         setCurrentTime((prevTime) => {
           if (prevTime >= session.duration) {
@@ -149,11 +160,11 @@ export function Player({ session }: { session: Session }) {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [isPlaying, session.duration, session.id, session.audioUrl, addSession, router, toast, t, session.title]);
+  }, [isPlaying, session.duration, session.id, audioUrl, addSession, router, toast, t, session.title]);
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || !session.audioUrl) return;
+    if (!audio || !audioUrl) return;
 
     const updateCurrentTime = () => setCurrentTime(audio.currentTime);
     const onPlay = () => setIsPlaying(true);
@@ -183,7 +194,7 @@ export function Player({ session }: { session: Session }) {
       audio.removeEventListener("ended", onEnded);
       audio.removeEventListener("canplay", handleCanPlay);
     };
-  }, [addSession, session.id, router, toast, t, session.title, session.audioUrl]);
+  }, [addSession, session.id, router, toast, t, session.title, audioUrl]);
 
   return (
     <>
@@ -191,7 +202,7 @@ export function Player({ session }: { session: Session }) {
         open={isSafetyPromptOpen}
         onStart={handleStartSession}
       />
-      {session.audioUrl && <audio ref={audioRef} src={session.audioUrl} preload="auto" />}
+      {audioUrl && <audio ref={audioRef} src={audioUrl} preload="auto" />}
       <div className="relative h-screen w-screen overflow-hidden">
         <Image
           src={session.imageUrl}
@@ -221,6 +232,7 @@ export function Player({ session }: { session: Session }) {
             <div className="text-center">
               <p className="text-sm uppercase tracking-wider text-primary font-semibold">{session.category}</p>
               <h1 className="text-2xl font-bold font-headline mt-1">{session.title}</h1>
+              <p className="text-sm text-muted-foreground mt-2">ガイド: {selectedTrainer.name}</p>
             </div>
 
             <div className="space-y-2">
@@ -285,7 +297,7 @@ export function Player({ session }: { session: Session }) {
                     onClick={toggleMute}
                     className="h-16 w-16"
                     aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria}
-                    disabled={!session.audioUrl}
+                    disabled={!audioUrl}
                   >
                     {isMuted ? <VolumeX className="h-8 w-8" /> : <Volume2 className="h-8 w-8" />}
                   </Button>

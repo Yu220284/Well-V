@@ -13,9 +13,11 @@ export const SessionSchema = z.object({
   description: z.string().optional(),
   category: z.enum(['workout', 'yoga', 'stretch']),
   duration: z.number().positive(), // in seconds
-  audioUrl: z.string().url(),
+  audioUrl: z.string().optional(),
   imageUrl: z.string().url(),
   imageHint: z.string(),
+  tags: z.array(z.string()).optional(),
+  trainerId: z.number().optional(),
 });
 
 // TypeScript type derived from the schema
@@ -82,8 +84,9 @@ export interface Trainer {
   name: string;
   imageUrl: string;
   imageHint: string;
-  groupId: string;
+  communityId: string;
   specialty: string;
   bio: string;
   followers: number;
+  tags: string[];
 }

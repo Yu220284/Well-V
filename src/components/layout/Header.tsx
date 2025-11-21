@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, Bell, Diamond } from "lucide-react";
+import { Settings, Bell, Diamond, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthButton } from "@/components/auth/AuthButton";
-import { useSupabaseFavorites } from "@/lib/hooks/use-supabase-favorites";
+import { useLocalAuth } from "@/lib/hooks/use-local-auth";
 
 export function Header() {
-  const { user } = useSupabaseFavorites();
+  const { user } = useLocalAuth();
   return (
     <header className="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8 bg-background/80 backdrop-blur-md border-b border-border/20">
       <div className="container mx-auto relative flex items-center">
@@ -18,7 +18,24 @@ export function Header() {
               <Settings className="h-6 w-6" />
             </Button>
           </Link>
-          <AuthButton />
+          {user ? (
+            <Link href="/menu/profile">
+              <Button variant="ghost" className="rounded-full h-10 px-3">
+                <div className="flex items-center gap-2">
+                  {user.profileImage ? (
+                    <img src={user.profileImage} alt="Profile" className="w-7 h-7 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="h-4 w-4 text-primary" />
+                    </div>
+                  )}
+                  <span className="text-sm font-semibold">{user.displayName}</span>
+                </div>
+              </Button>
+            </Link>
+          ) : (
+            <AuthButton />
+          )}
         </div>
         
         {/* 中央：WellVロゴ（絶対中央配置） */}

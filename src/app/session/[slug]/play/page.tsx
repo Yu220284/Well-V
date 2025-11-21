@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import { SESSIONS } from "@/lib/data";
-import { SessionDetail } from "@/components/session/SessionDetail";
+import { Player } from "@/components/session/Player";
 import type { Metadata } from "next";
 import messages from '@/../messages/ja.json';
 
 type Props = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ trainer?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -20,23 +21,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   return {
     title: `${session.title} | ${t.title}`,
-    description: `${session.description}`,
+    description: `Start your ${session.category} session: ${session.title}.`,
   };
 }
 
-export default async function SessionPage({ params }: Props) {
+export default async function SessionPlayPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const { trainer } = await searchParams;
   const session = SESSIONS.find((s) => s.id === slug);
 
   if (!session) {
     notFound();
   }
 
-  return <SessionDetail session={session} />;
-}
-
-export function generateStaticParams() {
-    return SESSIONS.map((session) => ({
-        slug: session.id,
-    }));
+  return <Player session={session} trainerId={trainer ? parseInt(trainer) : 1} />;
 }
