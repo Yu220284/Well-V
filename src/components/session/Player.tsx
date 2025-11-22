@@ -57,6 +57,8 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
 
   const isFav = isLoaded ? isFavorite(session.id) : false;
 
+
+
   const handleStartSession = () => {
     setIsSafetyPromptOpen(false);
     if (audioUrl) {
@@ -136,6 +138,12 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
       audioRef.current.currentTime = newTime;
     }
     setCurrentTime(newTime);
+    
+    const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
+    const currentStep = parseInt(localStorage.getItem('wellv_tutorial_step') || '0');
+    if (tutorialActive && currentStep === 10 && newTime >= session.duration - 1) {
+      localStorage.setItem('wellv_tutorial_step', '11');
+    }
   };
 
   useEffect(() => {
@@ -146,13 +154,16 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
             clearInterval(timer);
             addSession(session.id);
             setIsPlaying(false);
-            setTimeout(() => {
-              toast({
-                title: t.session_complete_title,
-                description: t.session_complete_description.replace("{sessionTitle}", session.title),
-              });
-            }, 0);
-            setTimeout(() => router.push(`/session/${session.id}/result`), 2000);
+            const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
+            if (!tutorialActive) {
+              setTimeout(() => {
+                toast({
+                  title: t.session_complete_title,
+                  description: t.session_complete_description.replace("{sessionTitle}", session.title),
+                });
+              }, 0);
+            }
+            setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 2000);
             return session.duration;
           }
           return prevTime + 1;
@@ -172,13 +183,16 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
     const onEnded = () => {
       addSession(session.id);
       setIsPlaying(false);
-      setTimeout(() => {
-        toast({
-          title: t.session_complete_title,
-          description: t.session_complete_description.replace("{sessionTitle}", session.title),
-        });
-      }, 0);
-      setTimeout(() => router.push(`/session/${session.id}/result`), 2000);
+      const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
+      if (!tutorialActive) {
+        setTimeout(() => {
+          toast({
+            title: t.session_complete_title,
+            description: t.session_complete_description.replace("{sessionTitle}", session.title),
+          });
+        }, 0);
+      }
+      setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 2000);
     };
 
     audio.addEventListener("timeupdate", updateCurrentTime);

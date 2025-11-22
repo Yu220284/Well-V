@@ -39,8 +39,8 @@ export default function TrainerPage() {
           <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Trainer Profile Section */}
         <section className="mb-12">
-            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-card to-card/60 shadow-lg">
-                <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0">
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-br from-card to-card/60 shadow-lg">
+                <div className="relative w-20 h-20 flex-shrink-0">
                     <Image
                         src={trainer.imageUrl}
                         alt={`Portrait of ${trainer.name}`}
@@ -49,7 +49,7 @@ export default function TrainerPage() {
                         className="rounded-full object-cover border-4 border-primary/50 shadow-xl"
                     />
                 </div>
-                <div className="text-center md:text-left">
+                <div className="flex-1">
                     <h1 className="text-3xl md:text-4xl font-bold font-headline">{trainer.name}</h1>
                     <p className="text-lg text-primary font-semibold mt-1">{trainer.specialty}</p>
                     {(trainer as any).streamLinks && (trainer as any).streamLinks.length > 0 && (

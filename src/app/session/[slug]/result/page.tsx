@@ -27,6 +27,14 @@ export default function SessionResultPage({
       setSession(foundSession);
     });
   }, [params]);
+
+  React.useEffect(() => {
+    const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
+    const currentStep = parseInt(localStorage.getItem('wellv_tutorial_step') || '0');
+    if (tutorialActive && currentStep === 10) {
+      localStorage.setItem('wellv_tutorial_step', '11');
+    }
+  }, []);
   const trainer = TRAINERS.find(t => t.id === 1); // Mock trainer
   const [isFollowing, setIsFollowing] = useState(false);
   const [groupPost, setGroupPost] = useState('');
@@ -36,15 +44,7 @@ export default function SessionResultPage({
   
   const isFav = isFavorite(session?.id || '');
 
-  const handleGroupPost = async () => {
-    if (!groupPost.trim()) return;
-    setIsPosting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    toast({ title: "投稿完了", description: "グループに投稿しました" });
-    setGroupPost('');
-    setIsPosting(false);
-  };
+
 
   if (!session) {
     return <div>Session not found</div>;
@@ -128,7 +128,14 @@ export default function SessionResultPage({
                 rows={3}
               />
               <Button 
-                onClick={handleGroupPost}
+                onClick={async () => {
+                  if (!groupPost.trim()) return;
+                  setIsPosting(true);
+                  await new Promise(resolve => setTimeout(resolve, 1000));
+                  toast({ title: "投稿完了", description: "グループに投稿しました" });
+                  setGroupPost('');
+                  setIsPosting(false);
+                }}
                 disabled={!groupPost.trim() || isPosting}
                 className="w-full"
                 size="sm"

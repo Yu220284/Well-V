@@ -33,7 +33,7 @@ export default function TutorialPage() {
   const handleStart = () => {
     localStorage.setItem('wellv_tutorial_active', 'true');
     localStorage.setItem('wellv_tutorial_step', '0');
-    setTimeout(() => router.push('/'), 0);
+    setTimeout(() => router.push('/'), 100);
   };
 
   const handleSkip = () => {

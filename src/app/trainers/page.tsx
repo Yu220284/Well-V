@@ -40,8 +40,8 @@ export default function TrainersPage() {
   const yogaTrainers = filterTrainers(TRAINERS.filter(t => t.specialty === 'ヨガ'));
   const stretchTrainers = filterTrainers(TRAINERS.filter(t => t.specialty === 'ストレッチ'));
 
-  const TrainerCard = ({ trainer }: { trainer: Trainer }) => (
-    <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
+  const TrainerCard = ({ trainer, isFirst }: { trainer: Trainer; isFirst?: boolean }) => (
+    <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1" data-tutorial={isFirst ? "trainer-card" : undefined}>
       <Link href={`/trainer/${trainer.id}`} className="block">
         <div className="aspect-square w-full relative overflow-hidden">
           <Image
@@ -65,7 +65,10 @@ export default function TrainersPage() {
           className="w-full mt-2"
           onClick={(e) => {
             e.preventDefault();
-            toggleFollow(trainer.id);
+            const isTutorialActive = typeof window !== 'undefined' && localStorage.getItem('wellv_tutorial_active') === 'true';
+            if (!isTutorialActive) {
+              toggleFollow(trainer.id);
+            }
           }}
         >
           <Heart className={`h-3 w-3 mr-1 ${isFollowing(trainer.id) ? 'fill-current' : ''}`} />
@@ -112,7 +115,7 @@ export default function TrainersPage() {
               {!isLoaded ? (
                 <p className="col-span-full text-center text-muted-foreground py-8">読み込み中...</p>
               ) : followingTrainers.length > 0 ? (
-                followingTrainers.map((trainer) => <TrainerCard key={trainer.id} trainer={trainer} />)
+                followingTrainers.map((trainer, index) => <TrainerCard key={trainer.id} trainer={trainer} isFirst={index === 0} />)
               ) : (
                 <p className="col-span-full text-center text-muted-foreground py-8">フォロー中のトレーナーはいません</p>
               )}

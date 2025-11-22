@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Play, Heart, Clock, Users, Star } from "lucide-react";
@@ -33,6 +33,8 @@ export function SessionDetail({ session }: { session: Session }) {
   const isFav = isLoaded ? isFavorite(session.id) : false;
   
   const availableTrainers = sessionTrainer ? [sessionTrainer] : TRAINERS;
+
+
 
   const handleStartSession = () => {
     router.push(`/session/${session.id}/play?trainer=${selectedTrainer}`);
@@ -149,6 +151,7 @@ export function SessionDetail({ session }: { session: Session }) {
                     onClick={handleStartSession}
                     className="w-full h-14 text-lg font-semibold"
                     size="lg"
+                    data-tutorial="session-start"
                   >
                     <Play className="h-6 w-6 mr-2" />
                     セッションを開始

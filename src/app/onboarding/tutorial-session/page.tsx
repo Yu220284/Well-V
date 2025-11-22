@@ -33,9 +33,13 @@ export default function TutorialSessionPage() {
     }
   };
 
-  const handleComplete = () => {
-    updateProfile({ onboardingCompleted: true });
-    router.push('/');
+  const handleComplete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    localStorage.setItem('wellv_tutorial_active', 'true');
+    localStorage.setItem('wellv_tutorial_step', '0');
+    setTimeout(() => {
+      router.push('/');
+    }, 100);
   };
 
   const step = TUTORIAL_STEPS[currentStep];
@@ -60,7 +64,7 @@ export default function TutorialSessionPage() {
 
       {currentStep === TUTORIAL_STEPS.length - 1 && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
-          <Button onClick={(e) => { e.stopPropagation(); handleComplete(); }} size="lg">
+          <Button onClick={handleComplete} size="lg">
             ホームへ進む
           </Button>
         </div>

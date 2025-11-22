@@ -9,9 +9,14 @@ import { Logo } from "../icons/Logo";
 export function BottomNav() {
   const pathname = usePathname();
 
+  if (pathname.startsWith('/onboarding') || pathname === '/language-select') {
+    return null;
+  }
+
+
   const navItems = [
     { href: "/sessions", label: "Sessions", icon: Layers },
-    { href: "/trainers", label: "Trainers", icon: Contact },
+    { href: "/trainers", label: "Trainers", icon: Contact, dataTutorial: "trainer-list" },
     { href: "/", label: "Home", icon: Logo, isCentral: true },
     { href: "/community", label: "Group", icon: Users },
     { href: "/menu", label: "Menu", icon: Menu },
@@ -54,6 +59,7 @@ export function BottomNav() {
                 "inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50 group",
                 isActive ? "text-primary" : "text-muted-foreground"
               )}
+              data-tutorial={item.dataTutorial}
             >
               <Icon className="w-6 h-6" />
               <span className="sr-only">{item.label}</span>

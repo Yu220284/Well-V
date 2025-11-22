@@ -47,7 +47,19 @@ export function SafetyPromptDialog({ open, onStart }: SafetyPromptDialogProps) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button onClick={onStart} className="w-full">
+          <Button 
+            onClick={(e) => {
+              e.stopPropagation();
+              const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
+              const currentStep = parseInt(localStorage.getItem('wellv_tutorial_step') || '0');
+              if (tutorialActive && currentStep === 4) {
+                localStorage.setItem('wellv_tutorial_step', '5');
+              }
+              onStart();
+            }} 
+            className="w-full" 
+            data-tutorial="safety-start"
+          >
             {t.start_button}
           </Button>
         </DialogFooter>
