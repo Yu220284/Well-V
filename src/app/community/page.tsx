@@ -1,0 +1,202 @@
+
+'use client';
+
+import { useState } from 'react';
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Header } from "@/components/layout/Header";
+import { PageTransition } from "@/components/layout/PageTransition";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { SearchBar } from "@/components/search/SearchBar";
+
+import { TRAINERS } from "@/lib/data";
+import { MessageSquare, ChevronRight, Users, ShoppingBag } from "lucide-react";
+import { AdBanner } from "@/components/layout/AdBanner";
+import { useTrainerStore } from "@/lib/hooks/use-trainer-store";
+
+const generateCommunityPosts = (trainerId: number, trainerName: string) => [
+  {
+    user: { name: `${trainerName} (トレーナー)`, avatar: 'https://picsum.photos/seed/trainer/100', isTrainer: true },
+    content: 'みんな、今週もお疲れ様！来週は新しいセッションを公開予定だよ✨',
+    time: '2時間前',
+    likes: 152,
+    comments: 28,
+  },
+  {
+    user: { name: 'ゆうか', avatar: 'https://picsum.photos/seed/user1/100' },
+    content: '今日のセッション、すごく良かったです！明日も頑張ります💪',
+    time: '30分前',
+    likes: 45,
+    comments: 12,
+  },
+  {
+    user: { name: 'たくみ', avatar: 'https://picsum.photos/seed/user2/100' },
+    content: '初めて完走できました！このコミュニティのみんなのおかげです。ありがとうございます！',
+    time: '1時間前',
+    likes: 67,
+    comments: 15,
+  },
+  {
+    user: { name: 'みさき', avatar: 'https://picsum.photos/seed/user3/100' },
+    content: '毎日続けて100日達成！継続は力なりですね✨',
+    time: '3時間前',
+    likes: 89,
+    comments: 22,
+  },
+];
+
+
+
+
+
+export default function CommunityPage() {
+  const searchParams = useSearchParams();
+  const communityId = searchParams.get('tab');
+  const { followedTrainers, isLoaded } = useTrainerStore();
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+  
+  const filterTrainers = (trainers: any[]) => {
+    if (!searchQuery.trim()) return trainers;
+    return trainers.filter(trainer => 
+      trainer.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+  
+  const followedTrainersList = filterTrainers(TRAINERS.filter(t => followedTrainers.includes(t.id)));
+  const currentTrainer = communityId ? TRAINERS.find(t => t.communityId === communityId) : null;
+  const posts = currentTrainer ? generateCommunityPosts(currentTrainer.id, currentTrainer.name) : [];
+
+  return (
+    <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
+      <Header />
+      <PageTransition>
+        <div className="pt-24">
+          <AdBanner />
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-2xl mx-auto">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+              <h1 className="relative text-xl font-bold font-headline py-2 pl-2">コミュニティ</h1>
+            </div>
+
+            {currentTrainer ? (
+              <div className="my-6">
+                <Link href="/community" className="text-sm text-muted-foreground hover:text-primary mb-4 inline-block">
+                  ← コミュニティ一覧に戻る
+                </Link>
+                
+                <Card className="mb-6 overflow-hidden">
+                  <div className="h-32 bg-gradient-to-r from-primary/20 to-primary/10" />
+                  <CardContent className="-mt-12 pb-6">
+                    <div className="flex items-end gap-4 mb-4">
+                      <Link href={`/trainer/${currentTrainer.id}`}>
+                        <Avatar className="h-24 w-24 border-4 border-background cursor-pointer hover:opacity-80 transition-opacity">
+                          <AvatarImage src={currentTrainer.imageUrl} alt={currentTrainer.name} />
+                          <AvatarFallback>{currentTrainer.name[0]}</AvatarFallback>
+                        </Avatar>
+                      </Link>
+                      <div className="flex-1 pb-2">
+                        <div className="flex items-center gap-2">
+                          <h2 className="text-2xl font-bold">{currentTrainer.name}のコミュニティ</h2>
+                          <Link href={`/community/${currentTrainer.communityId}/shop`}>
+                            <Button size="icon" variant="ghost" className="h-8 w-8">
+                              <ShoppingBag className="h-5 w-5" />
+                            </Button>
+                          </Link>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{currentTrainer.followers.toLocaleString()}人のメンバー</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{currentTrainer.bio}</p>
+                  </CardContent>
+                </Card>
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">最近の投稿</h3>
+                  <div className="space-y-4">
+                    {posts.map((post: any, idx: number) => (
+                      <Card key={idx}>
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10">
+                              <AvatarImage src={post.user.avatar} />
+                              <AvatarFallback>{post.user.name[0]}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-semibold text-sm">{post.user.name}</p>
+                              <p className="text-xs text-muted-foreground">{post.time}</p>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="pb-3">
+                          <p className="text-sm">{post.content}</p>
+                        </CardContent>
+                        <CardFooter className="flex gap-4 text-sm text-muted-foreground">
+                          <button className="flex items-center gap-1 hover:text-primary">
+                            👍 {post.likes}
+                          </button>
+                          <button className="flex items-center gap-1 hover:text-primary">
+                            <MessageSquare className="h-4 w-4" />
+                            {post.comments}
+                          </button>
+                        </CardFooter>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : !isLoaded ? (
+              <p className="text-center text-muted-foreground py-10">読み込み中...</p>
+            ) : followedTrainersList.length === 0 ? (
+              <Card className="my-6">
+                <CardContent className="p-8 text-center">
+                  <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-muted-foreground mb-4">まだトレーナーをフォローしていません</p>
+                  <Link href="/trainers">
+                    <Button>トレーナーを探す</Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="my-6">
+                <SearchBar 
+                  placeholder="検索"
+                  onSearch={handleSearch}
+                />
+                <div className="space-y-3">
+                  {followedTrainersList.map((trainer) => (
+                    <Link key={trainer.id} href={`/community/${trainer.id}`}>
+                      <Card className="hover:bg-accent/50 transition-colors">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-4">
+                            <Avatar className="h-12 w-12">
+                              <AvatarImage src={trainer.imageUrl} alt={trainer.name} />
+                              <AvatarFallback>{trainer.name[0]}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                              <h3 className="font-semibold">{trainer.name}</h3>
+                              <p className="text-sm text-muted-foreground">{trainer.followers.toLocaleString()}人のメンバー</p>
+                            </div>
+                            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+        </div>
+      </main>
+        </div>
+      </PageTransition>
+    </div>
+  );
+}

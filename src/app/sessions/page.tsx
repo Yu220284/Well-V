@@ -1,0 +1,166 @@
+'use client';
+
+import { useState } from "react";
+import { Header } from "@/components/layout/Header";
+import { PageTransition } from "@/components/layout/PageTransition";
+import { AdBanner } from "@/components/layout/AdBanner";
+import { SearchBar } from "@/components/search/SearchBar";
+import { SESSIONS } from "@/lib/data";
+import { Sparkles, Heart } from "lucide-react";
+import messages from '@/../messages/ja.json';
+import React from "react";
+import { useSupabaseSessions } from "@/lib/hooks/use-supabase-sessions";
+import type { Session } from "@/lib/types";
+import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFavoriteStore } from "@/lib/hooks/use-favorite-store";
+
+export default function SessionsPage() {
+  const t = messages.Home;
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('favorites');
+  const { favorites } = useFavoriteStore();
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const filterSessions = (sessions: Session[]) => {
+    if (!searchQuery.trim()) return sessions;
+    return sessions.filter(session => 
+      session.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      session.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (session.tags && session.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+    );
+  };
+
+  const favoriteSessions = filterSessions(SESSIONS.filter(s => favorites.includes(s.id)));
+  const workoutSessions = filterSessions(SESSIONS.filter(s => s.category === 'workout'));
+  const yogaSessions = filterSessions(SESSIONS.filter(s => s.category === 'yoga'));
+  const stretchSessions = filterSessions(SESSIONS.filter(s => s.category === 'stretch'));
+
+  const footerText = t.footer_text.replace('{sparkles}', '');
+
+  return (
+    <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
+      <Header />
+      <PageTransition>
+        <div className="pt-24">
+          <AdBanner />
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-8">
+          <section>
+            <div className="relative mb-4">
+              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
+              <h2 className="relative text-lg font-bold font-headline py-2 pl-2">セッション</h2>
+            </div>
+            
+            <SearchBar 
+              placeholder="セッションを検索..."
+              onSearch={handleSearch}
+            />
+
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="favorites">
+                  <Heart className="h-4 w-4 mr-1" />
+                  お気に入り
+                </TabsTrigger>
+                <TabsTrigger value="workout">ワークアウト</TabsTrigger>
+                <TabsTrigger value="yoga">ヨガ</TabsTrigger>
+                <TabsTrigger value="stretch">ストレッチ</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="favorites" className="mt-4">
+                {favoriteSessions.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-10">お気に入りのセッションがありません</p>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {favoriteSessions.map((session) => (
+                      <Link key={session.id} href={`/session/${session.id}`}>
+                        <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                          <div className="aspect-video relative">
+                            <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
+                          </div>
+                          <div className="p-4">
+                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                            <p className="text-xs text-muted-foreground">{Math.floor(session.duration / 60)}分</p>
+                          </div>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+
+              <TabsContent value="workout" className="mt-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {workoutSessions.map((session) => (
+                    <Link key={session.id} href={`/session/${session.id}`}>
+                      <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                        <div className="aspect-video relative">
+                          <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
+                        </div>
+                        <div className="p-4">
+                          <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                          <p className="text-xs text-muted-foreground">{Math.floor(session.duration / 60)}分</p>
+                        </div>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="yoga" className="mt-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {yogaSessions.map((session) => (
+                    <Link key={session.id} href={`/session/${session.id}`}>
+                      <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                        <div className="aspect-video relative">
+                          <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
+                        </div>
+                        <div className="p-4">
+                          <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                          <p className="text-xs text-muted-foreground">{Math.floor(session.duration / 60)}分</p>
+                        </div>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="stretch" className="mt-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {stretchSessions.map((session) => (
+                    <Link key={session.id} href={`/session/${session.id}`}>
+                      <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                        <div className="aspect-video relative">
+                          <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
+                        </div>
+                        <div className="p-4">
+                          <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                          <p className="text-xs text-muted-foreground">{Math.floor(session.duration / 60)}分</p>
+                        </div>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </section>
+        </div>
+      </main>
+      <footer className="text-center py-6 text-sm text-muted-foreground">
+          <p className="inline-flex items-center">
+            {footerText.split(' ')[0]}
+            <Sparkles className="inline-block h-4 w-4 text-primary mx-1" />
+            {footerText.split(' ')[1]}
+          </p>
+      </footer>
+        </div>
+      </PageTransition>
+    </div>
+  );
+}

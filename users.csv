@@ -1,0 +1,7 @@
+id,user_id,display_name,bio,avatar_url,role,total_sessions,total_minutes,last_id_change,created_at,updated_at
+gen_random_uuid(),fitnesslover,フィット好き,フィットネスと健康的な食事が大好きです。毎日少しずつでも体を動かすことを心がけています。,https://picsum.photos/seed/user1/200/200,user,28,420,,2024-01-15T10:00:00Z,2024-12-23T15:30:00Z
+gen_random_uuid(),yogalover,ヨガちゃん,ヨガ歴3年。心と体のバランスを大切にしています。朝のヨガが日課です。,https://picsum.photos/seed/user2/200/200,user,52,890,,2024-02-20T14:30:00Z,2024-12-23T12:15:00Z
+gen_random_uuid(),kintore_kun,きんとれくん,筋トレ初心者です。継続は力なりを信じて頑張っています！,https://picsum.photos/seed/user3/200/200,user,15,245,,2024-03-10T09:15:00Z,2024-12-23T18:45:00Z
+gen_random_uuid(),sora_ch,空音そら,10年以上のヨガ指導経験を持つインストラクター。心と体のバランスを大切にしたレッスンを提供します。みんなで一緒にヨガしましょう♪,https://picsum.photos/seed/trainer1/800/600,trainer,120,1800,,2024-01-01T08:00:00Z,2024-12-23T16:00:00Z
+gen_random_uuid(),kaito_fit,海斗カイト,パーソナルトレーナーとして多くのクライアントをサポート。効率的で楽しいトレーニングが得意です。一緒に最強になろう！,https://picsum.photos/seed/trainer2/800/600,trainer,95,1425,,2024-01-05T10:30:00Z,2024-12-23T14:20:00Z
+gen_random_uuid(),yui_wellness,癒井ゆい,リハビリテーション専門の理学療法士。体の不調改善と予防に特化したプログラムを提供します。みんなの体を癒やしたいな,https://picsum.photos/seed/trainer3/800/600,trainer,110,1650,,2024-01-03T12:15:00Z,2024-12-23T17:45:00Z

@@ -1,0 +1,109 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { Header } from "@/components/layout/Header";
+import { PageTransition } from "@/components/layout/PageTransition";
+import { SESSIONS } from "@/lib/data";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Clock, Play, HeartCrack } from "lucide-react";
+import { useSupabaseSessions } from "@/lib/hooks/use-supabase-sessions";
+import { useSupabaseFavorites } from "@/lib/hooks/use-supabase-favorites";
+import { Skeleton } from "@/components/ui/skeleton";
+import messages from '@/../messages/ja.json';
+import { AdBanner } from "@/components/layout/AdBanner";
+
+export default function FavoritesPage() {
+  const t = messages.FavoritesPage;
+  const { favorites, isLoaded, user } = useSupabaseFavorites();
+  const { sessions: supabaseSessions, loading } = useSupabaseSessions();
+  
+  const allSessions = supabaseSessions.length > 0 ? supabaseSessions : SESSIONS;
+  const favoriteSessions = allSessions.filter(session => session && favorites.includes(session.id));
+
+  const formatDuration = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    return `${minutes} min`;
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+      <Header />
+      <PageTransition>
+        <div className="pt-24">
+          <AdBanner />
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <div className="relative mb-6">
+            <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
+            <h1 className="relative text-2xl font-bold font-headline py-2 pl-2">{t.title}</h1>
+          </div>
+          <p className="text-lg text-muted-foreground">{t.description}</p>
+        </div>
+
+        {!isLoaded && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-[280px] w-full rounded-xl" />)}
+            </div>
+        )}
+
+        {isLoaded && !user && (
+          <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed rounded-xl bg-card">
+              <HeartCrack className="w-16 h-16 text-muted-foreground/50 mb-4" />
+              <h2 className="text-2xl font-bold">ログインが必要です</h2>
+              <p className="text-muted-foreground mt-2">お気に入り機能を使用するにはログインしてください</p>
+              <Link href="/auth/login" className="mt-6 inline-block px-6 py-2 text-sm font-semibold text-primary-foreground bg-primary rounded-full shadow-lg hover:scale-105 transition-transform">
+                ログイン
+              </Link>
+          </div>
+        )}
+        
+        {isLoaded && user && favoriteSessions.length === 0 && (
+          <div className="flex flex-col items-center justify-center text-center py-20 border-2 border-dashed rounded-xl bg-card">
+              <HeartCrack className="w-16 h-16 text-muted-foreground/50 mb-4" />
+              <h2 className="text-2xl font-bold">{t.no_favorites_title}</h2>
+              <p className="text-muted-foreground mt-2">{t.no_favorites_description}</p>
+              <Link href="/" className="mt-6 inline-block px-6 py-2 text-sm font-semibold text-primary-foreground bg-primary rounded-full shadow-lg hover:scale-105 transition-transform">
+                {t.explore_sessions_button}
+              </Link>
+          </div>
+        )}
+        
+        {isLoaded && favoriteSessions.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {favoriteSessions.map((session) => (
+              <Link key={session.id} href={`/session/${session.id}`} className="group">
+                <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1">
+                  <div className="relative h-40 w-full">
+                    <Image
+                      src={session.imageUrl}
+                      alt={session.title}
+                      data-ai-hint={session.imageHint}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Play className="h-12 w-12 text-white fill-white" />
+                    </div>
+                  </div>
+                  <CardHeader>
+                    <CardTitle className="font-headline text-lg">{session.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <Clock className="h-4 w-4 mr-1.5" />
+                      <span>{formatDuration(session.duration)}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
+      </main>
+        </div>
+      </PageTransition>
+    </div>
+  );
+}

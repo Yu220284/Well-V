@@ -1,0 +1,336 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import {
+  Play,
+  Pause,
+  RotateCcw,
+  X,
+  Heart,
+  Volume2,
+  VolumeX,
+  Loader2,
+  Rewind,
+  FastForward,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Card } from "@/components/ui/card";
+import { useSessionStore } from "@/lib/hooks/use-session-store";
+import type { Session } from "@/lib/types";
+import { SafetyPromptDialog } from "./SafetyPromptDialog";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { TRAINERS } from "@/lib/data";
+import messages from "@/../messages/ja.json";
+
+function formatTime(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+export function Player({ session, trainerId = 1 }: { session: Session; trainerId?: number }) {
+  const t = messages.SessionPlayer;
+  const router = useRouter();
+  const { addSession, toggleFavorite, isFavorite, isLoaded } = useSessionStore();
+  const { toast } = useToast();
+  const selectedTrainer = TRAINERS.find(trainer => trainer.id === trainerId) || TRAINERS[0];
+  
+  const getAudioUrl = () => {
+    if (selectedTrainer.id === 1 && session.audioUrl) {
+      return session.audioUrl;
+    }
+    return '';
+  };
+  
+  const audioUrl = getAudioUrl();
+
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isSafetyPromptOpen, setIsSafetyPromptOpen] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isReady, setIsReady] = useState(false);
+
+  const isFav = isLoaded ? isFavorite(session.id) : false;
+
+
+
+  const handleStartSession = () => {
+    setIsSafetyPromptOpen(false);
+    if (audioUrl) {
+      if (audioRef.current) {
+        audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
+      }
+    } else {
+      setIsPlaying(true);
+      setIsReady(true);
+    }
+  };
+
+  const handleCanPlay = () => setIsReady(true);
+
+  const togglePlayPause = () => {
+    if (audioUrl && audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
+      }
+    } else {
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const restart = () => {
+    setCurrentTime(0);
+    if (audioUrl && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      if (!isPlaying) {
+        audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
+      }
+    } else if (!isPlaying) {
+      setIsPlaying(true);
+    }
+  };
+
+  const stop = () => {
+    if (audioUrl && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    router.push("/");
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !audioRef.current.muted;
+      setIsMuted(audioRef.current.muted);
+    }
+  };
+
+  const handleFavoriteToggle = () => {
+    const wasIsFav = isFav;
+    toggleFavorite(session.id);
+    
+    // toast呼び出しを次のレンダリングサイクルまで遅延
+    setTimeout(() => {
+      toast({
+        title: wasIsFav ? t.removed_from_favorites : t.added_to_favorites,
+        description: session.title,
+      });
+    }, 0);
+  };
+
+  const seek = (delta: number) => {
+    if (!audioRef.current) return;
+    const newTime = Math.max(0, Math.min(session.duration, audioRef.current.currentTime + delta));
+    audioRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
+
+  const handleSliderChange = (value: number[]) => {
+    const newTime = value[0];
+    if (audioUrl && audioRef.current) {
+      audioRef.current.currentTime = newTime;
+    }
+    setCurrentTime(newTime);
+    
+    const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
+    const currentStep = parseInt(localStorage.getItem('wellv_tutorial_step') || '0');
+    if (tutorialActive && currentStep === 10 && newTime >= session.duration - 1) {
+      localStorage.setItem('wellv_tutorial_step', '11');
+    }
+  };
+
+  useEffect(() => {
+    if (isPlaying && !audioUrl) {
+      const timer = setInterval(() => {
+        setCurrentTime((prevTime) => {
+          if (prevTime >= session.duration) {
+            clearInterval(timer);
+            addSession(session.id);
+            setIsPlaying(false);
+            const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
+
+            setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 2000);
+            return session.duration;
+          }
+          return prevTime + 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isPlaying, session.duration, session.id, audioUrl, addSession, router, toast, t, session.title]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !audioUrl) return;
+
+    const updateCurrentTime = () => setCurrentTime(audio.currentTime);
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    const onEnded = () => {
+      addSession(session.id);
+      setIsPlaying(false);
+      const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
+
+      setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 2000);
+    };
+
+    audio.addEventListener("timeupdate", updateCurrentTime);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+    audio.addEventListener("ended", onEnded);
+    audio.addEventListener("canplay", handleCanPlay);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateCurrentTime);
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+      audio.removeEventListener("ended", onEnded);
+      audio.removeEventListener("canplay", handleCanPlay);
+    };
+  }, [addSession, session.id, router, toast, t, session.title, audioUrl]);
+
+  return (
+    <>
+      <SafetyPromptDialog
+        open={isSafetyPromptOpen}
+        onStart={handleStartSession}
+      />
+      {audioUrl && <audio ref={audioRef} src={audioUrl} preload="auto" />}
+      <div className="relative h-screen w-screen overflow-hidden">
+        <Image
+          src={session.imageUrl}
+          alt={session.title}
+          data-ai-hint={session.imageHint}
+          fill
+          className="object-cover scale-110 blur-xl"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
+
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-card/80 backdrop-blur-lg border-white/20 shadow-2xl">
+          <div className="p-6 space-y-4">
+            <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-4">
+              <Image
+                src={session.imageUrl}
+                alt={session.title}
+                data-ai-hint={session.imageHint}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+
+            <div className="text-center">
+              <p className="text-sm uppercase tracking-wider text-primary font-semibold">{session.category}</p>
+              <h1 className="text-2xl font-bold font-headline mt-1">{session.title}</h1>
+              <p className="text-sm text-muted-foreground mt-2">ガイド: {selectedTrainer.name}</p>
+            </div>
+
+            <div className="space-y-2">
+              <Slider
+                value={[currentTime]}
+                max={session.duration}
+                onValueChange={handleSliderChange}
+                aria-label={t.progress_label}
+                disabled={!isReady}
+                className="cursor-pointer"
+                data-tutorial="progress"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground font-mono">
+                <span>{formatTime(currentTime)}</span>
+                <span>-{formatTime(session.duration - currentTime)}</span>
+              </div>
+            </div>
+
+            {!isReady && !isSafetyPromptOpen && (
+              <div className="flex items-center justify-center h-24">
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+              </div>
+            )}
+
+            {isReady && (
+              <div className="flex flex-col gap-4">
+                <div className="flex justify-center items-center gap-4">
+                  <Button
+                    variant="ghost"
+                    onClick={() => seek(-10)}
+                    className="relative h-16 w-16 flex flex-col items-center justify-center"
+                    aria-label={t.seek_backward_aria}
+                    data-tutorial="rewind"
+                  >
+                    <span className="text-sm font-bold mb-0">10</span>
+                    <Rewind className="h-7 w-7" />
+                  </Button>
+                  <Button
+                    variant="default"
+                    onClick={togglePlayPause}
+                    className="h-20 w-20 rounded-full shadow-lg"
+                    aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}
+                    data-tutorial="play-button"
+                  >
+                    {isPlaying ? (
+                      <Pause className="h-10 w-10 fill-primary-foreground" />
+                    ) : (
+                      <Play className="h-10 w-10 fill-primary-foreground" />
+                    )}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => seek(10)}
+                    className="relative h-16 w-16 flex flex-col items-center justify-center"
+                    aria-label={t.seek_forward_aria}
+                    data-tutorial="forward"
+                  >
+                    <span className="text-sm font-bold mb-0">10</span>
+                    <FastForward className="h-7 w-7" />
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-5 items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    onClick={toggleMute}
+                    className="h-16 w-16"
+                    aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria}
+                    disabled={!audioUrl}
+                    data-tutorial="volume"
+                  >
+                    {isMuted ? <VolumeX className="h-8 w-8" /> : <Volume2 className="h-8 w-8" />}
+                  </Button>
+
+                  <div className="col-span-3 flex justify-center items-center gap-4">
+                    <Button variant="ghost" onClick={restart} className="h-16 w-16" aria-label={t.restart_button_aria}>
+                      <RotateCcw className="h-8 w-8" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={handleFavoriteToggle}
+                      className="h-16 w-16"
+                      aria-label={isFav ? t.remove_from_favorites_button_aria : t.add_to_favorites_button_aria}
+                      data-tutorial="favorite"
+                    >
+                      <Heart className={cn("h-8 w-8 transition-colors", isFav && "fill-red-500 text-red-500")} />
+                    </Button>
+                  </div>
+
+                  <Button variant="ghost" onClick={stop} className="h-16 w-16" aria-label={t.stop_button_aria}>
+                    <X className="h-8 w-8" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </Card>
+      </div>
+    </>
+  );
+}
