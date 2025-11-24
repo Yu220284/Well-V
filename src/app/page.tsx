@@ -18,9 +18,11 @@ import { useSupabaseSessions } from '@/lib/hooks/use-supabase-sessions';
 import { AdBanner } from "@/components/layout/AdBanner";
 import { getUserSessionHistory } from '@/lib/supabase/session-history';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { useTranslations } from '@/lib/hooks/use-translations';
 
 export default function HomePage() {
   const router = useRouter();
+  const { t } = useTranslations();
   const { sessionHistory, isLoaded } = useSessionStore();
   const { sessions: supabaseSessions, loading: sessionsLoading } = useSupabaseSessions();
   const [userSessionHistory, setUserSessionHistory] = useState([]);
@@ -115,8 +117,8 @@ export default function HomePage() {
             <div className="grid grid-cols-3 gap-3">
               <Card>
                 <CardContent className="p-3 text-center">
-                  <div className="text-xl font-bold text-primary">{weeklyDays}日</div>
-                  <div className="text-xs text-muted-foreground">今週実施</div>
+                  <div className="text-xl font-bold text-primary">{weeklyDays}{t('home.days')}</div>
+                  <div className="text-xs text-muted-foreground">{t('home.thisWeek')}</div>
                 </CardContent>
               </Card>
               <Card>
@@ -125,7 +127,7 @@ export default function HomePage() {
                     <div className="text-xl font-bold text-primary">{weeklyStreak}</div>
                     {hasDiamond && <span className="text-sm">💎</span>}
                   </div>
-                  <div className="text-xs text-muted-foreground">連続達成週</div>
+                  <div className="text-xs text-muted-foreground">{t('home.consecutiveWeeks')}</div>
                   {weekStatus && (
                     <div className={cn(
                       "text-xs px-1 py-0.5 rounded-full mt-1",
@@ -139,8 +141,8 @@ export default function HomePage() {
               </Card>
               <Card>
                 <CardContent className="p-3 text-center">
-                  <div className="text-xl font-bold text-primary">{weeklyMinutes}分</div>
-                  <div className="text-xs text-muted-foreground">今週のセッション</div>
+                  <div className="text-xl font-bold text-primary">{weeklyMinutes}{t('home.minutes')}</div>
+                  <div className="text-xs text-muted-foreground">{t('home.weeklySession')}</div>
                 </CardContent>
               </Card>
             </div>
@@ -150,7 +152,7 @@ export default function HomePage() {
           <section>
             <div className="relative mb-3">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-lg font-bold py-2 pl-2">今週のアクティビティ</h2>
+              <h2 className="relative text-lg font-bold py-2 pl-2">{t('home.weeklyActivity')}</h2>
             </div>
             <Link href="/calendar">
               <Card className="hover:bg-primary/5 transition-colors cursor-pointer">
@@ -198,7 +200,7 @@ export default function HomePage() {
             <section>
               <div className="relative mb-3">
                 <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-                <h2 className="relative text-lg font-bold py-2 pl-2">中断したセッション</h2>
+                <h2 className="relative text-lg font-bold py-2 pl-2">{t('home.interruptedSession')}</h2>
               </div>
               <Link href={`/session/${interruptedSession.id}`}>
                 <Card className="hover:bg-primary/5 transition-colors">
@@ -216,7 +218,7 @@ export default function HomePage() {
                       <div className="flex-1">
                         <div className="font-medium text-sm mb-1">{interruptedSession.title}</div>
                         <div className="text-xs text-muted-foreground mb-2">続きから再開できます</div>
-                        <Button size="sm" className="h-7 text-xs">セッションを再開</Button>
+                        <Button size="sm" className="h-7 text-xs">{t('home.resumeSession')}</Button>
                       </div>
                     </div>
                   </CardContent>
@@ -229,7 +231,7 @@ export default function HomePage() {
           <section>
             <div className="relative mb-3">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-lg font-bold py-2 pl-2">最新の投稿</h2>
+              <h2 className="relative text-lg font-bold py-2 pl-2">{t('home.latestPost')}</h2>
             </div>
             <Card data-tutorial="post">
               <CardContent className="p-4">
@@ -242,7 +244,7 @@ export default function HomePage() {
                       className="flex items-center gap-1 text-xs text-primary hover:underline"
                     >
                       <Languages className="h-3 w-3" />
-                      {isTranslated ? '原文' : '翻訳'}
+                      {isTranslated ? t('community.original') : t('community.translate')}
                     </button>
                   </div>
                   <div className="flex items-center gap-3">
@@ -263,7 +265,7 @@ export default function HomePage() {
           <section>
             <div className="relative mb-3">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-lg font-bold py-2 pl-2">最近のセッション</h2>
+              <h2 className="relative text-lg font-bold py-2 pl-2">{t('home.recentSessions')}</h2>
             </div>
             <div className="space-y-3" data-tutorial="session-list">
               {recentSessions.length > 0 ? (
@@ -297,7 +299,7 @@ export default function HomePage() {
               ) : (
                 <Card>
                   <CardContent className="p-4 text-center">
-                    <p className="text-sm text-muted-foreground">まだセッション履歴がありません</p>
+                    <p className="text-sm text-muted-foreground">{t('home.noHistory')}</p>
                   </CardContent>
                 </Card>
               )}

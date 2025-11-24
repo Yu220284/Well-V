@@ -9,6 +9,18 @@ export const translations = {
     edit: '編集',
     loading: '読み込み中...',
     
+    // Tags
+    tags: {
+      yoga: 'ヨガ',
+      workout: '筋トレ',
+      stretch: 'ストレッチ',
+      mindfulness: 'マインドフルネス',
+      cardio: '有酸素運動',
+      pilates: 'ピラティス',
+      meditation: '瞑想',
+      dance: 'ダンス',
+    },
+    
     // Tutorial
     tutorial: {
       startSession: 'セッションを始めよう',
@@ -76,6 +88,18 @@ export const translations = {
     delete: 'Delete',
     edit: 'Edit',
     loading: 'Loading...',
+    
+    // Tags
+    tags: {
+      yoga: 'Yoga',
+      workout: 'Workout',
+      stretch: 'Stretch',
+      mindfulness: 'Mindfulness',
+      cardio: 'Cardio',
+      pilates: 'Pilates',
+      meditation: 'Meditation',
+      dance: 'Dance',
+    },
     
     // Tutorial
     tutorial: {

@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { TRAINERS } from '@/lib/data';
 import { MessageSquare, ShoppingBag, Send, Languages } from 'lucide-react';
 import { translateText } from '@/lib/translate';
+import { useTranslations } from '@/lib/hooks/use-translations';
 
 const generateCommunityPosts = (trainerId: number, trainerName: string) => [
   {
@@ -44,6 +45,7 @@ export default function TrainerCommunityPage() {
   const [translatedPosts, setTranslatedPosts] = useState<Set<number>>(new Set());
   const [translating, setTranslating] = useState<Set<number>>(new Set());
   const { toast } = useToast();
+  const { t } = useTranslations();
   
   useEffect(() => {
     const comment = searchParams.get('comment');
@@ -72,7 +74,7 @@ export default function TrainerCommunityPage() {
 
               <div className="my-6">
                 <Link href="/community" className="text-sm text-muted-foreground hover:text-primary mb-4 inline-block">
-                  ← コミュニティ一覧に戻る
+                  ← {t('community.backToList')}
                 </Link>
                 
                 <Card className="mb-6 overflow-hidden">
@@ -87,14 +89,14 @@ export default function TrainerCommunityPage() {
                       </Link>
                       <div className="flex-1 pb-2">
                         <div className="flex items-center gap-2">
-                          <h2 className="text-2xl font-bold">{trainer.name}のコミュニティ</h2>
+                          <h2 className="text-2xl font-bold">{trainer.name} {t('community.community')}</h2>
                           <Link href={`/community/${trainerId}/shop`}>
                             <Button size="icon" variant="ghost" className="h-8 w-8">
                               <ShoppingBag className="h-5 w-5" />
                             </Button>
                           </Link>
                         </div>
-                        <p className="text-sm text-muted-foreground">{trainer.followers.toLocaleString()}人のメンバー</p>
+                        <p className="text-sm text-muted-foreground">{trainer.followers.toLocaleString()}{t('community.members')}</p>
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground">{trainer.bio}</p>
@@ -110,7 +112,7 @@ export default function TrainerCommunityPage() {
                       </Avatar>
                       <div className="flex-1">
                         <Textarea
-                          placeholder={`${trainer.name}のコミュニティに投稿...`}
+                          placeholder={`${t('community.postPlaceholder').replace('\'s', ` ${trainer.name}'s`)}`}
                           value={newPost}
                           onChange={(e) => setNewPost(e.target.value)}
                           className="mb-3 resize-none border-0 bg-transparent p-0 focus-visible:ring-0"
@@ -139,7 +141,7 @@ export default function TrainerCommunityPage() {
                             size="sm"
                           >
                             <Send className="w-4 h-4 mr-1" />
-                            {isPosting ? '投稿中...' : '投稿'}
+                            {isPosting ? t('community.posting') : t('community.post')}
                           </Button>
                         </div>
                       </div>
@@ -148,7 +150,7 @@ export default function TrainerCommunityPage() {
                 </Card>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">最近の投稿</h3>
+                  <h3 className="text-lg font-semibold mb-4">{t('community.recentPosts')}</h3>
                   <div className="space-y-4">
                     {posts.map((post: any, idx: number) => (
                       <Card key={idx}>
@@ -194,7 +196,7 @@ export default function TrainerCommunityPage() {
                             className="flex items-center gap-1 text-xs text-primary hover:underline mt-2 disabled:opacity-50"
                           >
                             <Languages className="h-3 w-3" />
-                            {translating.has(idx) ? '翻訳中...' : translatedPosts.has(idx) ? '原文' : '翻訳'}
+                            {translating.has(idx) ? t('community.translating') : translatedPosts.has(idx) ? t('community.original') : t('community.translate')}
                           </button>
                         </CardContent>
                         <CardFooter className="flex gap-4 text-sm text-muted-foreground">

@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Camera } from 'lucide-react';
 import { ProgressBar } from '@/components/onboarding/ProgressBar';
 import { useLocalAuth } from '@/lib/hooks/use-local-auth';
+import { useTranslations } from '@/lib/hooks/use-translations';
 
 const avatarOptions = [
   { bg: 'bg-gradient-to-br from-pink-200 to-rose-300' },
@@ -25,6 +26,7 @@ const avatarOptions = [
 export default function ProfilePage() {
   const router = useRouter();
   const { updateProfile } = useLocalAuth();
+  const { t } = useTranslations();
   const initialIndex = Math.floor(Math.random() * avatarOptions.length);
   const [currentAvatarIndex, setCurrentAvatarIndex] = useState(initialIndex);
   const [displayIndex, setDisplayIndex] = useState(initialIndex);
@@ -147,13 +149,13 @@ export default function ProfilePage() {
         <CardContent className="pt-6">
           <ProgressBar currentStep={4} totalSteps={6} />
           <div className="text-center mb-8 mt-2">
-            <h1 className="text-2xl font-bold mb-2">プロフィール設定</h1>
-            <p className="text-muted-foreground">あなたの情報を入力してください</p>
+            <h1 className="text-2xl font-bold mb-2">{t('onboarding.profileSetup')}</h1>
+            <p className="text-muted-foreground">{t('onboarding.profileSetupDesc')}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6 relative">
             <div className="mb-6">
-              <Label className="text-sm font-medium mb-3 block">プロフィール画像を選択</Label>
+              <Label className="text-sm font-medium mb-3 block">{t('onboarding.selectAvatar')}</Label>
               <div className="relative h-32 overflow-hidden">
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
                   {renderAvatar(-2, 'extra-left')}
@@ -166,28 +168,28 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="displayName">表示名</Label>
+              <Label htmlFor="displayName">{t('onboarding.displayName')}</Label>
               <Input
                 id="displayName"
                 value={profile.displayName}
                 onChange={(e) => setProfile(prev => ({ ...prev, displayName: e.target.value }))}
-                placeholder="あなたの名前"
+                placeholder={t('onboarding.displayNamePlaceholder')}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio">自己紹介</Label>
+              <Label htmlFor="bio">{t('onboarding.bio')}</Label>
               <Input
                 id="bio"
                 value={profile.bio}
                 onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
-                placeholder="簡単な自己紹介（任意）"
+                placeholder={t('onboarding.bioPlaceholder')}
               />
             </div>
 
             <Button type="submit" className="w-full" size="lg">
-              続ける
+              {t('continue')}
             </Button>
           </form>
         </CardContent>

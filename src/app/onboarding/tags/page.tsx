@@ -7,22 +7,26 @@ import { Button } from '@/components/ui/button';
 import { Flower2, Zap, StretchHorizontal, Brain, Heart, Activity, Sparkles, Music } from 'lucide-react';
 import { useLocalAuth } from '@/lib/hooks/use-local-auth';
 import { ProgressBar } from '@/components/onboarding/ProgressBar';
+import { useTranslations } from '@/lib/hooks/use-translations';
 
-const AVAILABLE_TAGS = [
-  { id: 'yoga', name: 'ヨガ', icon: Flower2 },
-  { id: 'workout', name: '筋トレ', icon: Zap },
-  { id: 'stretch', name: 'ストレッチ', icon: StretchHorizontal },
-  { id: 'mindfulness', name: 'マインドフルネス', icon: Brain },
-  { id: 'cardio', name: '有酸素運動', icon: Heart },
-  { id: 'pilates', name: 'ピラティス', icon: Activity },
-  { id: 'meditation', name: '瞑想', icon: Sparkles },
-  { id: 'dance', name: 'ダンス', icon: Music },
-];
+
 
 export default function TagsPage() {
   const router = useRouter();
   const { updateProfile } = useLocalAuth();
+  const { t } = useTranslations();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  
+  const AVAILABLE_TAGS = [
+    { id: 'yoga', name: t('tags.yoga'), icon: Flower2 },
+    { id: 'workout', name: t('tags.workout'), icon: Zap },
+    { id: 'stretch', name: t('tags.stretch'), icon: StretchHorizontal },
+    { id: 'mindfulness', name: t('tags.mindfulness'), icon: Brain },
+    { id: 'cardio', name: t('tags.cardio'), icon: Heart },
+    { id: 'pilates', name: t('tags.pilates'), icon: Activity },
+    { id: 'meditation', name: t('tags.meditation'), icon: Sparkles },
+    { id: 'dance', name: t('tags.dance'), icon: Music },
+  ];
 
   const toggleTag = (tagId: string) => {
     setSelectedTags(prev =>
@@ -40,9 +44,9 @@ export default function TagsPage() {
       <Card className="w-full max-w-2xl">
         <CardContent className="pt-6">
           <ProgressBar currentStep={4} totalSteps={6} />
-          <h1 className="text-2xl font-bold text-center mb-2 mt-2">興味のあるテーマを選択</h1>
+          <h1 className="text-2xl font-bold text-center mb-2 mt-2">{t('onboarding.selectThemes')}</h1>
           <p className="text-sm text-muted-foreground text-center mb-6">
-            あなたにぴったりのセッションをおすすめします
+            {t('onboarding.selectThemesDesc')}
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -68,7 +72,7 @@ export default function TagsPage() {
             className="w-full"
             size="lg"
           >
-            続ける ({selectedTags.length}個選択中)
+            {t('continue')} ({selectedTags.length}{t('onboarding.selected')})
           </Button>
         </CardContent>
       </Card>
