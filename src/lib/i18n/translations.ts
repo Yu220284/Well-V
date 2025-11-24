@@ -47,6 +47,16 @@ export const translations = {
       selectThemes: '興味のあるテーマを選択',
       selectThemesDesc: 'あなたにぴったりのセッションをおすすめします',
       selected: '個選択中',
+      recommendedTrainers: 'おすすめトレーナー',
+      followTrainers: '気になるトレーナーをフォローしましょう',
+      nextWithCount: '次へ進む',
+      following: '人フォロー中',
+      dataDownload: 'データダウンロード',
+      downloading: '初回ダウンロード中',
+      downloadDesc: '音声と言語データをダウンロードします。時間がかかる場合があります。',
+      startDownload: 'ダウンロードを開始',
+      downloadComplete: 'ダウンロード完了！',
+      completed: '完了',
     },
     
     // Home
@@ -135,6 +145,16 @@ export const translations = {
       selectThemes: 'Select Your Interests',
       selectThemesDesc: 'We\'ll recommend sessions perfect for you',
       selected: ' selected',
+      recommendedTrainers: 'Recommended Trainers',
+      followTrainers: 'Follow trainers you\'re interested in',
+      nextWithCount: 'Continue',
+      following: ' following',
+      dataDownload: 'Data Download',
+      downloading: 'Initial Download',
+      downloadDesc: 'Downloading voice and language data. This may take a while.',
+      startDownload: 'Start Download',
+      downloadComplete: 'Download Complete!',
+      completed: 'Completed',
     },
     
     // Home

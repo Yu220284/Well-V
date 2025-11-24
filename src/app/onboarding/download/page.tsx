@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
+import { useTranslations } from '@/lib/hooks/use-translations';
 
 const DOWNLOAD_ITEMS = [
   { id: 1, name: '基本データ', size: '2.5MB' },
@@ -15,6 +16,7 @@ const DOWNLOAD_ITEMS = [
 
 export default function DownloadPage() {
   const router = useRouter();
+  const { t } = useTranslations();
   const [isStarted, setIsStarted] = useState(false);
   const [currentItem, setCurrentItem] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -50,19 +52,19 @@ export default function DownloadPage() {
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4">
               <Download className={`h-10 w-10 text-primary ${isStarted ? 'animate-bounce' : ''}`} />
             </div>
-            <h2 className="text-2xl font-bold mb-2">{isStarted ? '初回ダウンロード中' : 'データダウンロード'}</h2>
+            <h2 className="text-2xl font-bold mb-2">{isStarted ? t('onboarding.downloading') : t('onboarding.dataDownload')}</h2>
             <p className="text-muted-foreground text-sm">
               {isStarted
                 ? currentItem < DOWNLOAD_ITEMS.length
-                  ? `${DOWNLOAD_ITEMS[currentItem].name}をダウンロード中...`
-                  : 'ダウンロード完了！'
-                : '音声と言語データをダウンロードします。時間がかかる場合があります。'}
+                  ? `${DOWNLOAD_ITEMS[currentItem].name}...`
+                  : t('onboarding.downloadComplete')
+                : t('onboarding.downloadDesc')}
             </p>
           </div>
 
           {!isStarted ? (
             <Button onClick={() => setIsStarted(true)} className="w-full" size="lg">
-              ダウンロードを開始
+              {t('onboarding.startDownload')}
             </Button>
           ) : (
             <div className="space-y-4">
@@ -96,7 +98,7 @@ export default function DownloadPage() {
             </div>
 
               <p className="text-center text-xs text-muted-foreground mt-6">
-                {Math.round(totalProgress)}% 完了
+                {Math.round(totalProgress)}% {t('onboarding.completed')}
               </p>
             </div>
           )}

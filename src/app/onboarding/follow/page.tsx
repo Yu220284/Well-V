@@ -9,9 +9,11 @@ import { Check } from 'lucide-react';
 import { TRAINERS } from '@/lib/data';
 import { useFollowStore } from '@/lib/hooks/use-follow-store';
 import { ProgressBar } from '@/components/onboarding/ProgressBar';
+import { useTranslations } from '@/lib/hooks/use-translations';
 
 export default function FollowPage() {
   const router = useRouter();
+  const { t } = useTranslations();
   const { followedTrainers } = useFollowStore();
   const recommendedTrainers = TRAINERS.slice(0, 6);
   const [localFollowed, setLocalFollowed] = useState<number[]>([]);
@@ -53,9 +55,9 @@ export default function FollowPage() {
       <Card className="w-full max-w-2xl">
         <CardContent className="pt-6">
           <ProgressBar currentStep={5} totalSteps={6} />
-          <h1 className="text-2xl font-bold text-center mb-2 mt-2">おすすめトレーナー</h1>
+          <h1 className="text-2xl font-bold text-center mb-2 mt-2">{t('onboarding.recommendedTrainers')}</h1>
           <p className="text-sm text-muted-foreground text-center mb-6">
-            気になるトレーナーをフォローしましょう
+            {t('onboarding.followTrainers')}
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
@@ -87,7 +89,7 @@ export default function FollowPage() {
           </div>
 
           <Button onClick={handleContinue} disabled={selectedCount === 0} className="w-full" size="lg">
-            次へ進む ({selectedCount}人フォロー中)
+            {t('onboarding.nextWithCount')} ({selectedCount}{t('onboarding.following')})
           </Button>
         </CardContent>
       </Card>
