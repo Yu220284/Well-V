@@ -8,7 +8,7 @@ import { Header } from "@/components/layout/Header";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, MessageSquare, Play } from 'lucide-react';
+import { Calendar, Clock, MessageSquare, Play, Languages } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,11 +16,15 @@ import { SESSIONS } from '@/lib/data';
 import { useSessionStore } from '@/lib/hooks/use-session-store';
 import { useSupabaseSessions } from '@/lib/hooks/use-supabase-sessions';
 import { AdBanner } from "@/components/layout/AdBanner";
+import { getUserSessionHistory } from '@/lib/supabase/session-history';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 export default function HomePage() {
   const router = useRouter();
   const { sessionHistory, isLoaded } = useSessionStore();
   const { sessions: supabaseSessions, loading: sessionsLoading } = useSupabaseSessions();
+  const [userSessionHistory, setUserSessionHistory] = useState([]);
+  const [isTranslated, setIsTranslated] = useState(false);
   
   useEffect(() => {
     const hasSeenSplash = typeof window !== 'undefined' && localStorage.getItem('wellv_seen_splash');
@@ -28,6 +32,11 @@ export default function HomePage() {
     if (!hasSeenSplash) {
       router.push('/splash');
     }
+    
+    // ユーザーのセッション履歴を取得
+    getUserSessionHistory()
+      .then(setUserSessionHistory)
+      .catch(() => {});
   }, [router]);
   
   // Supabaseセッションが利用可能な場合は使用、そうでなければ静的データ
@@ -79,6 +88,7 @@ export default function HomePage() {
   
   const lastPost = {
     content: "今日のヨガセッション、すごく気持ちよかった！新しいポーズにも挑戦できた。",
+    translatedContent: "Today's yoga session felt so good! I was able to try new poses too.",
     time: "2時間前",
     reactions: [
       { emoji: "👏", count: 8 },
@@ -89,10 +99,11 @@ export default function HomePage() {
   
   // Mock interrupted session (set to null if no interrupted session)
   const interruptedSession = Math.random() > 0.5 ? sessions[1] : null;
-  const recentSessions = sessionHistory.slice(-3).map(h => sessions.find(s => s.id === h.sessionId)).filter(Boolean);
+  const recentSessions = userSessionHistory.slice(0, 3).map(h => sessions.find(s => s.id === h.session_id)).filter(Boolean);
 
   return (
-    <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
+    <ProtectedRoute>
+      <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
       <PageTransition>
         <div className="pt-24">
@@ -222,9 +233,18 @@ export default function HomePage() {
             </div>
             <Card data-tutorial="post">
               <CardContent className="p-4">
-                <p className="text-sm mb-3">{lastPost.content}</p>
+                <p className="text-sm mb-3">{isTranslated ? lastPost.translatedContent : lastPost.content}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">{lastPost.time}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-muted-foreground">{lastPost.time}</span>
+                    <button
+                      onClick={() => setIsTranslated(!isTranslated)}
+                      className="flex items-center gap-1 text-xs text-primary hover:underline"
+                    >
+                      <Languages className="h-3 w-3" />
+                      {isTranslated ? '原文' : '翻訳'}
+                    </button>
+                  </div>
                   <div className="flex items-center gap-3">
                     {lastPost.reactions.map((reaction, index) => (
                       <div key={index} className="flex items-center gap-1">
@@ -287,6 +307,7 @@ export default function HomePage() {
       </main>
         </div>
       </PageTransition>
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 }

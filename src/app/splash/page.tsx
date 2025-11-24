@@ -3,14 +3,14 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/icons/Logo';
-import { useLocalAuth } from '@/lib/hooks/use-local-auth';
+import { useAuth } from '@/lib/auth/auth-context';
 
 export default function SplashPage() {
   const router = useRouter();
-  const { user, isLoaded } = useLocalAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
-    if (!isLoaded) return;
+    if (loading) return;
     
     const timer = setTimeout(() => {
       if (typeof window !== 'undefined') {
@@ -25,7 +25,7 @@ export default function SplashPage() {
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, [router, user, isLoaded]);
+  }, [router, user, loading]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 via-background to-secondary/30">

@@ -9,11 +9,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useLocalAuth } from '@/lib/hooks/use-local-auth';
+import { useAuth } from '@/lib/auth/auth-context';
 import { User, Youtube, Twitch, Plus, X } from 'lucide-react';
 
 export default function ProfilePage() {
-  const { user, updateProfile } = useLocalAuth();
+  const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [userId, setUserId] = useState('user123');
   const [lastIdChange] = useState(new Date('2024-11-01'));
@@ -62,7 +62,7 @@ export default function ProfilePage() {
               <form className="space-y-4 mt-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">名前</Label>
-                  <Input id="name" defaultValue="test" />
+                  <Input id="name" defaultValue={user?.user_metadata?.name || user?.email?.split('@')[0] || ''} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="userId">ID</Label>

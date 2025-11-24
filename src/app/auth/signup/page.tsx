@@ -6,14 +6,15 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 import { Separator } from '@/components/ui/separator'
-import { useLocalAuth } from '@/lib/hooks/use-local-auth'
+import { createClient } from '@/lib/supabase/client'
 import { ProgressBar } from '@/components/onboarding/ProgressBar'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
@@ -25,36 +26,36 @@ export default function SignupPage() {
     })
   }
 
-  const handlePhoneSignup = () => {
-    toast({
-      title: '準備中',
-      description: '電話番号でのアカウント作成は現在設定中です'
-    })
-  }
-
-  const { signUp: localSignUp } = useLocalAuth()
-
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
-    const result = localSignUp(email, 'temp_password', email.split('@')[0])
+    const supabase = createClient()
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          role: 'user'
+        }
+      }
+    })
     
-    if (!result.success) {
+    if (error) {
       toast({
         title: 'サインアップエラー',
-        description: result.error || 'アカウント作成に失敗しました',
+        description: error.message,
         variant: 'destructive'
       })
     } else {
-      router.push('/onboarding/tags')
+      router.push('/onboarding/profile')
     }
     
     setLoading(false)
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4 pb-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <ProgressBar currentStep={2} totalSteps={6} />
@@ -130,16 +131,30 @@ export default function SignupPage() {
             </div>
 
             <form onSubmit={handleSignup} className="space-y-4">
-            <div>
-              <Label htmlFor="email">メールアドレス</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+              <div>
+                <Label htmlFor="email">メールアドレス</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="password">パスワード</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={8}
+                  maxLength={16}
+                  pattern="[A-Za-z0-9!@#$%&*_+\-=.]{8,16}"
+                />
+                <p className="text-xs text-muted-foreground mt-1">8-16文字の英数字・記号</p>
+              </div>
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? 'アカウント作成中...' : 'アカウント作成'}
               </Button>

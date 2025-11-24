@@ -15,6 +15,8 @@ import { useSessionStore } from '@/lib/hooks/use-session-store';
 import { useSupabaseFavorites } from '@/lib/hooks/use-supabase-favorites';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { saveSessionCompletion } from '@/lib/supabase/session-history';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 export default function SessionResultPage({
   params,
@@ -40,7 +42,13 @@ export default function SessionResultPage({
     if (tutorialActive && currentStep === 10) {
       localStorage.setItem('wellv_tutorial_step', '11');
     }
-  }, []);
+    
+    // セッション完了を保存
+    if (session) {
+      saveSessionCompletion(session.id, session.duration)
+        .catch(error => console.error('Failed to save session completion:', error));
+    }
+  }, [session]);
   const trainer = session ? TRAINERS.find(t => t.id === session.trainerId) : null;
   const [isFollowing, setIsFollowing] = useState(false);
   const [communityPost, setCommunityPost] = useState('');
@@ -75,7 +83,8 @@ export default function SessionResultPage({
   const seconds = session.duration % 60;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center p-4">
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center p-4">
       <Card className="w-full max-w-lg bg-card/80 backdrop-blur-lg border-white/20 shadow-2xl">
         <CardContent className="p-8">
           <div className="text-center mb-8">
@@ -263,6 +272,7 @@ export default function SessionResultPage({
           <div className="pb-8"></div>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 }

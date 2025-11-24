@@ -4,19 +4,19 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
+import { Flower2, Zap, StretchHorizontal, Brain, Heart, Activity, Sparkles, Music } from 'lucide-react';
 import { useLocalAuth } from '@/lib/hooks/use-local-auth';
 import { ProgressBar } from '@/components/onboarding/ProgressBar';
 
 const AVAILABLE_TAGS = [
-  { id: 'yoga', name: 'ヨガ', emoji: '🧘' },
-  { id: 'workout', name: '筋トレ', emoji: '💪' },
-  { id: 'stretch', name: 'ストレッチ', emoji: '🤸' },
-  { id: 'mindfulness', name: 'マインドフルネス', emoji: '🧠' },
-  { id: 'cardio', name: '有酸素運動', emoji: '🏃' },
-  { id: 'pilates', name: 'ピラティス', emoji: '🤸‍♀️' },
-  { id: 'meditation', name: '瞑想', emoji: '🕉️' },
-  { id: 'dance', name: 'ダンス', emoji: '💃' },
+  { id: 'yoga', name: 'ヨガ', icon: Flower2 },
+  { id: 'workout', name: '筋トレ', icon: Zap },
+  { id: 'stretch', name: 'ストレッチ', icon: StretchHorizontal },
+  { id: 'mindfulness', name: 'マインドフルネス', icon: Brain },
+  { id: 'cardio', name: '有酸素運動', icon: Heart },
+  { id: 'pilates', name: 'ピラティス', icon: Activity },
+  { id: 'meditation', name: '瞑想', icon: Sparkles },
+  { id: 'dance', name: 'ダンス', icon: Music },
 ];
 
 export default function TagsPage() {
@@ -32,14 +32,14 @@ export default function TagsPage() {
 
   const handleContinue = () => {
     updateProfile({ tags: selectedTags });
-    router.push('/onboarding/profile');
+    router.push('/onboarding/follow');
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4 pb-4">
       <Card className="w-full max-w-2xl">
         <CardContent className="pt-6">
-          <ProgressBar currentStep={3} totalSteps={6} />
+          <ProgressBar currentStep={4} totalSteps={6} />
           <h1 className="text-2xl font-bold text-center mb-2 mt-2">興味のあるテーマを選択</h1>
           <p className="text-sm text-muted-foreground text-center mb-6">
             あなたにぴったりのセッションをおすすめします
@@ -56,11 +56,8 @@ export default function TagsPage() {
                     : 'border-border hover:border-primary/50'
                 }`}
               >
-                <div className="text-3xl mb-2">{tag.emoji}</div>
+                <tag.icon className="w-8 h-8 mx-auto mb-2" />
                 <div className="text-sm font-medium">{tag.name}</div>
-                {selectedTags.includes(tag.id) && (
-                  <Check className="h-4 w-4 text-primary mx-auto mt-2" />
-                )}
               </button>
             ))}
           </div>

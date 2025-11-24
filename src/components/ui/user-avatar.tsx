@@ -11,9 +11,14 @@ interface UserAvatarProps {
 }
 
 const backgroundColors = [
-  "bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-300", // 薄ピンク
-  "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300", // 水色
-  "bg-yellow-50 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300", // クリーム色
+  "bg-gradient-to-br from-pink-200 to-purple-200 text-gray-700",
+  "bg-gradient-to-br from-blue-200 to-cyan-200 text-gray-700", 
+  "bg-gradient-to-br from-green-200 to-emerald-200 text-gray-700",
+  "bg-gradient-to-br from-yellow-200 to-orange-200 text-gray-700",
+  "bg-gradient-to-br from-purple-200 to-pink-200 text-gray-700",
+  "bg-gradient-to-br from-indigo-200 to-blue-200 text-gray-700",
+  "bg-gradient-to-br from-rose-200 to-pink-200 text-gray-700",
+  "bg-gradient-to-br from-teal-200 to-green-200 text-gray-700"
 ]
 
 const sizeClasses = {

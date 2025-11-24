@@ -52,7 +52,7 @@ export default function FollowPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4 pb-4">
       <Card className="w-full max-w-2xl">
         <CardContent className="pt-6">
-          <ProgressBar currentStep={4} totalSteps={6} />
+          <ProgressBar currentStep={5} totalSteps={6} />
           <h1 className="text-2xl font-bold text-center mb-2 mt-2">おすすめトレーナー</h1>
           <p className="text-sm text-muted-foreground text-center mb-6">
             気になるトレーナーをフォローしましょう

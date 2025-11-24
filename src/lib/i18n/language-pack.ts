@@ -1,6 +1,6 @@
 "use client";
 
-export type Language = 'ja' | 'en' | 'zh';
+export type Language = 'ja' | 'en';
 
 export interface LanguagePack {
   code: Language;
@@ -23,7 +23,6 @@ const SELECTED_LANGUAGE_KEY = 'wellv_selected_language';
 export const AVAILABLE_LANGUAGES: { code: Language; name: string; nativeName: string }[] = [
   { code: 'ja', name: 'Japanese', nativeName: '日本語' },
   { code: 'en', name: 'English', nativeName: 'English' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文' },
 ];
 
 export async function downloadLanguagePack(language: Language): Promise<LanguagePack> {

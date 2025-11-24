@@ -6,7 +6,7 @@ import { PageTransition } from '@/components/layout/PageTransition';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Mail, Phone, Lock, Link, LogOut, Trash2 } from 'lucide-react';
-import { useLocalAuth } from '@/lib/hooks/use-local-auth';
+import { useAuth } from '@/lib/auth/auth-context';
 
 const accountItems = [
   {
@@ -44,18 +44,17 @@ const accountItems = [
 
 export default function AccountSettingsPage() {
   const router = useRouter();
-  const { signOut, user } = useLocalAuth();
+  const { signOut, user } = useAuth();
 
-  const handleLogout = () => {
-    signOut();
-    router.push('/auth/login');
+  const handleLogout = async () => {
+    localStorage.removeItem('wellv_seen_splash');
+    await signOut();
+    router.push('/splash');
   };
 
-  const handleDeleteAccount = () => {
-    const storedUsers = JSON.parse(localStorage.getItem('wellv_users') || '[]');
-    const filteredUsers = storedUsers.filter((u: any) => u.email !== user?.email);
-    localStorage.setItem('wellv_users', JSON.stringify(filteredUsers));
-    signOut();
+  const handleDeleteAccount = async () => {
+    // TODO: Implement Supabase account deletion
+    await signOut();
     router.push('/auth/signup');
   };
 
@@ -120,13 +119,46 @@ export default function AccountSettingsPage() {
                     );
                   }
 
-                  const isClickable = item.id === 'logout';
+                  if (item.id === 'logout') {
+                    return (
+                      <AlertDialog key={item.id}>
+                        <AlertDialogTrigger asChild>
+                          <Card className="hover:bg-primary/5 transition-colors cursor-pointer">
+                            <CardHeader className="flex flex-row items-center justify-between p-4">
+                              <div className="flex items-center gap-4">
+                                <div className="bg-accent/80 p-3 rounded-lg">
+                                  <item.icon className="h-5 w-5 text-primary" />
+                                </div>
+                                <div>
+                                  <CardTitle className="text-base">{item.title}</CardTitle>
+                                  <CardDescription className="text-xs">{item.description}</CardDescription>
+                                </div>
+                              </div>
+                            </CardHeader>
+                          </Card>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>ログアウトしますか？</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              アカウントからログアウトします。再度ログインが必要になります。
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleLogout}>
+                              ログアウト
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    );
+                  }
+
+                  const isClickable = false;
                   return (
                     <div key={item.id} className="relative">
-                      <Card 
-                        className={`hover:bg-primary/5 transition-colors ${isClickable ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-                        onClick={isClickable ? () => handleItemClick(item.id) : undefined}
-                      >
+                      <Card className="hover:bg-primary/5 transition-colors cursor-not-allowed">
                         <CardHeader className="flex flex-row items-center justify-between p-4">
                           <div className="flex items-center gap-4">
                             <div className="bg-accent/80 p-3 rounded-lg">
@@ -139,11 +171,9 @@ export default function AccountSettingsPage() {
                           </div>
                         </CardHeader>
                       </Card>
-                      {!isClickable && (
-                        <div className="absolute inset-0 bg-white/50 dark:bg-black/50 flex items-center justify-center rounded-lg">
-                          <p className="text-xs font-semibold bg-primary/20 text-primary-foreground backdrop-blur-sm px-2 py-1 rounded-full">この機能は現在開発中です。</p>
-                        </div>
-                      )}
+                      <div className="absolute inset-0 bg-white/50 dark:bg-black/50 flex items-center justify-center rounded-lg">
+                        <p className="text-xs font-semibold bg-primary/20 text-primary-foreground backdrop-blur-sm px-2 py-1 rounded-full">この機能は現在開発中です。</p>
+                      </div>
                     </div>
                   );
                 })}

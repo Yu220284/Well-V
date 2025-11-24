@@ -6,10 +6,10 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
 import { Separator } from '@/components/ui/separator'
-import { useLocalAuth } from '@/lib/hooks/use-local-auth'
+import { useAuth } from '@/lib/auth/auth-context'
 import { ProgressBar } from '@/components/onboarding/ProgressBar'
 
 export default function LoginPage() {
@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const { signIn } = useAuth()
 
   const handleSocialLogin = async (provider: 'google' | 'microsoft' | 'apple' | 'discord' | 'twitter' | 'instagram') => {
     toast({
@@ -26,28 +27,23 @@ export default function LoginPage() {
     })
   }
 
-  const handlePhoneLogin = () => {
-    toast({
-      title: '準備中',
-      description: '電話番号でのログインは現在設定中です'
-    })
-  }
-
-  const { signIn: localSignIn } = useLocalAuth()
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
-    const result = localSignIn(email, password)
+    const { error } = await signIn(email, password)
     
-    if (!result.success) {
+    if (error) {
       toast({
         title: 'ログインエラー',
-        description: result.error || 'メールアドレスまたはパスワードが間違っています',
+        description: error,
         variant: 'destructive'
       })
     } else {
+      toast({
+        title: 'ログイン成功',
+        description: `${email}でログインしました。`
+      })
       router.push('/')
     }
     
@@ -55,7 +51,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4 pb-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <ProgressBar currentStep={2} totalSteps={6} />

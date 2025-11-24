@@ -27,7 +27,7 @@ export default function LanguageSelectPage() {
         <CardContent className="pt-6">
           <ProgressBar currentStep={1} totalSteps={6} />
           <h1 className="text-2xl font-bold text-center mb-2">言語を選択 / Select Language</h1>
-          <p className="text-sm text-muted-foreground text-center mb-6">选择语言</p>
+          <p className="text-sm text-muted-foreground text-center mb-6">あなたの言語を選んでください</p>
           
           <div className="space-y-3 mb-6">
             {AVAILABLE_LANGUAGES.map((lang) => (
@@ -59,7 +59,7 @@ export default function LanguageSelectPage() {
             className="w-full"
             size="lg"
           >
-            {isDownloading ? 'ダウンロード中... / Downloading... / 下载中...' : '続ける / Continue / 继续'}
+            {isDownloading ? 'ダウンロード中... / Downloading...' : '続ける / Continue'}
           </Button>
         </CardContent>
       </Card>

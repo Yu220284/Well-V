@@ -5,6 +5,7 @@ import messages from '@/../messages/ja.json';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { TutorialOverlay } from '@/components/tutorial/TutorialOverlay';
+import { AuthProvider } from '@/lib/auth/auth-context';
 
 export const metadata: Metadata = {
   title: messages.Metadata.title,
@@ -31,14 +32,16 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased" suppressHydrationWarning={true}>
-        <FirebaseClientProvider>
-          <div className="min-h-screen bg-gradient-to-br from-accent to-secondary/30">
-            {children}
-          </div>
-          <TutorialOverlay />
-          <Toaster />
-          <BottomNav />
-        </FirebaseClientProvider>
+        <AuthProvider>
+          <FirebaseClientProvider>
+            <div className="min-h-screen bg-gradient-to-br from-accent to-secondary/30">
+              {children}
+            </div>
+            <TutorialOverlay />
+            <Toaster />
+            <BottomNav />
+          </FirebaseClientProvider>
+        </AuthProvider>
       </body>
     </html>
   );
