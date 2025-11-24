@@ -77,6 +77,14 @@ export const translations = {
       original: '原文',
       translating: '翻訳中...',
     },
+    
+    // Settings
+    settings: {
+      localeSettings: '地域・言語設定',
+      region: '地域',
+      selectRegion: '地域を選択してください',
+      language: '言語',
+    },
   },
   
   en: {
@@ -156,6 +164,14 @@ export const translations = {
       translate: 'Translate',
       original: 'Original',
       translating: 'Translating...',
+    },
+    
+    // Settings
+    settings: {
+      localeSettings: 'Region & Language Settings',
+      region: 'Region',
+      selectRegion: 'Select your region',
+      language: 'Language',
     },
   },
 };

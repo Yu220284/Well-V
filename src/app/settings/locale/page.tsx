@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Check } from 'lucide-react';
 import { AVAILABLE_LANGUAGES, setSelectedLanguage, getSelectedLanguage, Language } from '@/lib/i18n/language-pack';
+import { useTranslations } from '@/lib/hooks/use-translations';
 
 const REGIONS = [
   { code: 'jp', name: '日本', flag: '🇯🇵' },
@@ -61,6 +62,7 @@ const REGIONS = [
 
 export default function LocaleSettingsPage() {
   const router = useRouter();
+  const { t } = useTranslations();
   const [selectedLanguage, setSelectedLanguageState] = useState<Language>(getSelectedLanguage());
   const [selectedRegion, setSelectedRegion] = useState(
     typeof window !== 'undefined' ? localStorage.getItem('wellv_region') || 'jp' : 'jp'
@@ -69,7 +71,7 @@ export default function LocaleSettingsPage() {
   const handleSave = () => {
     setSelectedLanguage(selectedLanguage);
     localStorage.setItem('wellv_region', selectedRegion);
-    router.back();
+    window.location.reload();
   };
 
   return (
@@ -82,16 +84,16 @@ export default function LocaleSettingsPage() {
               <div className="mb-8">
                 <div className="relative mb-6">
                   <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-                  <h1 className="relative text-xl font-bold font-headline py-2 pl-2">地域・言語設定</h1>
+                  <h1 className="relative text-xl font-bold font-headline py-2 pl-2">{t('settings.localeSettings')}</h1>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <Label htmlFor="region" className="text-lg font-semibold">地域</Label>
+                  <Label htmlFor="region" className="text-lg font-semibold">{t('settings.region')}</Label>
                   <Select value={selectedRegion} onValueChange={setSelectedRegion}>
                     <SelectTrigger className="w-full mt-4">
-                      <SelectValue placeholder="地域を選択してください" />
+                      <SelectValue placeholder={t('settings.selectRegion')} />
                     </SelectTrigger>
                     <SelectContent>
                       {REGIONS.map((region) => (
@@ -107,7 +109,7 @@ export default function LocaleSettingsPage() {
                 </div>
 
                 <div>
-                  <h2 className="text-lg font-semibold mb-4">言語</h2>
+                  <h2 className="text-lg font-semibold mb-4">{t('settings.language')}</h2>
                   <div className="space-y-3">
                     {AVAILABLE_LANGUAGES.map((lang) => (
                       <button
@@ -130,7 +132,7 @@ export default function LocaleSettingsPage() {
                 </div>
 
                 <Button onClick={handleSave} className="w-full" size="lg">
-                  保存
+                  {t('save')}
                 </Button>
               </div>
             </div>
