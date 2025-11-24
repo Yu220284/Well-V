@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast'
 import { Separator } from '@/components/ui/separator'
 import { createClient } from '@/lib/supabase/client'
 import { ProgressBar } from '@/components/onboarding/ProgressBar'
+import { useTranslations } from '@/lib/hooks/use-translations'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -18,11 +19,12 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const { t } = useTranslations()
 
   const handleSocialSignup = async (provider: 'google' | 'microsoft' | 'apple' | 'discord' | 'twitter' | 'instagram') => {
     toast({
-      title: '準備中',
-      description: `${provider}でのアカウント作成は現在設定中です`
+      title: t('auth.preparing'),
+      description: `${provider}${t('auth.socialSignupPreparing')}`
     })
   }
 
@@ -43,7 +45,7 @@ export default function SignupPage() {
     
     if (error) {
       toast({
-        title: 'サインアップエラー',
+        title: t('auth.signupError'),
         description: error.message,
         variant: 'destructive'
       })
@@ -59,7 +61,7 @@ export default function SignupPage() {
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <ProgressBar currentStep={2} totalSteps={6} />
-          <h1 className="text-2xl font-bold text-center mb-6">アカウント作成</h1>
+          <h1 className="text-2xl font-bold text-center mb-6">{t('auth.createAccount')}</h1>
           <div className="space-y-4">
             <div className="grid grid-cols-6 gap-2">
               <Button variant="ghost" size="icon" className="border-0 hover:bg-accent" onClick={() => handleSocialSignup('google')}>
@@ -107,7 +109,7 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">電話番号で登録</Label>
+              <Label htmlFor="phone">{t('auth.registerWithPhone')}</Label>
               <div className="flex gap-2">
                 <select className="flex h-10 w-24 rounded-md border border-input bg-background px-3 py-2 text-sm">
                   <option value="+81">+81</option>
@@ -126,13 +128,13 @@ export default function SignupPage() {
             <div className="relative">
               <Separator className="my-4" />
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">
-                または
+                {t('auth.or')}
               </span>
             </div>
 
             <form onSubmit={handleSignup} className="space-y-4">
               <div>
-                <Label htmlFor="email">メールアドレス</Label>
+                <Label htmlFor="email">{t('auth.email')}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -142,7 +144,7 @@ export default function SignupPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="password">パスワード</Label>
+                <Label htmlFor="password">{t('auth.password')}</Label>
                 <Input
                   id="password"
                   type="password"
@@ -153,16 +155,16 @@ export default function SignupPage() {
                   maxLength={16}
                   pattern="[A-Za-z0-9!@#$%&*_+\-=.]{8,16}"
                 />
-                <p className="text-xs text-muted-foreground mt-1">8-16文字の英数字・記号</p>
+                <p className="text-xs text-muted-foreground mt-1">{t('auth.passwordRequirement')}</p>
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'アカウント作成中...' : 'アカウント作成'}
+                {loading ? t('auth.creating') : t('auth.createAccount')}
               </Button>
             </form>
 
             <div className="text-center">
               <Link href="/auth/login" className="text-sm text-primary hover:underline">
-                すでにアカウントをお持ちの方はこちら
+                {t('auth.alreadyHaveAccount')}
               </Link>
             </div>
           </div>

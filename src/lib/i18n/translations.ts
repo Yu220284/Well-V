@@ -88,6 +88,25 @@ export const translations = {
       translating: '翻訳中...',
     },
     
+    // Auth
+    auth: {
+      createAccount: 'アカウント作成',
+      login: 'ログイン',
+      email: 'メールアドレス',
+      password: 'パスワード',
+      passwordRequirement: '8-16文字の英数字・記号',
+      registerWithPhone: '電話番号で登録',
+      or: 'または',
+      creating: 'アカウント作成中...',
+      alreadyHaveAccount: 'すでにアカウントをお持ちの方はこちら',
+      loggingIn: 'ログイン中...',
+      noAccount: 'アカウントをお持ちでない方はこちら',
+      signupError: 'サインアップエラー',
+      loginError: 'ログインエラー',
+      preparing: '準備中',
+      socialSignupPreparing: 'でのアカウント作成は現在設定中です',
+    },
+    
     // Settings
     settings: {
       localeSettings: '地域・言語設定',
@@ -122,7 +141,7 @@ export const translations = {
     // Tutorial
     tutorial: {
       startSession: 'Start a Session',
-      startSessionDesc: 'Choose your favorite session and enjoy exercises with voice guidance',
+      startSessionDesc: 'Choose your favorite session and enjoy exercises with the voice by your "Kamioshi"!',
       collectDiamonds: 'Collect Diamonds',
       collectDiamondsDesc: 'Complete sessions to earn diamonds. Exchange diamonds for exclusive trainer goods',
       joinCommunity: 'Join the Community',
@@ -184,6 +203,25 @@ export const translations = {
       translate: 'Translate',
       original: 'Original',
       translating: 'Translating...',
+    },
+    
+    // Auth
+    auth: {
+      createAccount: 'Create Account',
+      login: 'Login',
+      email: 'Email Address',
+      password: 'Password',
+      passwordRequirement: '8-16 characters (letters, numbers, symbols)',
+      registerWithPhone: 'Register with Phone',
+      or: 'or',
+      creating: 'Creating Account...',
+      alreadyHaveAccount: 'Already have an account?',
+      loggingIn: 'Logging in...',
+      noAccount: 'Don\'t have an account?',
+      signupError: 'Signup Error',
+      loginError: 'Login Error',
+      preparing: 'Coming Soon',
+      socialSignupPreparing: ' account creation is currently being set up',
     },
     
     // Settings
