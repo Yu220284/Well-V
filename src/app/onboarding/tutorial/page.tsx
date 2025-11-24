@@ -7,29 +7,33 @@ import { Button } from '@/components/ui/button';
 import { Play, Diamond, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLocalAuth } from '@/lib/hooks/use-local-auth';
 import { ProgressBar } from '@/components/onboarding/ProgressBar';
+import { useTranslations } from '@/lib/hooks/use-translations';
 
-const TUTORIAL_STEPS = [
-  {
-    icon: Play,
-    title: 'セッションを始めよう',
-    description: 'お気に入りのセッションを選んで、推しの声のガイドでエクササイズを楽しもう',
-  },
-  {
-    icon: Diamond,
-    title: 'ダイヤを集めよう',
-    description: 'セッションを完了するとダイヤがもらえます。ダイヤでトレーナーの限定グッズと交換できます',
-  },
-  {
-    icon: Users,
-    title: 'コミュニティに参加',
-    description: 'トレーナーのコミュニティで他のメンバーと交流したり、投稿をシェアしよう',
-  },
-];
+
 
 export default function TutorialPage() {
   const router = useRouter();
   const { updateProfile } = useLocalAuth();
+  const { t } = useTranslations();
   const [currentStep, setCurrentStep] = useState(0);
+  
+  const TUTORIAL_STEPS = [
+    {
+      icon: Play,
+      title: t('tutorial.startSession'),
+      description: t('tutorial.startSessionDesc'),
+    },
+    {
+      icon: Diamond,
+      title: t('tutorial.collectDiamonds'),
+      description: t('tutorial.collectDiamondsDesc'),
+    },
+    {
+      icon: Users,
+      title: t('tutorial.joinCommunity'),
+      description: t('tutorial.joinCommunityDesc'),
+    },
+  ];
 
   const handleNext = () => {
     if (currentStep < TUTORIAL_STEPS.length - 1) {
@@ -83,7 +87,7 @@ export default function TutorialPage() {
               </Button>
             )}
             <Button onClick={handleNext} className="flex-1" size="lg">
-              {currentStep === TUTORIAL_STEPS.length - 1 ? '始める' : '次へ'}
+              {currentStep === TUTORIAL_STEPS.length - 1 ? t('tutorial.start') : t('tutorial.next')}
               {currentStep < TUTORIAL_STEPS.length - 1 && <ChevronRight className="h-4 w-4 ml-2" />}
             </Button>
           </div>
