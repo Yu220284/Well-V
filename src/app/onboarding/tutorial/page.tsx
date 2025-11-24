@@ -57,11 +57,11 @@ export default function TutorialPage() {
   const step = TUTORIAL_STEPS[currentStep];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4 pb-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-2 sm:p-4 pb-4">
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <ProgressBar currentStep={5} totalSteps={6} />
-          <div className="text-center mb-8 mt-2">
+          <div className="text-center mb-6 sm:mb-8 mt-2">
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4">
               <step.icon className="h-10 w-10 text-primary" />
             </div>

@@ -87,3 +87,23 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @media (max-width: 360px) {
+    .container {
+      @apply px-2;
+    }
+    h1 {
+      @apply text-xl;
+    }
+    h2 {
+      @apply text-lg;
+    }
+    .text-2xl {
+      @apply text-xl;
+    }
+    .text-xl {
+      @apply text-lg;
+    }
+  }
+}

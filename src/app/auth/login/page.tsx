@@ -53,11 +53,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-2 sm:p-4">
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <ProgressBar currentStep={2} totalSteps={6} />
-          <h1 className="text-2xl font-bold text-center mb-6">{t('auth.login')}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">{t('auth.login')}</h1>
           <div className="space-y-4">
             <div className="grid grid-cols-6 gap-2">
               <Button variant="ghost" size="icon" className="border-0 hover:bg-accent" onClick={() => handleSocialLogin('google')}>
