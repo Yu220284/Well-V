@@ -9,7 +9,7 @@ import { Logo } from "../icons/Logo";
 export function BottomNav() {
   const pathname = usePathname();
 
-  if (pathname.startsWith('/onboarding') || pathname === '/language-select' || pathname === '/splash') {
+  if (pathname.startsWith('/onboarding') || pathname === '/language-select' || pathname === '/splash' || pathname.startsWith('/settings') || pathname.startsWith('/auth/login') || pathname.startsWith('/auth/signup') || pathname.includes('/tutorial')) {
     return null;
   }
 
@@ -23,7 +23,7 @@ export function BottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-card border-t border-border">
+    <div className="fixed bottom-0 left-0 z-50 w-full h-14 bg-card border-t border-border">
       <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">
         {navItems.map((item) => {
           const isActive = (item.href === "/" && pathname === "/") || (item.href !== "/" && pathname.startsWith(item.href));
@@ -38,11 +38,11 @@ export function BottomNav() {
                 className="relative flex justify-center"
               >
                 <div className={cn(
-                    "absolute -top-7 flex h-16 w-16 items-center justify-center rounded-full border-4 border-background bg-card shadow-md transition-transform duration-300 hover:scale-110",
+                    "absolute -top-6 flex h-14 w-14 items-center justify-center rounded-full border-3 border-background bg-card shadow-md transition-transform duration-300 hover:scale-110",
                     isActive ? "bg-primary" : "bg-card"
                 )}>
                   <Icon className={cn(
-                    "h-8 w-8 transition-colors",
+                    "h-7 w-7 transition-colors",
                     isActive ? "text-primary-foreground" : "text-primary"
                   )} />
                 </div>
@@ -56,12 +56,12 @@ export function BottomNav() {
               href={item.href}
               aria-label={item.label}
               className={cn(
-                "inline-flex flex-col items-center justify-center px-5 hover:bg-primary/5 group",
+                "inline-flex flex-col items-center justify-center px-4 hover:bg-primary/5 group",
                 isActive ? "text-primary" : "text-muted-foreground"
               )}
               data-tutorial={item.dataTutorial}
             >
-              <Icon className="w-6 h-6" />
+              <Icon className="w-5 h-5" />
               <span className="sr-only">{item.label}</span>
             </Link>
           );

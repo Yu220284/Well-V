@@ -5,16 +5,22 @@
 ## 🎯 最新の更新内容
 
 ### UI/UX改善
-- 検索バーをシンプルなデザインに変更（リアルタイム検索対応）
-- コミュニティページのトレーナー表示を横長カード形式に変更
-- オンボーディングのタグ選択からチェックマーク削除
-- 最初のページを言語設定に変更
+- ヘッダーとナビゲーションバーを細くしてコンパクト化
+- 設定アイコンを左端、お知らせアイコンを右端に配置
+- プロフィール画像選択を滑らかなカルーセル表示に改善
+- 投稿詳細ページを追加（リアクション・コメント機能）
+- タグ選択に声のタイプ（#Ikebo, #Kawabo等）と言語を追加
+- ダウンロードページに推定容量表示を追加
+
+### 多言語対応強化
+- 声のタイプと言語タグを日本語/英語で表示
+- ダウンロードアイテム名を多言語対応
+- セクション見出しを多言語対応
 
 ### 技術的改善
-- Supabase依存関係を削除してパフォーマンス向上
-- Turbopackを無効化して動作を軽量化
-- チュートリアルシステムを簡易版に変更
-- プロジェクト構造をシンプル化
+- Supabaseをメインサーバーとして設定
+- アニメーション処理を最適化してラグを解消
+- ナビゲーションバー表示条件を改善
 
 ## 🚀 技術スタック
 
@@ -27,10 +33,11 @@
 - **Embla Carousel** - カルーセル機能
 
 ### バックエンド・データベース
-- **Firebase** - バックエンドサービス
-  - Firestore - NoSQLデータベース
+- **Supabase** - メインバックエンドサービス
+  - PostgreSQL - データベース
   - Authentication - ユーザー認証
   - Storage - ファイルストレージ
+  - Row Level Security - セキュリティ
 - **Vercel** - デプロイメント
 
 ### 開発ツール
@@ -86,14 +93,10 @@ npm install
 ```
 
 ### 4. 環境変数設定
-`.env.local` ファイルを作成し、Firebase設定を追加：
+`.env.local` ファイルを作成し、Supabase設定を追加：
 ```env
-NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### 5. 開発サーバー起動
@@ -115,14 +118,16 @@ src/
 │   ├── page.tsx           # ホーム画面
 │   ├── language-select/   # 言語選択
 │   ├── onboarding/        # オンボーディングフロー
-│   │   ├── tags/         # タグ選択
+│   │   ├── profile/      # プロフィール設定
+│   │   ├── tags/         # タグ選択（カテゴリ・声・言語）
 │   │   ├── follow/       # トレーナーフォロー
-│   │   ├── download/     # アプリダウンロード
+│   │   ├── download/     # データダウンロード
 │   │   ├── tutorial/     # チュートリアル開始
 │   │   └── tutorial-session/ # チュートリアルセッション
 │   ├── sessions/          # セッション一覧
 │   ├── trainers/          # トレーナー一覧
-│   ├── community/         # グループ機能
+│   ├── community/         # コミュニティ機能
+│   ├── post/[postId]/     # 投稿詳細
 │   ├── menu/              # メニュー画面
 │   ├── settings/          # 詳細設定
 │   └── session/[slug]/    # セッション詳細
@@ -166,26 +171,32 @@ src/
 
 ### 3. コミュニティ機能
 - トレーナー別グループ
-- 投稿・リアクション機能
+- 投稿・コメント・リアクション機能
+- 投稿詳細ページ
+- 多言語翻訳機能
 - アクティビティ共有
 
 ### 4. オンボーディング・チュートリアル
-- 言語選択（日本語、英語、中国語）
-- タグ選択（興味のあるカテゴリ）
+- 言語選択（日本語、英語）
+- プロフィール設定（名前・アバター選択）
+- タグ選択（カテゴリ・声のタイプ・言語）
 - トレーナーフォロー
-- アプリダウンロード案内
+- データダウンロード（推定容量表示）
 - インタラクティブチュートリアル
 
 ### 5. 多言語対応
-- next-intl による国際化
-- 日本語、英語、中国語サポート
+- カスタム国際化システム
+- 日本語、英語サポート
 - 設定画面から言語切り替え可能
+- タグ・ラベルの動的多言語表示
 
 ### 6. UI/UX
 - レスポンシブデザイン
 - ダークモード対応
+- コンパクトなヘッダー・ナビゲーション
+- 滑らかなカルーセルアニメーション
+- スワイプジェスチャー対応
 - 回転広告バナー（600x120）
-- ボトムナビゲーション
 
 ## 🔧 開発コマンド
 

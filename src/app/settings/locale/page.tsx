@@ -71,7 +71,8 @@ export default function LocaleSettingsPage() {
   const handleSave = () => {
     setSelectedLanguage(selectedLanguage);
     localStorage.setItem('wellv_region', selectedRegion);
-    window.location.reload();
+    router.push('/');
+    setTimeout(() => window.location.reload(), 100);
   };
 
   return (

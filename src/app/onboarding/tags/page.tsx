@@ -14,7 +14,7 @@ import { useTranslations } from '@/lib/hooks/use-translations';
 export default function TagsPage() {
   const router = useRouter();
   const { updateProfile } = useLocalAuth();
-  const { t } = useTranslations();
+  const { t, language } = useTranslations();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   
   const AVAILABLE_TAGS = [
@@ -26,6 +26,22 @@ export default function TagsPage() {
     { id: 'pilates', name: t('tags.pilates'), icon: Activity },
     { id: 'meditation', name: t('tags.meditation'), icon: Sparkles },
     { id: 'dance', name: t('tags.dance'), icon: Music },
+  ];
+
+  const VOICE_TYPES = [
+    { id: 'ikebo', nameJa: '#イケボ', nameEn: '#Ikebo' },
+    { id: 'kawabo', nameJa: '#カワボ', nameEn: '#Kawabo' },
+    { id: 'energetic', nameJa: '#元気', nameEn: '#Energetic' },
+    { id: 'cool', nameJa: '#クール', nameEn: '#Cool' },
+    { id: 'neutral', nameJa: '#中性的', nameEn: '#Neutral' },
+    { id: 'seiso', nameJa: '#清楚', nameEn: '#Seiso' },
+    { id: 'tsundere', nameJa: '#ツンデレ', nameEn: '#Tsundere' },
+    { id: 'chill', nameJa: '#落ち着き', nameEn: '#Chill' },
+  ];
+
+  const LANGUAGES = [
+    { id: 'japanese', nameJa: '#日本語', nameEn: '#Japanese' },
+    { id: 'english', nameJa: '#英語', nameEn: '#English' },
   ];
 
   const toggleTag = (tagId: string) => {
@@ -49,21 +65,63 @@ export default function TagsPage() {
             {t('onboarding.selectThemesDesc')}
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-            {AVAILABLE_TAGS.map((tag) => (
-              <button
-                key={tag.id}
-                onClick={() => toggleTag(tag.id)}
-                className={`p-4 rounded-lg border-2 transition-all ${
-                  selectedTags.includes(tag.id)
-                    ? 'border-primary bg-primary/10'
-                    : 'border-border hover:border-primary/50'
-                }`}
-              >
-                <tag.icon className="w-8 h-8 mx-auto mb-2" />
-                <div className="text-sm font-medium">{tag.name}</div>
-              </button>
-            ))}
+          <div className="space-y-6 mb-6">
+            <div>
+              <h3 className="text-sm font-semibold mb-3">{language === 'ja' ? 'カテゴリー' : 'Categories'}</h3>
+              <div className="flex flex-wrap gap-2">
+                {AVAILABLE_TAGS.map((tag) => (
+                  <button
+                    key={tag.id}
+                    onClick={() => toggleTag(tag.id)}
+                    className={`px-4 py-2 rounded-full border-2 transition-all text-sm ${
+                      selectedTags.includes(tag.id)
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border hover:border-primary/50'
+                    }`}
+                  >
+                    #{tag.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold mb-3">{language === 'ja' ? '声のタイプ' : 'Voice Types'}</h3>
+              <div className="flex flex-wrap gap-2">
+                {VOICE_TYPES.map((voice) => (
+                  <button
+                    key={voice.id}
+                    onClick={() => toggleTag(voice.id)}
+                    className={`px-4 py-2 rounded-full border-2 transition-all text-sm ${
+                      selectedTags.includes(voice.id)
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border hover:border-primary/50'
+                    }`}
+                  >
+                    {language === 'ja' ? voice.nameJa : voice.nameEn}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold mb-3">{language === 'ja' ? '言語' : 'Languages'}</h3>
+              <div className="flex flex-wrap gap-2">
+                {LANGUAGES.map((lang) => (
+                  <button
+                    key={lang.id}
+                    onClick={() => toggleTag(lang.id)}
+                    className={`px-4 py-2 rounded-full border-2 transition-all text-sm ${
+                      selectedTags.includes(lang.id)
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border hover:border-primary/50'
+                    }`}
+                  >
+                    {language === 'ja' ? lang.nameJa : lang.nameEn}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <Button

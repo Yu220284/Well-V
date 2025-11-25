@@ -33,6 +33,8 @@ export default function ProfilePage() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartX = useRef<number>(0);
+  const touchStartTime = useRef<number>(0);
   const [profile, setProfile] = useState({
     displayName: '',
     bio: '',
@@ -79,9 +81,9 @@ export default function ProfilePage() {
   const getPosition = (offset: number) => {
     const basePositions: Record<number, any> = {
       '-2': { left: '-30%', right: undefined, scale: 0.5, opacity: 0, translateX: undefined },
-      '-1': { left: '10%', right: undefined, scale: 0.67, opacity: 0.3, translateX: undefined },
+      '-1': { left: '0%', right: undefined, scale: 0.67, opacity: 0.3, translateX: undefined },
       '0': { left: '50%', right: undefined, translateX: '-50%', scale: 1, opacity: 1 },
-      '1': { left: undefined, right: '10%', scale: 0.67, opacity: 0.3, translateX: undefined },
+      '1': { left: undefined, right: '0%', scale: 0.67, opacity: 0.3, translateX: undefined },
       '2': { left: undefined, right: '-30%', scale: 0.5, opacity: 0, translateX: undefined }
     };
     
@@ -93,16 +95,16 @@ export default function ProfilePage() {
       const animPositions: Record<number, any> = {
         '-2': { left: '-50%', right: undefined, scale: 0.3, opacity: 0, translateX: undefined },
         '-1': { left: '-30%', right: undefined, scale: 0.5, opacity: 0, translateX: undefined },
-        '0': { left: '10%', right: undefined, scale: 0.67, opacity: 0.3, translateX: undefined },
+        '0': { left: '0%', right: undefined, scale: 0.67, opacity: 0.3, translateX: undefined },
         '1': { left: '50%', right: undefined, translateX: '-50%', scale: 1, opacity: 1 },
-        '2': { left: undefined, right: '10%', scale: 0.67, opacity: 0.3, translateX: undefined }
+        '2': { left: undefined, right: '0%', scale: 0.67, opacity: 0.3, translateX: undefined }
       };
       return animPositions[offset] || basePositions['0'];
     } else {
       const animPositions: Record<number, any> = {
-        '-2': { left: '10%', right: undefined, scale: 0.67, opacity: 0.3, translateX: undefined },
+        '-2': { left: '0%', right: undefined, scale: 0.67, opacity: 0.3, translateX: undefined },
         '-1': { left: '50%', right: undefined, translateX: '-50%', scale: 1, opacity: 1 },
-        '0': { left: undefined, right: '10%', scale: 0.67, opacity: 0.3, translateX: undefined },
+        '0': { left: undefined, right: '0%', scale: 0.67, opacity: 0.3, translateX: undefined },
         '1': { left: undefined, right: '-30%', scale: 0.5, opacity: 0, translateX: undefined },
         '2': { left: undefined, right: '-50%', scale: 0.3, opacity: 0, translateX: undefined }
       };
@@ -156,7 +158,29 @@ export default function ProfilePage() {
           <form onSubmit={handleSubmit} className="space-y-6 relative">
             <div className="mb-6">
               <Label className="text-sm font-medium mb-3 block">{t('onboarding.selectAvatar')}</Label>
-              <div className="relative h-32 overflow-hidden">
+              <div 
+                className="relative h-32 overflow-hidden"
+                onTouchStart={(e) => {
+                  touchStartX.current = e.touches[0].clientX;
+                  touchStartTime.current = Date.now();
+                }}
+                onTouchEnd={(e) => {
+                  const touchEndX = e.changedTouches[0].clientX;
+                  const touchEndTime = Date.now();
+                  const deltaX = touchEndX - touchStartX.current;
+                  const deltaTime = touchEndTime - touchStartTime.current;
+                  const velocity = Math.abs(deltaX) / deltaTime;
+                  
+                  if (Math.abs(deltaX) > 30) {
+                    const steps = velocity > 1 ? Math.min(Math.floor(velocity * 2), 3) : 1;
+                    const dir = deltaX > 0 ? 'left' : 'right';
+                    const newIndex = dir === 'left' 
+                      ? (currentAvatarIndex - steps + avatarOptions.length) % avatarOptions.length
+                      : (currentAvatarIndex + steps) % avatarOptions.length;
+                    changeAvatar(newIndex, dir);
+                  }
+                }}
+              >
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
                   {renderAvatar(-2, 'extra-left')}
                   {renderAvatar(-1, 'left')}
@@ -175,16 +199,6 @@ export default function ProfilePage() {
                 onChange={(e) => setProfile(prev => ({ ...prev, displayName: e.target.value }))}
                 placeholder={t('onboarding.displayNamePlaceholder')}
                 required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="bio">{t('onboarding.bio')}</Label>
-              <Input
-                id="bio"
-                value={profile.bio}
-                onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
-                placeholder={t('onboarding.bioPlaceholder')}
               />
             </div>
 

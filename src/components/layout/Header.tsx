@@ -9,57 +9,29 @@ import { useAuth } from "@/lib/auth/auth-context";
 export function Header() {
   const { user } = useAuth();
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8 bg-background/80 backdrop-blur-md border-b border-border/20">
-      <div className="container mx-auto relative flex items-center">
-        {/* 左側エリア */}
-        <div className="flex items-center gap-0 flex-1 mr-20">
-          <Link href="/settings">
-            <Button variant="ghost" size="icon" className="h-12 w-12">
-              <Settings className="h-6 w-6" />
-            </Button>
-          </Link>
-          {user ? (
-            <Link href="/menu/profile">
-              <Button variant="ghost" className="rounded-full h-10 px-3">
-                <div className="flex items-center gap-2">
-                  {user.profileImage ? (
-                    <img src={user.profileImage} alt="Profile" className="w-7 h-7 rounded-full object-cover" />
-                  ) : (
-                    <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-                      <User className="h-4 w-4 text-primary" />
-                    </div>
-                  )}
-                  <span className="text-sm font-semibold truncate max-w-20">{user.user_metadata?.name || user.email?.split('@')[0]}</span>
-                </div>
-              </Button>
-            </Link>
-          ) : (
-            <AuthButton />
-          )}
-        </div>
+    <header className="fixed top-0 left-0 right-0 z-50 py-2 px-3 bg-background/80 backdrop-blur-md border-b border-border/20">
+      <div className="container mx-auto relative flex items-center justify-between">
+        {/* 左端：設定アイコン */}
+        <Link href="/settings">
+          <Button variant="ghost" size="icon" className="h-9 w-9">
+            <Settings className="h-5 w-5" />
+          </Button>
+        </Link>
         
         {/* 中央：WellVロゴ（絶対中央配置） */}
         <Link href="/" className="absolute left-1/2 transform -translate-x-1/2">
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-primary font-headline">
+          <h1 className="text-lg font-bold tracking-tight text-primary font-headline">
             Well-V
           </h1>
         </Link>
         
-        {/* 右側エリア */}
-        <div className="flex items-center gap-2 flex-1 justify-end">
-          {user && (
-            <div className="flex items-center gap-1 px-3 py-1 bg-primary/10 rounded-full">
-              <Diamond className="h-4 w-4 text-primary fill-primary" />
-              <span className="text-sm font-semibold text-primary">1,250</span>
-            </div>
-          )}
-          <Link href="/menu/notifications">
-            <Button variant="ghost" size="icon" className="h-12 w-12 relative">
-              <Bell className="h-6 w-6" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
-            </Button>
-          </Link>
-        </div>
+        {/* 右端：お知らせアイコン */}
+        <Link href="/menu/notifications">
+          <Button variant="ghost" size="icon" className="h-9 w-9 relative">
+            <Bell className="h-5 w-5" />
+            <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full" />
+          </Button>
+        </Link>
       </div>
     </header>
   );

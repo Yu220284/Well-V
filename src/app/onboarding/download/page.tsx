@@ -8,15 +8,17 @@ import { Download } from 'lucide-react';
 import { useTranslations } from '@/lib/hooks/use-translations';
 
 const DOWNLOAD_ITEMS = [
-  { id: 1, name: '基本データ', size: '2.5MB' },
-  { id: 2, name: 'セッション音声', size: '15.3MB' },
-  { id: 3, name: 'トレーナー画像', size: '8.7MB' },
-  { id: 4, name: 'UI素材', size: '3.2MB' },
+  { id: 1, nameJa: '基本データ', nameEn: 'Basic Data', sizeMB: 2.5 },
+  { id: 2, nameJa: 'セッション音声', nameEn: 'Session Audio', sizeMB: 15.3 },
+  { id: 3, nameJa: 'トレーナー画像', nameEn: 'Trainer Images', sizeMB: 8.7 },
+  { id: 4, nameJa: 'UI素材', nameEn: 'UI Assets', sizeMB: 3.2 },
 ];
+
+const TOTAL_SIZE_MB = DOWNLOAD_ITEMS.reduce((sum, item) => sum + item.sizeMB, 0);
 
 export default function DownloadPage() {
   const router = useRouter();
-  const { t } = useTranslations();
+  const { t, language } = useTranslations();
   const [isStarted, setIsStarted] = useState(false);
   const [currentItem, setCurrentItem] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -56,9 +58,9 @@ export default function DownloadPage() {
             <p className="text-muted-foreground text-sm">
               {isStarted
                 ? currentItem < DOWNLOAD_ITEMS.length
-                  ? `${DOWNLOAD_ITEMS[currentItem].name}...`
+                  ? `${language === 'ja' ? DOWNLOAD_ITEMS[currentItem].nameJa : DOWNLOAD_ITEMS[currentItem].nameEn}...`
                   : t('onboarding.downloadComplete')
-                : t('onboarding.downloadDesc')}
+                : `${t('onboarding.downloadDesc')} (${TOTAL_SIZE_MB.toFixed(1)}MB)`}
             </p>
           </div>
 
@@ -89,9 +91,9 @@ export default function DownloadPage() {
                       : 'text-muted-foreground'
                   }`}
                 >
-                  <span>{item.name}</span>
+                  <span>{language === 'ja' ? item.nameJa : item.nameEn}</span>
                   <span className="text-xs">
-                    {idx < currentItem ? '✓' : idx === currentItem ? `${progress}%` : item.size}
+                    {idx < currentItem ? '✓' : idx === currentItem ? `${progress}%` : `${item.sizeMB}MB`}
                   </span>
                 </div>
               ))}

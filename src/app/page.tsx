@@ -233,32 +233,37 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
               <h2 className="relative text-lg font-bold py-2 pl-2">{t('home.latestPost')}</h2>
             </div>
-            <Card data-tutorial="post">
-              <CardContent className="p-4">
-                <p className="text-sm mb-3">{isTranslated ? lastPost.translatedContent : lastPost.content}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-muted-foreground">{lastPost.time}</span>
-                    <button
-                      onClick={() => setIsTranslated(!isTranslated)}
-                      className="flex items-center gap-1 text-xs text-primary hover:underline"
-                    >
-                      <Languages className="h-3 w-3" />
-                      {isTranslated ? t('community.original') : t('community.translate')}
-                    </button>
+            <Link href="/post/1">
+              <Card data-tutorial="post" className="hover:bg-primary/5 transition-colors cursor-pointer">
+                <CardContent className="p-4">
+                  <p className="text-sm mb-3">{isTranslated ? lastPost.translatedContent : lastPost.content}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-muted-foreground">{lastPost.time}</span>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsTranslated(!isTranslated);
+                        }}
+                        className="flex items-center gap-1 text-xs text-primary hover:underline"
+                      >
+                        <Languages className="h-3 w-3" />
+                        {isTranslated ? t('community.original') : t('community.translate')}
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {lastPost.reactions.map((reaction, index) => (
+                        <div key={index} className="flex items-center gap-1">
+                          <span className="text-sm">{reaction.emoji}</span>
+                          <span className="text-xs text-muted-foreground">{reaction.count}</span>
+                        </div>
+                      ))}
+                      <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    {lastPost.reactions.map((reaction, index) => (
-                      <div key={index} className="flex items-center gap-1">
-                        <span className="text-sm">{reaction.emoji}</span>
-                        <span className="text-xs text-muted-foreground">{reaction.count}</span>
-                      </div>
-                    ))}
-                    <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Link>
           </section>
 
           {/* セッション履歴 */}

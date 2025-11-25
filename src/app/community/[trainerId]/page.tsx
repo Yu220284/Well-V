@@ -153,62 +153,65 @@ export default function TrainerCommunityPage() {
                   <h3 className="text-lg font-semibold mb-4">{t('community.recentPosts')}</h3>
                   <div className="space-y-4">
                     {posts.map((post: any, idx: number) => (
-                      <Card key={idx}>
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center gap-3">
-                            <Avatar className="h-10 w-10">
-                              <AvatarImage src={post.user.avatar} />
-                              <AvatarFallback>{post.user.name[0]}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <p className="font-semibold text-sm">{post.user.name}</p>
-                              <p className="text-xs text-muted-foreground">{post.time}</p>
+                      <Link key={idx} href="/post/1">
+                        <Card className="hover:bg-primary/5 transition-colors cursor-pointer">
+                          <CardHeader className="pb-3">
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-10 w-10">
+                                <AvatarImage src={post.user.avatar} />
+                                <AvatarFallback>{post.user.name[0]}</AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <p className="font-semibold text-sm">{post.user.name}</p>
+                                <p className="text-xs text-muted-foreground">{post.time}</p>
+                              </div>
                             </div>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pb-3">
-                          <p className="text-sm">{translatedPosts.has(idx) && post.translatedContent ? post.translatedContent : post.content}</p>
-                          <button
-                            onClick={async () => {
-                              if (translatedPosts.has(idx)) {
-                                setTranslatedPosts(prev => {
-                                  const newSet = new Set(prev);
-                                  newSet.delete(idx);
-                                  return newSet;
-                                });
-                              } else {
-                                setTranslating(prev => new Set(prev).add(idx));
-                                if (!post.translatedContent) {
-                                  const translated = await translateText(post.content);
-                                  setPosts(prev => prev.map((p, i) => 
-                                    i === idx ? { ...p, translatedContent: translated } : p
-                                  ));
+                          </CardHeader>
+                          <CardContent className="pb-3">
+                            <p className="text-sm">{translatedPosts.has(idx) && post.translatedContent ? post.translatedContent : post.content}</p>
+                            <button
+                              onClick={async (e) => {
+                                e.preventDefault();
+                                if (translatedPosts.has(idx)) {
+                                  setTranslatedPosts(prev => {
+                                    const newSet = new Set(prev);
+                                    newSet.delete(idx);
+                                    return newSet;
+                                  });
+                                } else {
+                                  setTranslating(prev => new Set(prev).add(idx));
+                                  if (!post.translatedContent) {
+                                    const translated = await translateText(post.content);
+                                    setPosts(prev => prev.map((p, i) => 
+                                      i === idx ? { ...p, translatedContent: translated } : p
+                                    ));
+                                  }
+                                  setTranslating(prev => {
+                                    const newSet = new Set(prev);
+                                    newSet.delete(idx);
+                                    return newSet;
+                                  });
+                                  setTranslatedPosts(prev => new Set(prev).add(idx));
                                 }
-                                setTranslating(prev => {
-                                  const newSet = new Set(prev);
-                                  newSet.delete(idx);
-                                  return newSet;
-                                });
-                                setTranslatedPosts(prev => new Set(prev).add(idx));
-                              }
-                            }}
-                            disabled={translating.has(idx)}
-                            className="flex items-center gap-1 text-xs text-primary hover:underline mt-2 disabled:opacity-50"
-                          >
-                            <Languages className="h-3 w-3" />
-                            {translating.has(idx) ? t('community.translating') : translatedPosts.has(idx) ? t('community.original') : t('community.translate')}
-                          </button>
-                        </CardContent>
-                        <CardFooter className="flex gap-4 text-sm text-muted-foreground">
-                          <button className="flex items-center gap-1 hover:text-primary">
-                            👍 {post.likes}
-                          </button>
-                          <button className="flex items-center gap-1 hover:text-primary">
-                            <MessageSquare className="h-4 w-4" />
-                            {post.comments}
-                          </button>
-                        </CardFooter>
-                      </Card>
+                              }}
+                              disabled={translating.has(idx)}
+                              className="flex items-center gap-1 text-xs text-primary hover:underline mt-2 disabled:opacity-50"
+                            >
+                              <Languages className="h-3 w-3" />
+                              {translating.has(idx) ? t('community.translating') : translatedPosts.has(idx) ? t('community.original') : t('community.translate')}
+                            </button>
+                          </CardContent>
+                          <CardFooter className="flex gap-4 text-sm text-muted-foreground">
+                            <button className="flex items-center gap-1 hover:text-primary">
+                              👍 {post.likes}
+                            </button>
+                            <button className="flex items-center gap-1 hover:text-primary">
+                              <MessageSquare className="h-4 w-4" />
+                              {post.comments}
+                            </button>
+                          </CardFooter>
+                        </Card>
+                      </Link>
                     ))}
                   </div>
                 </div>
