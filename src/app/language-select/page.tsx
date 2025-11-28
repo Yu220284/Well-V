@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AVAILABLE_LANGUAGES, setSelectedLanguage, downloadLanguagePack, Language } from '@/lib/i18n/language-pack';
 import { Check } from 'lucide-react';
+import { AnimatedBackground } from '@/components/layout/AnimatedBackground';
 import { ProgressBar } from '@/components/onboarding/ProgressBar';
 
 export default function LanguageSelectPage() {
@@ -22,8 +23,9 @@ export default function LanguageSelectPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4 pb-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4 pb-4 relative">
+      <AnimatedBackground />
+      <Card className="w-full max-w-md relative z-10">
         <CardContent className="pt-6">
           <ProgressBar currentStep={1} totalSteps={6} />
           <h1 className="text-2xl font-bold text-center mb-2">Select Language / 言語を選択</h1>

@@ -43,7 +43,7 @@ const menuItems = [
         title: "メンバーシップ", 
         description: "プランの確認・変更",
         icon: Award,
-        href: null
+        href: '/premium'
     },
     { 
         id: 'add-session',
@@ -64,7 +64,7 @@ const menuItems = [
         title: "お問い合わせ",
         description: "ご意見・ご要望はこちらへ",
         icon: Mail,
-        href: null
+        href: '/contact'
     },
 ];
 
@@ -77,17 +77,17 @@ export default function MenuPage() {
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
       <Header />
       <PageTransition>
-        <div className="pt-24">
+        <div className="pt-12">
           <AdBanner />
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="max-w-2xl mx-auto">
-          <div className="mb-8">
-            <div className="relative mb-6">
+          <div className="mb-3">
+            <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-              <h1 className="relative text-xl font-bold font-headline py-2 pl-2">{t.title}</h1>
+              <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">{t.title}</h1>
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-2">
             {menuItems.map((item) => {
               const content = (
                 <Card className="hover:bg-primary/5 transition-colors">

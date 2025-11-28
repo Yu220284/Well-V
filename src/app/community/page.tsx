@@ -13,7 +13,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { SearchBar } from "@/components/search/SearchBar";
 
 import { TRAINERS } from "@/lib/data";
-import { MessageSquare, ChevronRight, Users, ShoppingBag } from "lucide-react";
+import { MessageSquare, ChevronRight, Users, ShoppingBag, Sparkles } from "lucide-react";
 import { AdBanner } from "@/components/layout/AdBanner";
 import { useTrainerStore } from "@/lib/hooks/use-trainer-store";
 
@@ -77,20 +77,22 @@ export default function CommunityPage() {
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
       <PageTransition>
-        <div className="pt-24">
+        <div className="pt-12">
           <AdBanner />
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="max-w-2xl mx-auto">
-            <div className="relative mb-6">
-              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-              <h1 className="relative text-xl font-bold font-headline py-2 pl-2">コミュニティ</h1>
-            </div>
+            {!currentTrainer && (
+              <div className="relative mb-2">
+                <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+                <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">コミュニティ</h1>
+              </div>
+            )}
 
             {currentTrainer ? (
               <div className="my-6">
-                <Link href="/community" className="text-sm text-muted-foreground hover:text-primary mb-4 inline-block">
-                  ← コミュニティ一覧に戻る
-                </Link>
+                  <Link href="/community" className="text-sm text-muted-foreground hover:text-primary mb-4 inline-block">
+                    ← コミュニティ一覧に戻る
+                  </Link>
                 
                 <Card className="mb-6 overflow-hidden">
                   <div className="h-32 bg-gradient-to-r from-primary/20 to-primary/10" />
@@ -104,7 +106,7 @@ export default function CommunityPage() {
                       </Link>
                       <div className="flex-1 pb-2">
                         <div className="flex items-center gap-2">
-                          <h2 className="text-2xl font-bold">{currentTrainer.name}のコミュニティ</h2>
+                          <h2 className="text-2xl font-bold">{currentTrainer.name}</h2>
                           <Link href={`/community/${currentTrainer.communityId}/shop`}>
                             <Button size="icon" variant="ghost" className="h-8 w-8">
                               <ShoppingBag className="h-5 w-5" />
@@ -139,9 +141,9 @@ export default function CommunityPage() {
                           <p className="text-sm">{post.content}</p>
                         </CardContent>
                         <CardFooter className="flex gap-4 text-sm text-muted-foreground">
-                          <button className="flex items-center gap-1 hover:text-primary">
-                            👍 {post.likes}
-                          </button>
+                          <div className="flex items-center gap-1">
+                            {post.likes}
+                          </div>
                           <button className="flex items-center gap-1 hover:text-primary">
                             <MessageSquare className="h-4 w-4" />
                             {post.comments}
@@ -165,12 +167,12 @@ export default function CommunityPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="my-6">
+              <div>
                 <SearchBar 
                   placeholder="検索"
                   onSearch={handleSearch}
                 />
-                <div className="space-y-3">
+                <div className="space-y-4 mt-4">
                   {followedTrainersList.map((trainer) => (
                     <Link key={trainer.id} href={`/community/${trainer.id}`}>
                       <Card className="hover:bg-accent/50 transition-colors">
@@ -197,6 +199,12 @@ export default function CommunityPage() {
       </main>
         </div>
       </PageTransition>
+      <footer className="text-center py-6 text-sm text-muted-foreground">
+        <p className="inline-flex items-center">
+          <Sparkles className="inline-block h-4 w-4 text-primary mx-1" />
+          WellV
+        </p>
+      </footer>
     </div>
   );
 }

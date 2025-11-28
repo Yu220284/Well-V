@@ -47,14 +47,14 @@ export default function SessionsPage() {
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
       <PageTransition>
-        <div className="pt-24">
+        <div className="pt-12">
           <AdBanner />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-8">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div className="space-y-3">
           <section>
-            <div className="relative mb-4">
+            <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-lg font-bold font-headline py-2 pl-2">セッション</h2>
+              <h2 className="relative text-lg font-bold font-headline py-1.5 pl-2">セッション</h2>
             </div>
             
             <SearchBar 
@@ -62,7 +62,7 @@ export default function SessionsPage() {
               onSearch={handleSearch}
             />
 
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-3">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="favorites">
                   <Heart className="h-4 w-4 mr-1" />
@@ -83,10 +83,11 @@ export default function SessionsPage() {
                         <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
                           <div className="aspect-video relative">
                             <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
-                          </div>
-                          <div className="p-4">
-                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
-                            <p className="text-xs text-muted-foreground">{Math.floor(session.duration / 60)}分</p>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                            <div className="absolute bottom-2 left-2 right-2 text-white">
+                              <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                              <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}分</p>
+                            </div>
                           </div>
                         </Card>
                       </Link>
@@ -102,10 +103,11 @@ export default function SessionsPage() {
                       <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
                         <div className="aspect-video relative">
                           <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
-                        </div>
-                        <div className="p-4">
-                          <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
-                          <p className="text-xs text-muted-foreground">{Math.floor(session.duration / 60)}分</p>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                          <div className="absolute bottom-2 left-2 right-2 text-white">
+                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}分</p>
+                          </div>
                         </div>
                       </Card>
                     </Link>
@@ -120,10 +122,11 @@ export default function SessionsPage() {
                       <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
                         <div className="aspect-video relative">
                           <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
-                        </div>
-                        <div className="p-4">
-                          <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
-                          <p className="text-xs text-muted-foreground">{Math.floor(session.duration / 60)}分</p>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                          <div className="absolute bottom-2 left-2 right-2 text-white">
+                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}分</p>
+                          </div>
                         </div>
                       </Card>
                     </Link>
@@ -138,10 +141,11 @@ export default function SessionsPage() {
                       <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
                         <div className="aspect-video relative">
                           <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
-                        </div>
-                        <div className="p-4">
-                          <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
-                          <p className="text-xs text-muted-foreground">{Math.floor(session.duration / 60)}分</p>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                          <div className="absolute bottom-2 left-2 right-2 text-white">
+                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}分</p>
+                          </div>
                         </div>
                       </Card>
                     </Link>

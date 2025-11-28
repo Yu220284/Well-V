@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator'
 import { useAuth } from '@/lib/auth/auth-context'
 import { ProgressBar } from '@/components/onboarding/ProgressBar'
 import { useTranslations } from '@/lib/hooks/use-translations'
+import { AnimatedBackground } from '@/components/layout/AnimatedBackground'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -42,6 +43,7 @@ export default function LoginPage() {
         variant: 'destructive'
       })
     } else {
+      localStorage.setItem('wellv_seen_splash', 'true')
       toast({
         title: 'ログイン成功',
         description: `${email}でログインしました。`
@@ -53,8 +55,9 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-2 sm:p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-2 sm:p-4 relative">
+      <AnimatedBackground />
+      <Card className="w-full max-w-md relative z-10">
         <CardContent className="pt-6">
           <ProgressBar currentStep={2} totalSteps={6} />
           <h1 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">{t('auth.login')}</h1>

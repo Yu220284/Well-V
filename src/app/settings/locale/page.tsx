@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Check } from 'lucide-react';
 import { AVAILABLE_LANGUAGES, setSelectedLanguage, getSelectedLanguage, Language } from '@/lib/i18n/language-pack';
 import { useTranslations } from '@/lib/hooks/use-translations';
+import { BottomNav } from '@/components/layout/BottomNav';
 
 const REGIONS = [
   { code: 'jp', name: '日本', flag: '🇯🇵' },
@@ -71,21 +72,22 @@ export default function LocaleSettingsPage() {
   const handleSave = () => {
     setSelectedLanguage(selectedLanguage);
     localStorage.setItem('wellv_region', selectedRegion);
-    router.push('/');
+    router.back();
     setTimeout(() => window.location.reload(), 100);
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
       <Header />
       <PageTransition>
-        <div className="pt-24">
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="pt-12">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
             <div className="max-w-2xl mx-auto">
-              <div className="mb-8">
-                <div className="relative mb-6">
+              <div className="mb-3">
+                <div className="relative mb-2">
                   <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-                  <h1 className="relative text-xl font-bold font-headline py-2 pl-2">{t('settings.localeSettings')}</h1>
+                  <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">{t('settings.localeSettings')}</h1>
                 </div>
               </div>
 
@@ -141,5 +143,7 @@ export default function LocaleSettingsPage() {
         </div>
       </PageTransition>
     </div>
+    <BottomNav />
+    </>
   );
 }

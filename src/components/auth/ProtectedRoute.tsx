@@ -9,9 +9,11 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoaded && !user) {
+    const onboardingCompleted = localStorage.getItem('wellv_onboarding_completed') === 'true';
+    
+    if (isLoaded && !user && !onboardingCompleted) {
       router.push('/language-select');
-    } else if (isLoaded && user && !user.onboardingCompleted) {
+    } else if (isLoaded && user && !user.onboardingCompleted && !onboardingCompleted) {
       router.push('/onboarding/profile');
     }
   }, [user, isLoaded, router]);
@@ -27,7 +29,9 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!user || !user.onboardingCompleted) {
+  const onboardingCompleted = typeof window !== 'undefined' && localStorage.getItem('wellv_onboarding_completed') === 'true';
+  
+  if ((!user || !user.onboardingCompleted) && !onboardingCompleted) {
     return null;
   }
 

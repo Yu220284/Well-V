@@ -9,7 +9,7 @@ import { Logo } from "../icons/Logo";
 export function BottomNav() {
   const pathname = usePathname();
 
-  if (pathname.startsWith('/onboarding') || pathname === '/language-select' || pathname === '/splash' || pathname.startsWith('/settings') || pathname.startsWith('/auth/login') || pathname.startsWith('/auth/signup') || pathname.includes('/tutorial')) {
+  if (pathname.startsWith('/onboarding') || pathname === '/language-select' || pathname === '/splash' || pathname.startsWith('/auth/login') || pathname.startsWith('/auth/signup') || pathname.includes('/tutorial') || pathname.includes('/play')) {
     return null;
   }
 
@@ -23,7 +23,7 @@ export function BottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 w-full h-14 bg-card border-t border-border">
+    <div className="fixed bottom-0 left-0 z-50 w-full h-12 bg-card border-t border-border">
       <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">
         {navItems.map((item) => {
           const isActive = (item.href === "/" && pathname === "/") || (item.href !== "/" && pathname.startsWith(item.href));
@@ -38,11 +38,11 @@ export function BottomNav() {
                 className="relative flex justify-center"
               >
                 <div className={cn(
-                    "absolute -top-6 flex h-14 w-14 items-center justify-center rounded-full border-3 border-background bg-card shadow-md transition-transform duration-300 hover:scale-110",
+                    "absolute -top-5 flex h-12 w-12 items-center justify-center rounded-full border-3 border-background bg-card shadow-md transition-transform duration-300 hover:scale-110",
                     isActive ? "bg-primary" : "bg-card"
                 )}>
                   <Icon className={cn(
-                    "h-7 w-7 transition-colors",
+                    "h-6 w-6 transition-colors",
                     isActive ? "text-primary-foreground" : "text-primary"
                   )} />
                 </div>

@@ -8,7 +8,7 @@ import { Header } from "@/components/layout/Header";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, MessageSquare, Play, Languages } from 'lucide-react';
+import { Calendar, Clock, MessageSquare, Play, Languages, ThumbsUp, Heart, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -93,9 +93,9 @@ export default function HomePage() {
     translatedContent: "Today's yoga session felt so good! I was able to try new poses too.",
     time: "2時間前",
     reactions: [
-      { emoji: "👏", count: 8 },
-      { emoji: "🔥", count: 5 },
-      { emoji: "👍", count: 12 }
+      { icon: ThumbsUp, count: 8 },
+      { icon: Heart, count: 5 },
+      { icon: Flame, count: 12 }
     ]
   };
   
@@ -108,10 +108,10 @@ export default function HomePage() {
       <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
       <PageTransition>
-        <div className="pt-24">
+        <div className="pt-12">
           <AdBanner />
-          <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-8">
-        <div className="space-y-6">
+          <main className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-3">
+        <div className="space-y-3">
           {/* 週間統計 3列表示 */}
           <section>
             <div className="grid grid-cols-3 gap-3">
@@ -150,13 +150,13 @@ export default function HomePage() {
 
           {/* ウィークリーカレンダー */}
           <section>
-            <div className="relative mb-3">
+            <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-base sm:text-lg font-bold py-2 pl-2">{t('home.weeklyActivity')}</h2>
+              <h2 className="relative text-base sm:text-lg font-bold py-1.5 pl-2">{t('home.weeklyActivity')}</h2>
             </div>
             <Link href="/calendar">
               <Card className="hover:bg-primary/5 transition-colors cursor-pointer">
-                <CardContent className="p-4">
+                <CardContent className="p-3">
                   <div className="grid grid-cols-7 gap-2">
                     {weeklyCalendar.map((day, index) => (
                       <div key={index} className="flex flex-col items-center">
@@ -178,7 +178,7 @@ export default function HomePage() {
                     ))}
                   </div>
                   {weekStatus && (
-                    <div className="mt-4 text-center">
+                    <div className="mt-3 text-center">
                       <div className={cn(
                         "inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium",
                         isPerfectWeek ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" :
@@ -198,13 +198,13 @@ export default function HomePage() {
           {/* 中断したセッション */}
           {interruptedSession && (
             <section>
-              <div className="relative mb-3">
+              <div className="relative mb-2">
                 <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-                <h2 className="relative text-lg font-bold py-2 pl-2">{t('home.interruptedSession')}</h2>
+                <h2 className="relative text-lg font-bold py-1.5 pl-2">{t('home.interruptedSession')}</h2>
               </div>
               <Link href={`/session/${interruptedSession.id}`}>
                 <Card className="hover:bg-primary/5 transition-colors">
-                  <CardContent className="p-4">
+                  <CardContent className="p-3">
                     <div className="flex items-center gap-4">
                       <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                         <Image
@@ -229,14 +229,14 @@ export default function HomePage() {
 
           {/* 前回のグループ投稿 */}
           <section>
-            <div className="relative mb-3">
+            <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-lg font-bold py-2 pl-2">{t('home.latestPost')}</h2>
+              <h2 className="relative text-lg font-bold py-1.5 pl-2">{t('home.latestPost')}</h2>
             </div>
             <Link href="/post/1">
               <Card data-tutorial="post" className="hover:bg-primary/5 transition-colors cursor-pointer">
-                <CardContent className="p-4">
-                  <p className="text-sm mb-3">{isTranslated ? lastPost.translatedContent : lastPost.content}</p>
+                <CardContent className="p-3">
+                  <p className="text-sm mb-2">{isTranslated ? lastPost.translatedContent : lastPost.content}</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <span className="text-xs text-muted-foreground">{lastPost.time}</span>
@@ -252,12 +252,15 @@ export default function HomePage() {
                       </button>
                     </div>
                     <div className="flex items-center gap-3">
-                      {lastPost.reactions.map((reaction, index) => (
-                        <div key={index} className="flex items-center gap-1">
-                          <span className="text-sm">{reaction.emoji}</span>
-                          <span className="text-xs text-muted-foreground">{reaction.count}</span>
-                        </div>
-                      ))}
+                      {lastPost.reactions.map((reaction, index) => {
+                        const Icon = reaction.icon;
+                        return (
+                          <div key={index} className="flex items-center gap-1">
+                            <Icon className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-xs text-muted-foreground">{reaction.count}</span>
+                          </div>
+                        );
+                      })}
                       <MessageSquare className="h-4 w-4 text-muted-foreground" />
                     </div>
                   </div>
@@ -268,16 +271,16 @@ export default function HomePage() {
 
           {/* セッション履歴 */}
           <section>
-            <div className="relative mb-3">
+            <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-lg font-bold py-2 pl-2">{t('home.recentSessions')}</h2>
+              <h2 className="relative text-lg font-bold py-1.5 pl-2">{t('home.recentSessions')}</h2>
             </div>
-            <div className="space-y-3" data-tutorial="session-list">
+            <div className="space-y-2" data-tutorial="session-list">
               {recentSessions.length > 0 ? (
                 recentSessions.map((session, index) => (
                   <Link key={index} href={`/session/${session.id}`}>
                     <Card className="hover:bg-primary/5 transition-colors" data-tutorial={index === 0 ? "session-card" : undefined}>
-                      <CardContent className="p-4">
+                      <CardContent className="p-3">
                         <div className="flex items-center gap-3">
                           <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
                             <Image
@@ -303,7 +306,7 @@ export default function HomePage() {
                 ))
               ) : (
                 <Card>
-                  <CardContent className="p-4 text-center">
+                  <CardContent className="p-3 text-center">
                     <p className="text-sm text-muted-foreground">{t('home.noHistory')}</p>
                   </CardContent>
                 </Card>

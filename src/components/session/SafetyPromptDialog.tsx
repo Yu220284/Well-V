@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, Dot } from "lucide-react";
+import { AdBanner } from "@/components/layout/AdBanner";
 import messages from '@/../messages/ja.json';
 
 interface SafetyPromptDialogProps {
@@ -46,6 +47,9 @@ export function SafetyPromptDialog({ open, onStart }: SafetyPromptDialogProps) {
             </ul>
           </DialogDescription>
         </DialogHeader>
+        <div className="-mx-6 my-4">
+          <AdBanner />
+        </div>
         <DialogFooter>
           <Button 
             onClick={(e) => {

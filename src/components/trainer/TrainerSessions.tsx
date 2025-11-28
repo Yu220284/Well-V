@@ -35,11 +35,11 @@ export function TrainerSessions({ sessions }: TrainerSessionsProps) {
         return (
           <TabsContent key={category} value={category} className="mt-6">
             {categorySessions.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 gap-4">
                 {categorySessions.map((session, index) => (
                   <Link key={session.id} href={`/session/${session.id}`} className="group">
                     <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1" data-tutorial={index === 0 ? "session-card" : undefined}>
-                      <div className="relative h-40 w-full">
+                      <div className="relative aspect-[4/3] w-full">
                         <Image
                           src={session.imageUrl}
                           alt={session.title}
@@ -47,17 +47,18 @@ export function TrainerSessions({ sessions }: TrainerSessionsProps) {
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
                           <Play className="h-12 w-12 text-white fill-white" />
                         </div>
+                        <div className="absolute bottom-2 left-2 right-2 text-white">
+                          <CardTitle className="font-headline text-sm mb-1 line-clamp-2">{session.title}</CardTitle>
+                          <div className="flex items-center text-xs">
+                            <Clock className="h-3 w-3 mr-1" />
+                            <span>{formatDuration(session.duration)}</span>
+                          </div>
+                        </div>
                       </div>
-                      <CardHeader>
-                        <CardTitle className="font-headline text-lg">{session.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent className="flex items-center text-sm text-muted-foreground">
-                        <Clock className="h-4 w-4 mr-1.5" />
-                        <span>{formatDuration(session.duration)}</span>
-                      </CardContent>
                     </Card>
                   </Link>
                 ))}

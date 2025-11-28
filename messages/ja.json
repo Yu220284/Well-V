@@ -128,5 +128,29 @@
   },
   "SettingsPage": {
     "title": "詳細設定"
+  },
+  "settings": {
+    "title": "詳細設定",
+    "account": "アカウント情報",
+    "accountDesc": "メールアドレス、パスワード変更、SNS連携",
+    "subscription": "サブスクリプション管理",
+    "subscriptionDesc": "プラン確認、更新、解約、支払い履歴",
+    "locale": "地域・言語設定",
+    "localeDesc": "地域と言語の設定",
+    "notifications": "通知設定",
+    "notificationsDesc": "プッシュ通知やお知らせの設定",
+    "reminders": "セッション開始リマインダー",
+    "remindersDesc": "定期的なセッション開始の通知設定",
+    "backup": "バックアップ／復元",
+    "backupDesc": "クラウド保存、端末移行",
+    "legal": "利用規約／プライバシーポリシー",
+    "legalDesc": "法的文書の確認",
+    "version": "アプリバージョン情報",
+    "versionDesc": "現在のバージョンとアップデート情報",
+    "comingSoon": "この機能は現在開発中です。",
+    "localeSettings": "地域・言語設定",
+    "region": "地域",
+    "selectRegion": "地域を選択",
+    "language": "言語"
   }
 }

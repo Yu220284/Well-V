@@ -13,7 +13,7 @@ export async function saveSessionCompletion(sessionId: string, durationSeconds: 
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
-  if (!user) throw new Error('User not authenticated');
+  if (!user) return null;
 
   const { data, error } = await supabase
     .from('session_history')
@@ -26,7 +26,10 @@ export async function saveSessionCompletion(sessionId: string, durationSeconds: 
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    console.error('Failed to save session completion:', error);
+    return null;
+  }
   return data;
 }
 

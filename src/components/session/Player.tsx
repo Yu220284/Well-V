@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
@@ -14,11 +14,14 @@ import {
   Loader2,
   Rewind,
   FastForward,
+  UserPlus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
 import { useSessionStore } from "@/lib/hooks/use-session-store";
+import { useFollowStore } from "@/lib/hooks/use-follow-store";
+import { usePremium } from "@/lib/hooks/use-premium";
 import type { Session } from "@/lib/types";
 import { SafetyPromptDialog } from "./SafetyPromptDialog";
 import { useToast } from "@/hooks/use-toast";
@@ -36,8 +39,11 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
   const t = messages.SessionPlayer;
   const router = useRouter();
   const { addSession, toggleFavorite, isFavorite, isLoaded } = useSessionStore();
+  const { toggleFollow, isFollowing } = useFollowStore();
+  const { checkPremiumStatus } = usePremium();
   const { toast } = useToast();
   const selectedTrainer = TRAINERS.find(trainer => trainer.id === trainerId) || TRAINERS[0];
+  const isPremium = checkPremiumStatus();
   
   const getAudioUrl = () => {
     if (selectedTrainer.id === 1 && session.audioUrl) {
@@ -47,13 +53,18 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
   };
   
   const audioUrl = getAudioUrl();
+  const videoUrl = session.videoUrl || '';
+  const hasVideo = isPremium && session.hasVideo && videoUrl;
 
   const audioRef = useRef<HTMLAudioElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isSafetyPromptOpen, setIsSafetyPromptOpen] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [isReady, setIsReady] = useState(false);
+  const [actualDuration, setActualDuration] = useState(session.duration);
+  const [playbackRate, setPlaybackRate] = useState(1.0);
 
   const isFav = isLoaded ? isFavorite(session.id) : false;
 
@@ -61,20 +72,32 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
 
   const handleStartSession = () => {
     setIsSafetyPromptOpen(false);
-    if (audioUrl) {
-      if (audioRef.current) {
-        audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
-      }
+    if (hasVideo && videoRef.current) {
+      videoRef.current.play().catch((e) => console.error("Video play failed:", e));
+    } else if (audioUrl && audioRef.current) {
+      audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
     } else {
       setIsPlaying(true);
       setIsReady(true);
     }
   };
 
-  const handleCanPlay = () => setIsReady(true);
+  const handleCanPlay = () => {
+    setIsReady(true);
+    const media = hasVideo ? videoRef.current : audioRef.current;
+    if (media && media.duration && !isNaN(media.duration) && isFinite(media.duration)) {
+      setActualDuration(media.duration);
+    }
+  };
 
-  const togglePlayPause = () => {
-    if (audioUrl && audioRef.current) {
+  const togglePlayPause = useCallback(() => {
+    if (hasVideo && videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play().catch((e) => console.error("Video play failed:", e));
+      }
+    } else if (audioUrl && audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
@@ -83,11 +106,16 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
     } else {
       setIsPlaying(!isPlaying);
     }
-  };
+  }, [hasVideo, audioUrl, isPlaying]);
 
-  const restart = () => {
+  const restart = useCallback(() => {
     setCurrentTime(0);
-    if (audioUrl && audioRef.current) {
+    if (hasVideo && videoRef.current) {
+      videoRef.current.currentTime = 0;
+      if (!isPlaying) {
+        videoRef.current.play().catch((e) => console.error("Video play failed:", e));
+      }
+    } else if (audioUrl && audioRef.current) {
       audioRef.current.currentTime = 0;
       if (!isPlaying) {
         audioRef.current.play().catch((e) => console.error("Audio play failed:", e));
@@ -95,18 +123,27 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
     } else if (!isPlaying) {
       setIsPlaying(true);
     }
-  };
+  }, [hasVideo, audioUrl, isPlaying]);
 
-  const stop = () => {
-    if (audioUrl && audioRef.current) {
+  const handleStop = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+    if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
+    setIsPlaying(false);
+    setCurrentTime(0);
     router.push("/");
-  };
+  }, [router]);
 
   const toggleMute = () => {
-    if (audioRef.current) {
+    if (hasVideo && videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    } else if (audioRef.current) {
       audioRef.current.muted = !audioRef.current.muted;
       setIsMuted(audioRef.current.muted);
     }
@@ -125,17 +162,19 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
     }, 0);
   };
 
-  const seek = (delta: number) => {
-    if (!audioRef.current) return;
-    const newTime = Math.max(0, Math.min(session.duration, audioRef.current.currentTime + delta));
-    audioRef.current.currentTime = newTime;
+  const seek = useCallback((delta: number) => {
+    const mediaRef = hasVideo ? videoRef.current : audioRef.current;
+    if (!mediaRef) return;
+    const newTime = Math.max(0, Math.min(actualDuration, mediaRef.currentTime + delta));
+    mediaRef.currentTime = newTime;
     setCurrentTime(newTime);
-  };
+  }, [hasVideo, actualDuration]);
 
   const handleSliderChange = (value: number[]) => {
     const newTime = value[0];
-    if (audioUrl && audioRef.current) {
-      audioRef.current.currentTime = newTime;
+    const mediaRef = hasVideo ? videoRef.current : audioRef.current;
+    if (mediaRef) {
+      mediaRef.currentTime = newTime;
     }
     setCurrentTime(newTime);
     
@@ -147,30 +186,30 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
   };
 
   useEffect(() => {
-    if (isPlaying && !audioUrl) {
+    if (isPlaying && !audioUrl && !hasVideo) {
       const timer = setInterval(() => {
         setCurrentTime((prevTime) => {
-          if (prevTime >= session.duration) {
+          if (prevTime >= actualDuration) {
             clearInterval(timer);
             addSession(session.id);
             setIsPlaying(false);
             const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
 
             setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 2000);
-            return session.duration;
+            return actualDuration;
           }
           return prevTime + 1;
         });
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [isPlaying, session.duration, session.id, audioUrl, addSession, router, toast, t, session.title]);
+  }, [isPlaying, actualDuration, session.id, audioUrl, hasVideo, addSession, router, toast, t, session.title]);
 
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio || !audioUrl) return;
+    const media = hasVideo ? videoRef.current : audioRef.current;
+    if (!media || (!hasVideo && !audioUrl)) return;
 
-    const updateCurrentTime = () => setCurrentTime(audio.currentTime);
+    const updateCurrentTime = () => setCurrentTime(media.currentTime);
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
     const onEnded = () => {
@@ -181,20 +220,57 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
       setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 2000);
     };
 
-    audio.addEventListener("timeupdate", updateCurrentTime);
-    audio.addEventListener("play", onPlay);
-    audio.addEventListener("pause", onPause);
-    audio.addEventListener("ended", onEnded);
-    audio.addEventListener("canplay", handleCanPlay);
+    media.addEventListener("timeupdate", updateCurrentTime);
+    media.addEventListener("play", onPlay);
+    media.addEventListener("pause", onPause);
+    media.addEventListener("ended", onEnded);
+    media.addEventListener("canplay", handleCanPlay);
 
     return () => {
-      audio.removeEventListener("timeupdate", updateCurrentTime);
-      audio.removeEventListener("play", onPlay);
-      audio.removeEventListener("pause", onPause);
-      audio.removeEventListener("ended", onEnded);
-      audio.removeEventListener("canplay", handleCanPlay);
+      media.removeEventListener("timeupdate", updateCurrentTime);
+      media.removeEventListener("play", onPlay);
+      media.removeEventListener("pause", onPause);
+      media.removeEventListener("ended", onEnded);
+      media.removeEventListener("canplay", handleCanPlay);
     };
-  }, [addSession, session.id, router, toast, t, session.title, audioUrl]);
+  }, [addSession, session.id, router, toast, t, session.title, audioUrl, hasVideo]);
+
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: session.title,
+        artist: selectedTrainer.name,
+        album: session.category === 'workout' ? 'ワークアウト' : session.category === 'yoga' ? 'ヨガ' : 'ストレッチ',
+        artwork: [
+          { src: session.imageUrl, sizes: '96x96', type: 'image/jpeg' },
+          { src: session.imageUrl, sizes: '128x128', type: 'image/jpeg' },
+          { src: session.imageUrl, sizes: '192x192', type: 'image/jpeg' },
+          { src: session.imageUrl, sizes: '256x256', type: 'image/jpeg' },
+          { src: session.imageUrl, sizes: '384x384', type: 'image/jpeg' },
+          { src: session.imageUrl, sizes: '512x512', type: 'image/jpeg' },
+        ],
+      });
+
+      navigator.mediaSession.setActionHandler('play', togglePlayPause);
+      navigator.mediaSession.setActionHandler('pause', togglePlayPause);
+      navigator.mediaSession.setActionHandler('seekbackward', () => seek(-10));
+      navigator.mediaSession.setActionHandler('seekforward', () => seek(10));
+      navigator.mediaSession.setActionHandler('previoustrack', restart);
+      navigator.mediaSession.setActionHandler('stop', handleStop);
+    }
+
+    return () => {
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = null;
+        navigator.mediaSession.setActionHandler('play', null);
+        navigator.mediaSession.setActionHandler('pause', null);
+        navigator.mediaSession.setActionHandler('seekbackward', null);
+        navigator.mediaSession.setActionHandler('seekforward', null);
+        navigator.mediaSession.setActionHandler('previoustrack', null);
+        navigator.mediaSession.setActionHandler('stop', null);
+      }
+    };
+  }, [session.title, session.category, session.imageUrl, selectedTrainer.name, togglePlayPause, seek, restart, handleStop]);
 
   return (
     <>
@@ -202,7 +278,8 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
         open={isSafetyPromptOpen}
         onStart={handleStartSession}
       />
-      {audioUrl && <audio ref={audioRef} src={audioUrl} preload="auto" />}
+
+      {!hasVideo && audioUrl && <audio ref={audioRef} src={audioUrl} preload="auto" />}
       <div className="relative h-screen w-screen overflow-hidden">
         <Image
           src={session.imageUrl}
@@ -219,14 +296,24 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
         <Card className="w-full max-w-md bg-card/80 backdrop-blur-lg border-white/20 shadow-2xl">
           <div className="p-6 space-y-4">
             <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-4">
-              <Image
-                src={session.imageUrl}
-                alt={session.title}
-                data-ai-hint={session.imageHint}
-                fill
-                className="object-cover"
-                priority
-              />
+              {hasVideo ? (
+                <video
+                  ref={videoRef}
+                  src={videoUrl}
+                  className="w-full h-full object-cover"
+                  preload="auto"
+                  playsInline
+                />
+              ) : (
+                <Image
+                  src={session.imageUrl}
+                  alt={session.title}
+                  data-ai-hint={session.imageHint}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              )}
             </div>
 
             <div className="text-center">
@@ -238,7 +325,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
             <div className="space-y-2">
               <Slider
                 value={[currentTime]}
-                max={session.duration}
+                max={actualDuration}
                 onValueChange={handleSliderChange}
                 aria-label={t.progress_label}
                 disabled={!isReady}
@@ -247,7 +334,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
               />
               <div className="flex justify-between text-xs text-muted-foreground font-mono">
                 <span>{formatTime(currentTime)}</span>
-                <span>-{formatTime(session.duration - currentTime)}</span>
+                <span>-{formatTime(actualDuration - currentTime)}</span>
               </div>
             </div>
 
@@ -263,11 +350,11 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                   <Button
                     variant="ghost"
                     onClick={() => seek(-10)}
-                    className="relative h-16 w-16 flex flex-col items-center justify-center"
+                    className="relative h-16 w-16 flex flex-col items-center justify-center gap-0.5"
                     aria-label={t.seek_backward_aria}
                     data-tutorial="rewind"
                   >
-                    <span className="text-sm font-bold mb-0">10</span>
+                    <span className="text-sm font-bold ml-1">10</span>
                     <Rewind className="h-7 w-7" />
                   </Button>
                   <Button
@@ -286,11 +373,11 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                   <Button
                     variant="ghost"
                     onClick={() => seek(10)}
-                    className="relative h-16 w-16 flex flex-col items-center justify-center"
+                    className="relative h-16 w-16 flex flex-col items-center justify-center gap-0.5"
                     aria-label={t.seek_forward_aria}
                     data-tutorial="forward"
                   >
-                    <span className="text-sm font-bold mb-0">10</span>
+                    <span className="text-sm font-bold mr-1">10</span>
                     <FastForward className="h-7 w-7" />
                   </Button>
                 </div>
@@ -301,13 +388,13 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                     onClick={toggleMute}
                     className="h-16 w-16"
                     aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria}
-                    disabled={!audioUrl}
+                    disabled={!audioUrl && !hasVideo}
                     data-tutorial="volume"
                   >
                     {isMuted ? <VolumeX className="h-8 w-8" /> : <Volume2 className="h-8 w-8" />}
                   </Button>
 
-                  <div className="col-span-3 flex justify-center items-center gap-4">
+                  <div className="col-span-3 flex justify-center items-center gap-2">
                     <Button variant="ghost" onClick={restart} className="h-16 w-16" aria-label={t.restart_button_aria}>
                       <RotateCcw className="h-8 w-8" />
                     </Button>
@@ -320,9 +407,36 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                     >
                       <Heart className={cn("h-8 w-8 transition-colors", isFav && "fill-red-500 text-red-500")} />
                     </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        const wasFollowing = isFollowing(selectedTrainer.id);
+                        toggleFollow(selectedTrainer.id);
+                        setTimeout(() => {
+                          toast({
+                            title: wasFollowing ? "フォローを解除しました" : "フォローしました",
+                            description: selectedTrainer.name,
+                          });
+                        }, 0);
+                      }}
+                      className="h-16 w-16"
+                      aria-label={isFollowing(selectedTrainer.id) ? "フォロー解除" : "フォロー"}
+                    >
+                      <UserPlus className={cn("h-8 w-8 transition-colors", isFollowing(selectedTrainer.id) && "text-primary")} />
+                    </Button>
                   </div>
 
-                  <Button variant="ghost" onClick={stop} className="h-16 w-16" aria-label={t.stop_button_aria}>
+                  <Button 
+                    variant="ghost" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleStop();
+                    }} 
+                    className="h-16 w-16" 
+                    aria-label={t.stop_button_aria}
+                    type="button"
+                  >
                     <X className="h-8 w-8" />
                   </Button>
                 </div>

@@ -104,11 +104,28 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 npm run dev
 ```
 
+### 6. テストアカウント
+
+Supabase認証が有効な場合、以下のテストアカウントでログインできます：
+
+```
+Email: wellvuser1@gmail.com
+Password: test1234
+
+その他のテストユーザー（パスワード: test1234）:
+- wellvryusei@gmail.com
+- wellvakarin@gmail.com
+- wellvuser2@gmail.com
+- wellvuser3@gmail.com
+- wellvyumeno@gmail.com
+```
+
 ⚠️ **開発時の注意点**
 - 初回起動時は `.next` フォルダの生成に時間がかかる場合があります
 - ポート3000が使用中の場合は自動的に別のポートが割り当てられます
 - ホットリロードが効かない場合はサーバーを再起動してください
 - LocalStorageを使用しているため、ブラウザのシークレットモードでは一部機能が制限されます
+- 現在はローカル認証とSupabase認証の両方をサポートしています
 
 ## 📁 プロジェクト構造
 

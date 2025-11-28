@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { PageTransition } from '@/components/layout/PageTransition';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { BottomNav } from '@/components/layout/BottomNav';
 
 const notifications = [
   {
@@ -35,18 +36,19 @@ const notifications = [
 
 export default function NotificationsPage() {
   return (
+    <>
     <div className="pb-24">
       <Header />
       <PageTransition>
-        <div className="pt-24">
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="pt-12">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="max-w-2xl mx-auto">
-          <div className="relative mb-6">
+          <div className="relative mb-2">
             <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-            <h1 className="relative text-2xl font-bold font-headline py-2 pl-2">お知らせ</h1>
+            <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">お知らせ</h1>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             {notifications.map((notification) => (
               <Card key={notification.id} className={cn(
                 "transition-colors",
@@ -69,5 +71,7 @@ export default function NotificationsPage() {
         </div>
       </PageTransition>
     </div>
+    <BottomNav />
+    </>
   );
 }

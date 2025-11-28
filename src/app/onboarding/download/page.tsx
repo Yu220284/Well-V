@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { useTranslations } from '@/lib/hooks/use-translations';
+import { AnimatedBackground } from '@/components/layout/AnimatedBackground';
 
 const DOWNLOAD_ITEMS = [
   { id: 1, nameJa: '基本データ', nameEn: 'Basic Data', sizeMB: 2.5 },
@@ -47,14 +48,15 @@ export default function DownloadPage() {
   const totalProgress = ((currentItem * 100 + progress) / (DOWNLOAD_ITEMS.length * 100)) * 100;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4 pb-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-3 relative">
+      <AnimatedBackground />
+      <Card className="w-full max-w-md relative z-10">
         <CardContent className="pt-6">
-          <div className="text-center mb-8">
+          <div className="text-center mb-4">
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4">
               <Download className={`h-10 w-10 text-primary ${isStarted ? 'animate-bounce' : ''}`} />
             </div>
-            <h2 className="text-2xl font-bold mb-2">{isStarted ? t('onboarding.downloading') : t('onboarding.dataDownload')}</h2>
+            <h2 className="text-xl font-bold mb-1">{isStarted ? t('onboarding.downloading') : t('onboarding.dataDownload')}</h2>
             <p className="text-muted-foreground text-sm">
               {isStarted
                 ? currentItem < DOWNLOAD_ITEMS.length

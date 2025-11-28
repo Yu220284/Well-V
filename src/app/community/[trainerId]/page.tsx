@@ -14,6 +14,7 @@ import { TRAINERS } from '@/lib/data';
 import { MessageSquare, ShoppingBag, Send, Languages } from 'lucide-react';
 import { translateText } from '@/lib/translate';
 import { useTranslations } from '@/lib/hooks/use-translations';
+import { AdBanner } from '@/components/layout/AdBanner';
 
 const generateCommunityPosts = (trainerId: number, trainerName: string) => [
   {
@@ -64,8 +65,9 @@ export default function TrainerCommunityPage() {
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
       <PageTransition>
-        <div className="pt-24">
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="pt-12">
+          <AdBanner />
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
             <div className="max-w-2xl mx-auto">
               <div className="relative mb-6">
                 <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
@@ -89,7 +91,7 @@ export default function TrainerCommunityPage() {
                       </Link>
                       <div className="flex-1 pb-2">
                         <div className="flex items-center gap-2">
-                          <h2 className="text-2xl font-bold">{trainer.name} {t('community.community')}</h2>
+                          <h2 className="text-2xl font-bold">{trainer.name}</h2>
                           <Link href={`/community/${trainerId}/shop`}>
                             <Button size="icon" variant="ghost" className="h-8 w-8">
                               <ShoppingBag className="h-5 w-5" />
@@ -112,7 +114,7 @@ export default function TrainerCommunityPage() {
                       </Avatar>
                       <div className="flex-1">
                         <Textarea
-                          placeholder={`${t('community.postPlaceholder').replace('\'s', ` ${trainer.name}'s`)}`}
+                          placeholder={`${trainer.name}のコミュニティに投稿`}
                           value={newPost}
                           onChange={(e) => setNewPost(e.target.value)}
                           className="mb-3 resize-none border-0 bg-transparent p-0 focus-visible:ring-0"
@@ -202,9 +204,9 @@ export default function TrainerCommunityPage() {
                             </button>
                           </CardContent>
                           <CardFooter className="flex gap-4 text-sm text-muted-foreground">
-                            <button className="flex items-center gap-1 hover:text-primary">
-                              👍 {post.likes}
-                            </button>
+                            <div className="flex items-center gap-1">
+                              {post.likes}
+                            </div>
                             <button className="flex items-center gap-1 hover:text-primary">
                               <MessageSquare className="h-4 w-4" />
                               {post.comments}

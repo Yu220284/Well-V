@@ -4,6 +4,7 @@
 import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
+import { usePremium } from "@/lib/hooks/use-premium";
 
 import {
   Carousel,
@@ -18,12 +19,17 @@ const banners = [
 ];
 
 export function AdBanner() {
+  const { checkPremiumStatus, showAds } = usePremium();
+  const isPremium = checkPremiumStatus();
+  
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: false })
   );
 
+  if (isPremium && !showAds) return null;
+
   return (
-    <div className="flex justify-center px-4">
+    <div className="flex justify-center px-4 mt-2">
       <Carousel
         plugins={[plugin.current]}
         className="w-full max-w-2xl h-[120px]"

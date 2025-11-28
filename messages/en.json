@@ -74,5 +74,29 @@
     "home": "Home",
     "trainers": "Trainers",
     "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "account": "Account Information",
+    "accountDesc": "Email, password, and social media connections",
+    "subscription": "Subscription Management",
+    "subscriptionDesc": "Plan details, renewal, cancellation, payment history",
+    "locale": "Region & Language",
+    "localeDesc": "Region and language settings",
+    "notifications": "Notification Settings",
+    "notificationsDesc": "Push notifications and alerts",
+    "reminders": "Session Reminders",
+    "remindersDesc": "Regular session start notifications",
+    "backup": "Backup / Restore",
+    "backupDesc": "Cloud storage and device migration",
+    "legal": "Terms / Privacy Policy",
+    "legalDesc": "Legal documents",
+    "version": "App Version",
+    "versionDesc": "Current version and update information",
+    "comingSoon": "This feature is coming soon.",
+    "localeSettings": "Region & Language Settings",
+    "region": "Region",
+    "selectRegion": "Select Region",
+    "language": "Language"
   }
 }

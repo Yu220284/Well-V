@@ -52,17 +52,18 @@ export default function TrainersPage() {
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover object-center transition-transform duration-300 hover:scale-105"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          <div className="absolute bottom-2 left-2 right-2 text-white">
+            <h3 className="font-semibold text-sm truncate">{trainer.name}</h3>
+            <p className="text-xs opacity-90">{trainer.specialty}</p>
+          </div>
         </div>
       </Link>
-      <CardContent className="p-3">
-        <Link href={`/trainer/${trainer.id}`}>
-          <h3 className="font-semibold text-sm truncate">{trainer.name}</h3>
-          <p className="text-xs text-muted-foreground">{trainer.specialty}</p>
-        </Link>
+      <CardContent className="p-2">
         <Button
           size="sm"
           variant={isFollowing(trainer.id) ? "default" : "outline"}
-          className="w-full mt-2"
+          className="w-full"
           onClick={(e) => {
             e.preventDefault();
             const isTutorialActive = typeof window !== 'undefined' && localStorage.getItem('wellv_tutorial_active') === 'true';
@@ -82,12 +83,12 @@ export default function TrainersPage() {
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
       <PageTransition>
-        <div className="pt-24">
+        <div className="pt-12">
           <AdBanner />
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="relative mb-6">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div className="relative mb-2">
           <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-          <h1 className="relative text-xl font-bold font-headline py-2 pl-2">トレーナー</h1>
+          <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">トレーナー</h1>
         </div>
         
         <SearchBar 
@@ -95,7 +96,7 @@ export default function TrainersPage() {
           onSearch={handleSearch}
         />
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-3">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="new">
               <Sparkles className="h-4 w-4 mr-1" />
@@ -133,6 +134,12 @@ export default function TrainersPage() {
       </main>
         </div>
       </PageTransition>
+      <footer className="text-center py-6 text-sm text-muted-foreground">
+        <p className="inline-flex items-center">
+          <Sparkles className="inline-block h-4 w-4 text-primary mx-1" />
+          WellV
+        </p>
+      </footer>
     </div>
   );
 }

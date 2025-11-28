@@ -8,6 +8,7 @@ import { Play, Diamond, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLocalAuth } from '@/lib/hooks/use-local-auth';
 import { ProgressBar } from '@/components/onboarding/ProgressBar';
 import { useTranslations } from '@/lib/hooks/use-translations';
+import { AnimatedBackground } from '@/components/layout/AnimatedBackground';
 
 
 
@@ -50,6 +51,7 @@ export default function TutorialPage() {
   };
 
   const handleStart = () => {
+    localStorage.setItem('wellv_onboarding_completed', 'true');
     updateProfile({ onboardingCompleted: true });
     router.push('/');
   };
@@ -57,8 +59,9 @@ export default function TutorialPage() {
   const step = TUTORIAL_STEPS[currentStep];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-2 sm:p-4 pb-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-2 sm:p-4 pb-4 relative">
+      <AnimatedBackground />
+      <Card className="w-full max-w-md relative z-10">
         <CardContent className="pt-6">
           <ProgressBar currentStep={5} totalSteps={6} />
           <div className="text-center mb-6 sm:mb-8 mt-2">

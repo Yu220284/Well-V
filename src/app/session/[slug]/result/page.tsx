@@ -4,11 +4,12 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Combobox } from '@/components/ui/combobox';
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SESSIONS, TRAINERS } from '@/lib/data';
-import { Twitter, MessageCircle, Copy, UserPlus, Heart, Users, CheckCircle } from 'lucide-react';
+import { Twitter, MessageCircle, Copy, UserPlus, Heart, Users, CheckCircle, Search, Check, ChevronDown, Clock } from 'lucide-react';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSessionStore } from '@/lib/hooks/use-session-store';
@@ -54,6 +55,8 @@ export default function SessionResultPage({
   const [communityPost, setCommunityPost] = useState('');
   const [isPosting, setIsPosting] = useState(false);
   const [selectedTrainerId, setSelectedTrainerId] = useState(session?.trainerId || 1);
+  const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Mock followed trainers (in real app, get from user data)
   const followedTrainerIds = [1, 2, 3, 4, 5]; // Mock followed trainer IDs
@@ -63,11 +66,11 @@ export default function SessionResultPage({
     : followedTrainerIds;
   const followedTrainers = TRAINERS.filter(t => allFollowedIds.includes(t.id));
   
-  const trainerOptions = followedTrainers.map(t => ({
-    value: t.id.toString(),
-    label: `${t.name}`,
-    searchText: `${t.name} ${t.id}`
-  }));
+  const selectedTrainerData = followedTrainers.find(t => t.id === selectedTrainerId);
+  const filteredTrainers = followedTrainers.filter(trainer => 
+    trainer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    trainer.specialty.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const { toggleFavorite: toggleSupabaseFavorite, isFavorite } = useSupabaseFavorites();
   const { toast } = useToast();
   
@@ -86,32 +89,36 @@ export default function SessionResultPage({
     <ProtectedRoute>
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center p-4">
       <Card className="w-full max-w-lg bg-card/80 backdrop-blur-lg border-white/20 shadow-2xl">
-        <CardContent className="p-8">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+        <CardContent className="p-6">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-green-100 rounded-full mb-3">
+              <CheckCircle className="w-7 h-7 text-green-600" />
             </div>
-            <h1 className="text-3xl font-bold font-headline mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold font-headline mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               セッション完了！
             </h1>
-            <p className="text-sm font-medium text-muted-foreground mb-4">お疲れさまでした</p>
+            <p className="text-sm font-medium text-muted-foreground">お疲れさまでした</p>
           </div>
 
-          <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-6 shadow-lg">
+          <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 shadow-lg">
             <Image
               src={session.imageUrl}
               alt={session.imageHint}
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            
+            <div className="absolute bottom-3 left-3 right-3 text-white">
+              <h2 className="text-xl font-bold mb-1">{session.title}</h2>
+              <div className="flex items-center gap-1 text-sm">
+                <Clock className="h-3 w-3" />
+                <span>完了時間: {minutes}分{seconds}秒</span>
+              </div>
+            </div>
           </div>
 
-          <div className="text-center mb-6">
-            <h2 className="text-xl font-bold mb-2">{session.title}</h2>
-            <p className="text-muted-foreground mb-4">
-              完了時間: {minutes}分{seconds}秒
-            </p>
+          <div className="text-center mb-4">
             <div className="flex justify-center gap-4">
               <Button 
                 onClick={() => {
@@ -138,22 +145,91 @@ export default function SessionResultPage({
             </div>
           </div>
 
-          <div className="space-y-4 mb-6">
-            <div className="bg-muted/50 rounded-lg p-4" data-tutorial="post">
-              <div className="flex items-center gap-2 mb-3">
+          <div className="space-y-3 mb-4">
+            <div className="bg-muted/50 rounded-lg p-3" data-tutorial="post">
+              <div className="flex items-center gap-2 mb-2">
                 <Users className="w-4 h-4 text-primary" />
                 <span className="font-medium text-sm">コミュニティに投稿</span>
               </div>
               
-              <div className="mb-3">
-                <Combobox
-                  options={trainerOptions}
-                  value={selectedTrainerId.toString()}
-                  onValueChange={(value) => setSelectedTrainerId(parseInt(value))}
-                  placeholder="トレーナーを選択..."
-                  searchPlaceholder="トレーナー名またはIDで検索..."
-                  emptyText="トレーナーが見つかりません。"
-                />
+              <div className="mb-2">
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-full justify-between h-auto p-2"
+                    >
+                      {selectedTrainerData ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                            <Image
+                              src={selectedTrainerData.imageUrl}
+                              alt={selectedTrainerData.name}
+                              width={32}
+                              height={32}
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
+                          <div className="flex-1 text-left">
+                            <p className="font-medium text-xs">{selectedTrainerData.name}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        "トレーナーを選択..."
+                      )}
+                      <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-2" align="start">
+                    <div className="space-y-2">
+                      <div className="relative">
+                        <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="トレーナーを検索..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="pl-8 h-9"
+                        />
+                      </div>
+                      <div className="max-h-60 overflow-y-auto space-y-1">
+                        {filteredTrainers.length > 0 ? filteredTrainers.map((trainer) => (
+                          <button
+                            key={trainer.id}
+                            onClick={() => {
+                              setSelectedTrainerId(trainer.id);
+                              setOpen(false);
+                              setSearchQuery('');
+                            }}
+                            className="w-full flex items-center gap-2 p-2 rounded-md hover:bg-accent transition-colors"
+                          >
+                            <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                              <Image
+                                src={trainer.imageUrl}
+                                alt={trainer.name}
+                                width={32}
+                                height={32}
+                                className="object-cover w-full h-full"
+                              />
+                            </div>
+                            <div className="flex-1 text-left">
+                              <p className="font-medium text-xs">{trainer.name}</p>
+                            </div>
+                            <Check
+                              className={cn(
+                                "h-4 w-4",
+                                selectedTrainerId === trainer.id ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                          </button>
+                        )) : (
+                          <p className="text-sm text-muted-foreground text-center py-4">該当するトレーナーが見つかりません</p>
+                        )}
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
               
               <Button 
@@ -168,8 +244,8 @@ export default function SessionResultPage({
               </Button>
             </div>
           </div>
-          <div className="mb-6">
-            <p className="text-center text-sm font-medium text-muted-foreground mb-3">シェアする</p>
+          <div className="mb-4">
+            <p className="text-center text-sm font-medium text-muted-foreground mb-2">シェアする</p>
             <div className="flex justify-center gap-4" data-tutorial="share">
               <Button 
                 onClick={async () => {
@@ -268,8 +344,7 @@ export default function SessionResultPage({
               </Button>
             </div>
           </div>
-          
-          <div className="pb-8"></div>
+
         </CardContent>
       </Card>
       </div>

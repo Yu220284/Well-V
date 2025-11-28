@@ -39,13 +39,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       
       if (error) {
         return { error: error.message };
+      }
+      
+      // ローカルストレージにもユーザー情報を保存
+      if (data.user) {
+        const authUser = { 
+          email: data.user.email || email, 
+          displayName: data.user.email?.split('@')[0] || 'User', 
+          onboardingCompleted: true 
+        };
+        localStorage.setItem('wellv_auth_user', JSON.stringify(authUser));
       }
       
       return {};

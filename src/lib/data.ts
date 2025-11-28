@@ -26,6 +26,19 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const SESSIONS: Session[] = [
+  { 
+    id: 'v-01', 
+    title: 'ヒーリングヨガ＆ストレッチ（動画）', 
+    category: 'yoga', 
+    duration: 30, 
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    hasVideo: true,
+    isPremium: true,
+    imageUrl: 'https://picsum.photos/seed/v01-premium/600/400', 
+    imageHint: 'premium yoga video session', 
+    tags: ['動画', 'プレミアム'], 
+    trainerId: 1 
+  },
   { id: 'y-01', title: '朝の目覚めヨガ', category: 'yoga', duration: 600, audioUrl: '', imageUrl: 'https://picsum.photos/seed/y01-yoga/600/400', imageHint: 'morning yoga', tags: ['朝', '目覚め'], trainerId: 1 },
   { id: 'w-01', title: '朝のエナジーブースト筋トレ', category: 'workout', duration: 300, audioUrl: '/audio/w01-workout-trainer1.mp3', imageUrl: 'https://picsum.photos/seed/w01-workout/600/400', imageHint: 'morning energy workout', tags: ['朝', '筋トレ'], trainerId: 2 },
   { id: 's-01', title: '朝の全身ストレッチ', category: 'stretch', duration: 480, audioUrl: '', imageUrl: 'https://picsum.photos/seed/s01-stretch/600/400', imageHint: 'morning full body stretch', trainerId: 3 },

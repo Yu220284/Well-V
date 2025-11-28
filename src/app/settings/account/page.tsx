@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Mail, Phone, Lock, Link, LogOut, Trash2 } from 'lucide-react';
 import { useAuth } from '@/lib/auth/auth-context';
+import { BottomNav } from '@/components/layout/BottomNav';
 
 const accountItems = [
   {
@@ -65,20 +66,21 @@ export default function AccountSettingsPage() {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
       <Header />
       <PageTransition>
-        <div className="pt-24">
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="pt-12">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
             <div className="max-w-2xl mx-auto">
-              <div className="mb-8">
-                <div className="relative mb-6">
+              <div className="mb-3">
+                <div className="relative mb-2">
                   <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-                  <h1 className="relative text-xl font-bold font-headline py-2 pl-2">アカウント設定</h1>
+                  <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">アカウント設定</h1>
                 </div>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {accountItems.map((item) => {
                   if (item.id === 'delete-account') {
                     return (
@@ -183,5 +185,7 @@ export default function AccountSettingsPage() {
         </div>
       </PageTransition>
     </div>
+    <BottomNav />
+    </>
   );
 }

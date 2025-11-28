@@ -31,8 +31,8 @@ export default function ProfilePage() {
     <div className="pb-24">
       <Header />
       <PageTransition>
-        <div className="pt-24">
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="pt-12">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
             <div className="max-w-2xl mx-auto">
               <div className="relative mb-6">
                 <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>

@@ -14,14 +14,19 @@ export const SessionSchema = z.object({
   category: z.enum(['workout', 'yoga', 'stretch']),
   duration: z.number().positive(), // in seconds
   audioUrl: z.string().optional(),
+  videoUrl: z.string().optional(),
+  hasVideo: z.boolean().optional(),
   imageUrl: z.string().url(),
   imageHint: z.string(),
   tags: z.array(z.string()).optional(),
   trainerId: z.number().optional(),
+  isPremium: z.boolean().optional(),
 });
 
 // TypeScript type derived from the schema
 export type Session = z.infer<typeof SessionSchema>;
+
+export type MediaType = 'audio' | 'video';
 
 
 export interface Category {

@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, Languages, Send } from 'lucide-react';
+import { ArrowLeft, Languages, Send, ThumbsUp, Heart, Flame } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslations } from '@/lib/hooks/use-translations';
 
@@ -18,9 +18,9 @@ const MOCK_POST = {
   translatedContent: "Today's yoga session felt so good! I was able to try new poses too.",
   time: '2時間前',
   reactions: [
-    { emoji: '👏', count: 8 },
-    { emoji: '🔥', count: 5 },
-    { emoji: '👍', count: 12 }
+    { type: 'like', icon: ThumbsUp, count: 12 },
+    { type: 'heart', icon: Heart, count: 8 },
+    { type: 'fire', icon: Flame, count: 5 }
   ],
   comments: [
     { user: { name: 'たけし', avatar: 'https://picsum.photos/seed/user2/100' }, content: 'すごい！私も頑張ります💪', time: '1時間前' },
@@ -35,29 +35,30 @@ export default function PostDetailPage() {
   const [isTranslated, setIsTranslated] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [post, setPost] = useState(MOCK_POST);
-  const [userReaction, setUserReaction] = useState<string | null>('👏');
+  const [userReactions, setUserReactions] = useState<Set<string>>(new Set(['like']));
 
-  const handleReaction = (emoji: string) => {
-    if (userReaction === emoji) {
-      setUserReaction(null);
-      setPost(prev => ({
-        ...prev,
-        reactions: prev.reactions.map(r => 
-          r.emoji === emoji ? { ...r, count: r.count - 1 } : r
-        )
-      }));
-    } else {
-      const prevReaction = userReaction;
-      setUserReaction(emoji);
-      setPost(prev => ({
-        ...prev,
-        reactions: prev.reactions.map(r => {
-          if (r.emoji === emoji) return { ...r, count: r.count + (prevReaction ? 0 : 1) };
-          if (r.emoji === prevReaction) return { ...r, count: r.count - 1 };
-          return r;
-        })
-      }));
-    }
+  const handleReaction = (type: string) => {
+    setUserReactions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(type)) {
+        newSet.delete(type);
+        setPost(p => ({
+          ...p,
+          reactions: p.reactions.map(r => 
+            r.type === type ? { ...r, count: r.count - 1 } : r
+          )
+        }));
+      } else {
+        newSet.add(type);
+        setPost(p => ({
+          ...p,
+          reactions: p.reactions.map(r => 
+            r.type === type ? { ...r, count: r.count + 1 } : r
+          )
+        }));
+      }
+      return newSet;
+    });
   };
 
   const handleComment = () => {
@@ -79,8 +80,8 @@ export default function PostDetailPage() {
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
       <Header />
       <PageTransition>
-        <div className="pt-24">
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="pt-12">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
             <div className="max-w-2xl mx-auto">
               <Button variant="ghost" onClick={() => router.back()} className="mb-4">
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -108,19 +109,22 @@ export default function PostDetailPage() {
                     {isTranslated ? t('community.original') : t('community.translate')}
                   </button>
                 </CardContent>
-                <CardFooter className="flex flex-wrap gap-2 border-t pt-4">
-                  {post.reactions.map((reaction, idx) => (
-                    <Button
-                      key={idx}
-                      variant={userReaction === reaction.emoji ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => handleReaction(reaction.emoji)}
-                      className="h-8"
-                    >
-                      <span className="mr-1">{reaction.emoji}</span>
-                      {reaction.count}
-                    </Button>
-                  ))}
+                <CardFooter className="flex flex-wrap gap-2 pt-4">
+                  {post.reactions.map((reaction, idx) => {
+                    const Icon = reaction.icon;
+                    return (
+                      <Button
+                        key={idx}
+                        variant={userReactions.has(reaction.type) ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handleReaction(reaction.type)}
+                        className="h-8"
+                      >
+                        <Icon className="h-4 w-4 mr-1" />
+                        {reaction.count}
+                      </Button>
+                    );
+                  })}
                 </CardFooter>
               </Card>
 
@@ -152,7 +156,7 @@ export default function PostDetailPage() {
                   </CardContent>
                 </Card>
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {post.comments.map((comment, idx) => (
                     <Card key={idx}>
                       <CardContent className="p-4">
