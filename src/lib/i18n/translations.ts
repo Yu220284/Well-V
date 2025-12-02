@@ -135,6 +135,59 @@ export const translations = {
       adDisplayDesc: 'プレミアム会員は広告の表示/非表示を選択できます',
       showAds: '広告を表示する',
     },
+    
+    // Sessions
+    sessions: {
+      title: 'セッション',
+      search: 'セッションを検索...',
+      all: 'すべて',
+      favorites: 'お気に入り',
+      completed: '完了済み',
+      inProgress: '進行中',
+    },
+    
+    // Trainers
+    trainers: {
+      title: 'トレーナー',
+      search: 'トレーナーを検索...',
+      new: '新人',
+      following: 'フォロー中',
+      follow: 'フォロー',
+    },
+    
+    // Calendar
+    calendar: {
+      title: 'カレンダー',
+      thisMonth: '今月',
+      sessionsCompleted: 'セッション完了',
+    },
+    
+    // Menu
+    menu: {
+      title: 'メニュー',
+      profile: 'プロフィール',
+      premium: 'プレミアム',
+      contact: 'お問い合わせ',
+      logout: 'ログアウト',
+    },
+    
+    // Premium
+    premium: {
+      title: 'プレミアムプラン',
+      description: '広告なしで快適に',
+      features: '特典',
+      subscribe: '登録する',
+    },
+    
+    // Contact
+    contact: {
+      title: 'お問い合わせ',
+      name: 'お名前',
+      email: 'メールアドレス',
+      message: 'メッセージ',
+      send: '送信',
+      sending: '送信中...',
+    },
   },
   
   en: {
@@ -273,7 +326,61 @@ export const translations = {
       adDisplayDesc: 'Premium members can choose to show or hide ads',
       showAds: 'Show Ads',
     },
+    
+    // Sessions
+    sessions: {
+      title: 'Sessions',
+      search: 'Search sessions...',
+      all: 'All',
+      favorites: 'Favorites',
+      completed: 'Completed',
+      inProgress: 'In Progress',
+    },
+    
+    // Trainers
+    trainers: {
+      title: 'Trainers',
+      search: 'Search trainers...',
+      new: 'New',
+      following: 'Following',
+      follow: 'Follow',
+    },
+    
+    // Calendar
+    calendar: {
+      title: 'Calendar',
+      thisMonth: 'This Month',
+      sessionsCompleted: 'Sessions Completed',
+    },
+    
+    // Menu
+    menu: {
+      title: 'Menu',
+      profile: 'Profile',
+      premium: 'Premium',
+      contact: 'Contact',
+      logout: 'Logout',
+    },
+    
+    // Premium
+    premium: {
+      title: 'Premium Plan',
+      description: 'Enjoy ad-free experience',
+      features: 'Features',
+      subscribe: 'Subscribe',
+    },
+    
+    // Contact
+    contact: {
+      title: 'Contact Us',
+      name: 'Name',
+      email: 'Email',
+      message: 'Message',
+      send: 'Send',
+      sending: 'Sending...',
+    },
   },
+};
 };
 
 export type TranslationKey = keyof typeof translations.ja;
