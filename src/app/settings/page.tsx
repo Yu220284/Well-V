@@ -13,6 +13,8 @@ import { useLocalAuth } from '@/lib/hooks/use-local-auth';
 import { useTranslations } from '@/lib/hooks/use-translations';
 import { usePremium } from '@/lib/hooks/use-premium';
 import { BottomNav } from '@/components/layout/BottomNav';
+import { useLanguage } from '@/lib/hooks/use-language';
+import { translations } from '@/lib/i18n/translations';
 
 
 
@@ -20,55 +22,56 @@ export default function SettingsPage() {
   const router = useRouter();
   const { signOut, user } = useLocalAuth();
   const [isDeleting, setIsDeleting] = useState(false);
-  const { t } = useTranslations();
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].settings;
 
   const settingsItems = [
     { 
         id: 'account',
-        title: t('settings.account'), 
-        description: t('settings.accountDesc'), 
+        title: t.account, 
+        description: t.accountDesc, 
         icon: User,
     },
     { 
         id: 'subscription',
-        title: t('settings.subscription'), 
-        description: t('settings.subscriptionDesc'),
+        title: t.subscription, 
+        description: t.subscriptionDesc,
         icon: CreditCard,
     },
     { 
         id: 'locale',
-        title: t('settings.locale'), 
-        description: t('settings.localeDesc'), 
+        title: t.locale, 
+        description: t.localeDesc, 
         icon: Globe,
     },
     { 
         id: 'notifications',
-        title: t('settings.notifications'), 
-        description: t('settings.notificationsDesc'),
+        title: t.notifications, 
+        description: t.notificationsDesc,
         icon: Bell,
     },
     { 
         id: 'reminders',
-        title: t('settings.reminders'), 
-        description: t('settings.remindersDesc'),
+        title: t.reminders, 
+        description: t.remindersDesc,
         icon: AlarmClock,
     },
     { 
         id: 'backup',
-        title: t('settings.backup'), 
-        description: t('settings.backupDesc'), 
+        title: t.backup, 
+        description: t.backupDesc, 
         icon: Cloud,
     },
     { 
         id: 'legal',
-        title: t('settings.legal'), 
-        description: t('settings.legalDesc'),
+        title: t.legal, 
+        description: t.legalDesc,
         icon: FileText,
     },
     { 
         id: 'version',
-        title: t('settings.version'), 
-        description: t('settings.versionDesc'),
+        title: t.version, 
+        description: t.versionDesc,
         icon: Info,
     },
   ];
@@ -98,7 +101,7 @@ export default function SettingsPage() {
           <div className="mb-3">
             <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-              <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">{t('settings.title')}</h1>
+              <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">{t.title}</h1>
             </div>
           </div>
           <div className="space-y-2">
@@ -129,7 +132,7 @@ export default function SettingsPage() {
                 </Card>
                 {item.id !== 'locale' && item.id !== 'account' && item.id !== 'subscription' && (
                   <div className="absolute inset-0 bg-white/50 dark:bg-black/50 flex items-center justify-center rounded-lg">
-                    <p className="text-xs font-semibold bg-primary/20 text-primary-foreground backdrop-blur-sm px-2 py-1 rounded-full">{t('settings.comingSoon')}</p>
+                    <p className="text-xs font-semibold bg-primary/20 text-primary-foreground backdrop-blur-sm px-2 py-1 rounded-full">{t.comingSoon}</p>
                   </div>
                 )}
               </div>

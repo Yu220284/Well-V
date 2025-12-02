@@ -7,71 +7,74 @@ import { AdBanner } from '@/components/layout/AdBanner';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
 import { User, Bell, Heart, Star, Award, Settings as SettingsIcon, Mail, ChevronRight, PlusCircle } from 'lucide-react';
-import messages from '@/../messages/ja.json';
+import { useLanguage } from '@/lib/hooks/use-language';
+import { translations } from '@/lib/i18n/translations';
 
-const menuItems = [
+
+
+export default function MenuPage() {
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].menu;
+  const tSettings = translations[language || 'ja'].settings;
+  
+  const menuItems = [
     { 
         id: 'profile',
-        title: "プロフィール", 
-        description: "アカウント情報や表示名の変更", 
+        title: t.profile, 
+        description: language === 'ja' ? "アカウント情報や表示名の変更" : "View and edit account information", 
         icon: User,
         href: '/menu/profile'
     },
     { 
         id: 'notifications',
-        title: "お知らせ", 
-        description: "運営からのお知らせを確認",
+        title: language === 'ja' ? "お知らせ" : "Notifications", 
+        description: language === 'ja' ? "運営からのお知らせを確認" : "Check announcements from the team",
         icon: Bell,
         href: '/menu/notifications'
     },
     { 
         id: 'following',
-        title: "フォロー", 
-        description: "フォローしているトレーナーの確認", 
+        title: language === 'ja' ? "フォロー" : "Following", 
+        description: language === 'ja' ? "フォローしているトレーナーの確認" : "View trainers you follow", 
         icon: Heart,
         href: null 
     },
     { 
         id: 'favorites',
-        title: "お気に入り", 
-        description: "お気に入りしたセッション",
+        title: language === 'ja' ? "お気に入り" : "Favorites", 
+        description: language === 'ja' ? "お気に入りしたセッション" : "Your favorite sessions",
         icon: Star,
         href: '/favorites'
     },
     { 
         id: 'membership',
-        title: "メンバーシップ", 
-        description: "プランの確認・変更",
+        title: language === 'ja' ? "メンバーシップ" : "Membership", 
+        description: language === 'ja' ? "プランの確認・変更" : "View and manage your plan",
         icon: Award,
         href: '/premium'
     },
     { 
         id: 'add-session',
-        title: "新規セッションを追加",
-        description: "新しいセッションを作成・提案する",
+        title: language === 'ja' ? "新規セッションを追加" : "Add New Session",
+        description: language === 'ja' ? "新しいセッションを作成・提案する" : "Create or suggest a new session",
         icon: PlusCircle,
         href: '/add-session'
     },
     { 
         id: 'advanced',
-        title: "詳細設定",
-        description: "言語設定や通知設定など",
+        title: tSettings.title,
+        description: language === 'ja' ? "言語設定や通知設定など" : "Language, notifications, and more",
         icon: SettingsIcon,
         href: '/settings'
     },
     { 
         id: 'contact',
-        title: "お問い合わせ",
-        description: "ご意見・ご要望はこちらへ",
+        title: t.contact,
+        description: language === 'ja' ? "ご意見・ご要望はこちらへ" : "Send us your feedback",
         icon: Mail,
         href: '/contact'
     },
-];
-
-const WIP_MESSAGE = "この機能は現在開発中です。";
-
-export default function MenuPage() {
-  const t = messages.MenuPage;
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 pb-24">
@@ -120,7 +123,7 @@ export default function MenuPage() {
                 <div key={item.id} className="relative cursor-not-allowed">
                   {content}
                   <div className="absolute inset-0 bg-white/50 dark:bg-black/50 flex items-center justify-center rounded-lg">
-                     <p className="text-xs font-semibold bg-primary/20 text-primary-foreground backdrop-blur-sm px-2 py-1 rounded-full">{WIP_MESSAGE}</p>
+                     <p className="text-xs font-semibold bg-primary/20 text-primary-foreground backdrop-blur-sm px-2 py-1 rounded-full">{tSettings.comingSoon}</p>
                   </div>
                 </div>
               );

@@ -19,10 +19,14 @@ import { AdBanner } from "@/components/layout/AdBanner";
 import { getUserSessionHistory } from '@/lib/supabase/session-history';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { useTranslations } from '@/lib/hooks/use-translations';
+import { useLanguage } from '@/lib/hooks/use-language';
+import { translations } from '@/lib/i18n/translations';
 
 export default function HomePage() {
   const router = useRouter();
-  const { t } = useTranslations();
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].home;
+  const tCommunity = translations[language || 'ja'].community;
   const { sessionHistory, isLoaded } = useSessionStore();
   const { sessions: supabaseSessions, loading: sessionsLoading } = useSupabaseSessions();
   const [userSessionHistory, setUserSessionHistory] = useState([]);
@@ -102,6 +106,31 @@ export default function HomePage() {
   // Mock interrupted session (set to null if no interrupted session)
   const interruptedSession = Math.random() > 0.5 ? sessions[1] : null;
   const recentSessions = userSessionHistory.slice(0, 3).map(h => sessions.find(s => s.id === h.session_id)).filter(Boolean);
+  
+  // おすすめセッションの生成
+  const getRecommendedSessions = () => {
+    // お気に入りのセッションからカテゴリを取得
+    const favoriteCategories = sessions
+      .filter(s => sessionHistory.some(h => h.sessionId === s.id))
+      .map(s => s.category);
+    
+    // フォロー中のトレーナーを取得（モック）
+    const followedTrainerIds = [1, 2]; // 実際はuseFollowStoreから取得
+    
+    // おすすめセッションをフィルタリング
+    const recommended = sessions.filter(s => {
+      // 最近やったセッションは除外
+      if (recentSessions.some(rs => rs?.id === s.id)) return false;
+      
+      // お気に入りカテゴリまたはフォロー中トレーナーのセッション
+      return favoriteCategories.includes(s.category) || followedTrainerIds.includes(s.trainerId);
+    });
+    
+    // ランダムに3つ選択
+    return recommended.sort(() => Math.random() - 0.5).slice(0, 3);
+  };
+  
+  const recommendedSessions = getRecommendedSessions();
 
   return (
     <ProtectedRoute>
@@ -117,8 +146,8 @@ export default function HomePage() {
             <div className="grid grid-cols-3 gap-3">
               <Card>
                 <CardContent className="p-3 text-center">
-                  <div className="text-xl font-bold text-primary">{weeklyDays}{t('home.days')}</div>
-                  <div className="text-xs text-muted-foreground">{t('home.thisWeek')}</div>
+                  <div className="text-xl font-bold text-primary">{weeklyDays}{t.days}</div>
+                  <div className="text-xs text-muted-foreground">{t.thisWeek}</div>
                 </CardContent>
               </Card>
               <Card>
@@ -127,7 +156,7 @@ export default function HomePage() {
                     <div className="text-xl font-bold text-primary">{weeklyStreak}</div>
                     {hasDiamond && <span className="text-sm">💎</span>}
                   </div>
-                  <div className="text-xs text-muted-foreground">{t('home.consecutiveWeeks')}</div>
+                  <div className="text-xs text-muted-foreground">{t.consecutiveWeeks}</div>
                   {weekStatus && (
                     <div className={cn(
                       "text-xs px-1 py-0.5 rounded-full mt-1",
@@ -141,8 +170,8 @@ export default function HomePage() {
               </Card>
               <Card>
                 <CardContent className="p-3 text-center">
-                  <div className="text-xl font-bold text-primary">{weeklyMinutes}{t('home.minutes')}</div>
-                  <div className="text-xs text-muted-foreground">{t('home.weeklySession')}</div>
+                  <div className="text-xl font-bold text-primary">{weeklyMinutes}{t.minutes}</div>
+                  <div className="text-xs text-muted-foreground">{t.weeklySession}</div>
                 </CardContent>
               </Card>
             </div>
@@ -152,7 +181,7 @@ export default function HomePage() {
           <section>
             <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-base sm:text-lg font-bold py-1.5 pl-2">{t('home.weeklyActivity')}</h2>
+              <h2 className="relative text-base sm:text-lg font-bold py-1.5 pl-2">{t.weeklyActivity}</h2>
             </div>
             <Link href="/calendar">
               <Card className="hover:bg-primary/5 transition-colors cursor-pointer">
@@ -200,7 +229,7 @@ export default function HomePage() {
             <section>
               <div className="relative mb-2">
                 <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-                <h2 className="relative text-lg font-bold py-1.5 pl-2">{t('home.interruptedSession')}</h2>
+                <h2 className="relative text-lg font-bold py-1.5 pl-2">{t.interruptedSession}</h2>
               </div>
               <Link href={`/session/${interruptedSession.id}`}>
                 <Card className="hover:bg-primary/5 transition-colors">
@@ -217,8 +246,8 @@ export default function HomePage() {
                       </div>
                       <div className="flex-1">
                         <div className="font-medium text-sm mb-1">{interruptedSession.title}</div>
-                        <div className="text-xs text-muted-foreground mb-2">続きから再開できます</div>
-                        <Button size="sm" className="h-7 text-xs">{t('home.resumeSession')}</Button>
+                        <div className="text-xs text-muted-foreground mb-2">{language === 'ja' ? '続きから再開できます' : 'Resume from where you left off'}</div>
+                        <Button size="sm" className="h-7 text-xs">{t.resumeSession}</Button>
                       </div>
                     </div>
                   </CardContent>
@@ -231,7 +260,7 @@ export default function HomePage() {
           <section>
             <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-lg font-bold py-1.5 pl-2">{t('home.latestPost')}</h2>
+              <h2 className="relative text-lg font-bold py-1.5 pl-2">{t.latestPost}</h2>
             </div>
             <Link href="/post/1">
               <Card data-tutorial="post" className="hover:bg-primary/5 transition-colors cursor-pointer">
@@ -248,7 +277,7 @@ export default function HomePage() {
                         className="flex items-center gap-1 text-xs text-primary hover:underline"
                       >
                         <Languages className="h-3 w-3" />
-                        {isTranslated ? t('community.original') : t('community.translate')}
+                        {isTranslated ? tCommunity.original : tCommunity.translate}
                       </button>
                     </div>
                     <div className="flex items-center gap-3">
@@ -269,11 +298,50 @@ export default function HomePage() {
             </Link>
           </section>
 
+          {/* おすすめセッション */}
+          {recommendedSessions.length > 0 && (
+            <section>
+              <div className="relative mb-2">
+                <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
+                <h2 className="relative text-lg font-bold py-1.5 pl-2">{language === 'ja' ? 'おすすめセッション' : 'Recommended Sessions'}</h2>
+              </div>
+              <div className="space-y-2">
+                {recommendedSessions.map((session, index) => (
+                  <Link key={index} href={`/session/${session.id}`}>
+                    <Card className="hover:bg-primary/5 transition-colors">
+                      <CardContent className="p-3">
+                        <div className="flex items-center gap-3">
+                          <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                            <Image
+                              src={session.imageUrl}
+                              alt={session.title}
+                              fill
+                              sizes="48px"
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-medium text-sm">{session.title}</div>
+                            <div className="text-xs text-muted-foreground flex items-center">
+                              <Clock className="h-3 w-3 mr-1" />
+                              {Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}
+                            </div>
+                          </div>
+                          <Play className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* セッション履歴 */}
           <section>
             <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-lg font-bold py-1.5 pl-2">{t('home.recentSessions')}</h2>
+              <h2 className="relative text-lg font-bold py-1.5 pl-2">{t.recentSessions}</h2>
             </div>
             <div className="space-y-2" data-tutorial="session-list">
               {recentSessions.length > 0 ? (
@@ -295,7 +363,7 @@ export default function HomePage() {
                             <div className="font-medium text-sm">{session.title}</div>
                             <div className="text-xs text-muted-foreground flex items-center">
                               <Clock className="h-3 w-3 mr-1" />
-                              {Math.floor(session.duration / 60)}分
+                              {Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}
                             </div>
                           </div>
                           <Play className="h-4 w-4 text-muted-foreground" />
@@ -307,7 +375,7 @@ export default function HomePage() {
               ) : (
                 <Card>
                   <CardContent className="p-3 text-center">
-                    <p className="text-sm text-muted-foreground">{t('home.noHistory')}</p>
+                    <p className="text-sm text-muted-foreground">{t.noHistory}</p>
                   </CardContent>
                 </Card>
               )}
