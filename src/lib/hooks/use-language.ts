@@ -10,5 +10,5 @@ export function useLanguage() {
     setLanguage(getSelectedLanguage());
   }, []);
 
-  return language;
+  return { language };
 }

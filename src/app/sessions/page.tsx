@@ -7,7 +7,6 @@ import { AdBanner } from "@/components/layout/AdBanner";
 import { SearchBar } from "@/components/search/SearchBar";
 import { SESSIONS } from "@/lib/data";
 import { Sparkles, Heart } from "lucide-react";
-import messages from '@/../messages/ja.json';
 import React from "react";
 import { useSupabaseSessions } from "@/lib/hooks/use-supabase-sessions";
 import type { Session } from "@/lib/types";
@@ -16,9 +15,13 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavoriteStore } from "@/lib/hooks/use-favorite-store";
+import { useLanguage } from "@/lib/hooks/use-language";
+import { translations } from "@/lib/i18n/translations";
 
 export default function SessionsPage() {
-  const t = messages.Home;
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].sessions;
+  const tTags = translations[language || 'ja'].tags;
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('favorites');
   const { favorites } = useFavoriteStore();
@@ -41,7 +44,7 @@ export default function SessionsPage() {
   const yogaSessions = filterSessions(SESSIONS.filter(s => s.category === 'yoga'));
   const stretchSessions = filterSessions(SESSIONS.filter(s => s.category === 'stretch'));
 
-  const footerText = t.footer_text.replace('{sparkles}', '');
+
 
   return (
     <div className="pb-24 bg-gradient-to-br from-background to-secondary/20 min-h-screen">
@@ -54,11 +57,11 @@ export default function SessionsPage() {
           <section>
             <div className="relative mb-2">
               <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h2 className="relative text-lg font-bold font-headline py-1.5 pl-2">セッション</h2>
+              <h2 className="relative text-lg font-bold font-headline py-1.5 pl-2">{t.title}</h2>
             </div>
             
             <SearchBar 
-              placeholder="セッションを検索..."
+              placeholder={t.search}
               onSearch={handleSearch}
             />
 
@@ -66,16 +69,16 @@ export default function SessionsPage() {
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="favorites">
                   <Heart className="h-4 w-4 mr-1" />
-                  お気に入り
+                  {t.favorites}
                 </TabsTrigger>
-                <TabsTrigger value="workout">ワークアウト</TabsTrigger>
-                <TabsTrigger value="yoga">ヨガ</TabsTrigger>
-                <TabsTrigger value="stretch">ストレッチ</TabsTrigger>
+                <TabsTrigger value="workout">{tTags.workout}</TabsTrigger>
+                <TabsTrigger value="yoga">{tTags.yoga}</TabsTrigger>
+                <TabsTrigger value="stretch">{tTags.stretch}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="favorites" className="mt-4">
                 {favoriteSessions.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-10">お気に入りのセッションがありません</p>
+                  <p className="text-center text-muted-foreground py-10">{language === 'ja' ? 'お気に入りのセッションがありません' : 'No favorite sessions'}</p>
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {favoriteSessions.map((session) => (
@@ -86,7 +89,7 @@ export default function SessionsPage() {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                             <div className="absolute bottom-2 left-2 right-2 text-white">
                               <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
-                              <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}分</p>
+                              <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
                             </div>
                           </div>
                         </Card>
@@ -106,7 +109,7 @@ export default function SessionsPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                           <div className="absolute bottom-2 left-2 right-2 text-white">
                             <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
-                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}分</p>
+                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
                           </div>
                         </div>
                       </Card>
@@ -125,7 +128,7 @@ export default function SessionsPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                           <div className="absolute bottom-2 left-2 right-2 text-white">
                             <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
-                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}分</p>
+                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
                           </div>
                         </div>
                       </Card>
@@ -144,7 +147,7 @@ export default function SessionsPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                           <div className="absolute bottom-2 left-2 right-2 text-white">
                             <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
-                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}分</p>
+                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
                           </div>
                         </div>
                       </Card>
@@ -158,9 +161,8 @@ export default function SessionsPage() {
       </main>
       <footer className="text-center py-6 text-sm text-muted-foreground">
           <p className="inline-flex items-center">
-            {footerText.split(' ')[0]}
             <Sparkles className="inline-block h-4 w-4 text-primary mx-1" />
-            {footerText.split(' ')[1]}
+            WellV
           </p>
       </footer>
         </div>

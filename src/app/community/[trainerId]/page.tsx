@@ -15,6 +15,8 @@ import { MessageSquare, ShoppingBag, Send, Languages } from 'lucide-react';
 import { translateText } from '@/lib/translate';
 import { useTranslations } from '@/lib/hooks/use-translations';
 import { AdBanner } from '@/components/layout/AdBanner';
+import { useLanguage } from '@/lib/hooks/use-language';
+import { translations } from '@/lib/i18n/translations';
 
 const generateCommunityPosts = (trainerId: number, trainerName: string) => [
   {
@@ -36,17 +38,19 @@ const generateCommunityPosts = (trainerId: number, trainerName: string) => [
 ];
 
 export default function TrainerCommunityPage() {
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].community;
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
   const trainerId = parseInt(params.trainerId as string);
   const [newPost, setNewPost] = useState('');
   const [isPosting, setIsPosting] = useState(false);
-  const [posts, setPosts] = useState(generateCommunityPosts(trainerId, TRAINERS.find(t => t.id === trainerId)?.name || ''));
+  const [posts, setPosts] = useState(generateCommunityPosts(trainerId, TRAINERS.find(tr => tr.id === trainerId)?.name || ''));
   const [translatedPosts, setTranslatedPosts] = useState<Set<number>>(new Set());
   const [translating, setTranslating] = useState<Set<number>>(new Set());
   const { toast } = useToast();
-  const { t } = useTranslations();
+  const { t: tOld } = useTranslations();
   
   useEffect(() => {
     const comment = searchParams.get('comment');
@@ -55,10 +59,10 @@ export default function TrainerCommunityPage() {
     }
   }, [searchParams]);
   
-  const trainer = TRAINERS.find(t => t.id === trainerId);
+  const trainer = TRAINERS.find(tr => tr.id === trainerId);
 
   if (!trainer) {
-    return <div>トレーナーが見つかりません</div>;
+    return <div>{language === 'ja' ? 'トレーナーが見つかりません' : 'Trainer not found'}</div>;
   }
 
   return (
@@ -71,12 +75,12 @@ export default function TrainerCommunityPage() {
             <div className="max-w-2xl mx-auto">
               <div className="relative mb-6">
                 <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-                <h1 className="relative text-xl font-bold font-headline py-2 pl-2">コミュニティ</h1>
+                <h1 className="relative text-xl font-bold font-headline py-2 pl-2">{t.community}</h1>
               </div>
 
               <div className="my-6">
                 <Link href="/community" className="text-sm text-muted-foreground hover:text-primary mb-4 inline-block">
-                  ← {t('community.backToList')}
+                  ← {t.backToList}
                 </Link>
                 
                 <Card className="mb-6 overflow-hidden">
@@ -98,7 +102,7 @@ export default function TrainerCommunityPage() {
                             </Button>
                           </Link>
                         </div>
-                        <p className="text-sm text-muted-foreground">{trainer.followers.toLocaleString()}{t('community.members')}</p>
+                        <p className="text-sm text-muted-foreground">{trainer.followers.toLocaleString()}{t.members}</p>
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground">{trainer.bio}</p>
@@ -114,7 +118,7 @@ export default function TrainerCommunityPage() {
                       </Avatar>
                       <div className="flex-1">
                         <Textarea
-                          placeholder={`${trainer.name}のコミュニティに投稿`}
+                          placeholder={language === 'ja' ? `${trainer.name}のコミュニティに投稿` : `Post to ${trainer.name}'s community`}
                           value={newPost}
                           onChange={(e) => setNewPost(e.target.value)}
                           className="mb-3 resize-none border-0 bg-transparent p-0 focus-visible:ring-0"
@@ -137,13 +141,13 @@ export default function TrainerCommunityPage() {
                               setPosts(prev => [newPostData, ...prev]);
                               setNewPost('');
                               setIsPosting(false);
-                              toast({ title: "投稿完了", description: "コミュニティに投稿しました" });
+                              toast({ title: language === 'ja' ? "投稿完了" : "Posted", description: language === 'ja' ? "コミュニティに投稿しました" : "Posted to community" });
                             }}
                             disabled={!newPost.trim() || isPosting}
                             size="sm"
                           >
                             <Send className="w-4 h-4 mr-1" />
-                            {isPosting ? t('community.posting') : t('community.post')}
+                            {isPosting ? t.posting : t.post}
                           </Button>
                         </div>
                       </div>
@@ -152,7 +156,7 @@ export default function TrainerCommunityPage() {
                 </Card>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">{t('community.recentPosts')}</h3>
+                  <h3 className="text-lg font-semibold mb-4">{t.recentPosts}</h3>
                   <div className="space-y-4">
                     {posts.map((post: any, idx: number) => (
                       <Link key={idx} href="/post/1">
@@ -200,7 +204,7 @@ export default function TrainerCommunityPage() {
                               className="flex items-center gap-1 text-xs text-primary hover:underline mt-2 disabled:opacity-50"
                             >
                               <Languages className="h-3 w-3" />
-                              {translating.has(idx) ? t('community.translating') : translatedPosts.has(idx) ? t('community.original') : t('community.translate')}
+                              {translating.has(idx) ? t.translating : translatedPosts.has(idx) ? t.original : t.translate}
                             </button>
                           </CardContent>
                           <CardFooter className="flex gap-4 text-sm text-muted-foreground">

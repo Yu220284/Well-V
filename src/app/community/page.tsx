@@ -16,6 +16,8 @@ import { TRAINERS } from "@/lib/data";
 import { MessageSquare, ChevronRight, Users, ShoppingBag, Sparkles } from "lucide-react";
 import { AdBanner } from "@/components/layout/AdBanner";
 import { useTrainerStore } from "@/lib/hooks/use-trainer-store";
+import { useLanguage } from "@/lib/hooks/use-language";
+import { translations } from "@/lib/i18n/translations";
 
 const generateCommunityPosts = (trainerId: number, trainerName: string) => [
   {
@@ -53,6 +55,8 @@ const generateCommunityPosts = (trainerId: number, trainerName: string) => [
 
 
 export default function CommunityPage() {
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].community;
   const searchParams = useSearchParams();
   const communityId = searchParams.get('tab');
   const { followedTrainers, isLoaded } = useTrainerStore();
@@ -84,14 +88,14 @@ export default function CommunityPage() {
             {!currentTrainer && (
               <div className="relative mb-2">
                 <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-                <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">コミュニティ</h1>
+                <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">{t.community}</h1>
               </div>
             )}
 
             {currentTrainer ? (
               <div className="my-6">
                   <Link href="/community" className="text-sm text-muted-foreground hover:text-primary mb-4 inline-block">
-                    ← コミュニティ一覧に戻る
+                    ← {t.backToList}
                   </Link>
                 
                 <Card className="mb-6 overflow-hidden">
@@ -113,7 +117,7 @@ export default function CommunityPage() {
                             </Button>
                           </Link>
                         </div>
-                        <p className="text-sm text-muted-foreground">{currentTrainer.followers.toLocaleString()}人のメンバー</p>
+                        <p className="text-sm text-muted-foreground">{currentTrainer.followers.toLocaleString()}{t.members}</p>
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground">{currentTrainer.bio}</p>
@@ -121,7 +125,7 @@ export default function CommunityPage() {
                 </Card>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">最近の投稿</h3>
+                  <h3 className="text-lg font-semibold mb-4">{t.recentPosts}</h3>
                   <div className="space-y-4">
                     {posts.map((post: any, idx: number) => (
                       <Card key={idx}>
@@ -155,21 +159,21 @@ export default function CommunityPage() {
                 </div>
               </div>
             ) : !isLoaded ? (
-              <p className="text-center text-muted-foreground py-10">読み込み中...</p>
+              <p className="text-center text-muted-foreground py-10">{translations[language || 'ja'].loading}</p>
             ) : followedTrainersList.length === 0 ? (
               <Card className="my-6">
                 <CardContent className="p-8 text-center">
                   <Users className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-muted-foreground mb-4">まだトレーナーをフォローしていません</p>
+                  <p className="text-muted-foreground mb-4">{language === 'ja' ? 'まだトレーナーをフォローしていません' : 'No trainers followed yet'}</p>
                   <Link href="/trainers">
-                    <Button>トレーナーを探す</Button>
+                    <Button>{language === 'ja' ? 'トレーナーを探す' : 'Find Trainers'}</Button>
                   </Link>
                 </CardContent>
               </Card>
             ) : (
               <div>
                 <SearchBar 
-                  placeholder="検索"
+                  placeholder={language === 'ja' ? '検索' : 'Search'}
                   onSearch={handleSearch}
                 />
                 <div className="space-y-4 mt-4">
@@ -184,7 +188,7 @@ export default function CommunityPage() {
                             </Avatar>
                             <div className="flex-1">
                               <h3 className="font-semibold">{trainer.name}</h3>
-                              <p className="text-sm text-muted-foreground">{trainer.followers.toLocaleString()}人のメンバー</p>
+                              <p className="text-sm text-muted-foreground">{trainer.followers.toLocaleString()}{t.members}</p>
                             </div>
                             <ChevronRight className="h-5 w-5 text-muted-foreground" />
                           </div>

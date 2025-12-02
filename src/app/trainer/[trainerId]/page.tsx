@@ -11,12 +11,16 @@ import { Users, Heart, ExternalLink } from "lucide-react";
 import { AdBanner } from "@/components/layout/AdBanner";
 import { Button } from "@/components/ui/button";
 import { useFollowStore } from "@/lib/hooks/use-follow-store";
+import { useLanguage } from "@/lib/hooks/use-language";
+import { translations } from "@/lib/i18n/translations";
 
 export default function TrainerPage() {
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].trainers;
   const params = useParams();
   const trainerId = params?.trainerId as string;
   const { toggleFollow, isFollowing, isLoaded } = useFollowStore();
-  const trainer = TRAINERS.find((t) => t.id.toString() === trainerId);
+  const trainer = TRAINERS.find((tr) => tr.id.toString() === trainerId);
   const allSessions = trainer ? SESSIONS.filter((s) => s.trainerId === trainer.id) : [];
 
   if (!trainer) {
@@ -24,7 +28,7 @@ export default function TrainerPage() {
       <div className="min-h-screen bg-background">
         <Header />
         <div className="pt-24 container mx-auto px-4 py-8">
-          <p className="text-center text-muted-foreground">トレーナーが見つかりません</p>
+          <p className="text-center text-muted-foreground">{language === 'ja' ? 'トレーナーが見つかりません' : 'Trainer not found'}</p>
         </div>
       </div>
     );
@@ -77,12 +81,12 @@ export default function TrainerPage() {
                             disabled={!isLoaded}
                         >
                             <Heart className={`w-3 h-3 mr-1 ${isLoaded && isFollowing(trainer.id) ? 'fill-current' : ''}`} />
-                            {!isLoaded ? '読み込み中...' : isFollowing(trainer.id) ? 'フォロー中' : 'フォロー'}
+                            {!isLoaded ? translations[language || 'ja'].loading : isFollowing(trainer.id) ? t.following : t.follow}
                         </Button>
                         <Button size="sm" variant="outline" asChild>
                             <Link href={`/community?tab=${trainer.communityId}`}>
                                 <Users className="w-3 h-3 mr-1" />
-                                コミュニティ
+                                {translations[language || 'ja'].community.community}
                             </Link>
                         </Button>
                     </div>
@@ -94,7 +98,7 @@ export default function TrainerPage() {
         <section data-tutorial="session-list">
           <div className="relative mb-3">
             <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-            <h2 className="relative text-2xl font-bold font-headline py-1.5 pl-2">{`${trainer.name}のセッション`}</h2>
+            <h2 className="relative text-2xl font-bold font-headline py-1.5 pl-2">{language === 'ja' ? `${trainer.name}のセッション` : `${trainer.name}'s Sessions`}</h2>
           </div>
           
           <TrainerSessions sessions={allSessions} />
