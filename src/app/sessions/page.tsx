@@ -78,7 +78,7 @@ export default function SessionsPage() {
 
               <TabsContent value="favorites" className="mt-4">
                 {favoriteSessions.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-10">{language === 'ja' ? 'お気に入りのセッションがありません' : 'No favorite sessions'}</p>
+                  <p className="text-center text-muted-foreground py-10">{t.noFavorites}</p>
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {favoriteSessions.map((session) => (
@@ -162,7 +162,7 @@ export default function SessionsPage() {
       <footer className="text-center py-6 text-sm text-muted-foreground">
           <p className="inline-flex items-center">
             <Sparkles className="inline-block h-4 w-4 text-primary mx-1" />
-            WellV
+            Well-V
           </p>
       </footer>
         </div>

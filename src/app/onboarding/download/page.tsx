@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { useTranslations } from '@/lib/hooks/use-translations';
 import { AnimatedBackground } from '@/components/layout/AnimatedBackground';
+import { useLanguage } from '@/lib/hooks/use-language';
+import { translations } from '@/lib/i18n/translations';
 
 const DOWNLOAD_ITEMS = [
   { id: 1, nameJa: '基本データ', nameEn: 'Basic Data', sizeMB: 2.5 },
@@ -19,7 +21,8 @@ const TOTAL_SIZE_MB = DOWNLOAD_ITEMS.reduce((sum, item) => sum + item.sizeMB, 0)
 
 export default function DownloadPage() {
   const router = useRouter();
-  const { t, language } = useTranslations();
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].onboarding;
   const [isStarted, setIsStarted] = useState(false);
   const [currentItem, setCurrentItem] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -56,19 +59,19 @@ export default function DownloadPage() {
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4">
               <Download className={`h-10 w-10 text-primary ${isStarted ? 'animate-bounce' : ''}`} />
             </div>
-            <h2 className="text-xl font-bold mb-1">{isStarted ? t('onboarding.downloading') : t('onboarding.dataDownload')}</h2>
+            <h2 className="text-xl font-bold mb-1">{isStarted ? t.downloading : t.dataDownload}</h2>
             <p className="text-muted-foreground text-sm">
               {isStarted
                 ? currentItem < DOWNLOAD_ITEMS.length
                   ? `${language === 'ja' ? DOWNLOAD_ITEMS[currentItem].nameJa : DOWNLOAD_ITEMS[currentItem].nameEn}...`
-                  : t('onboarding.downloadComplete')
-                : `${t('onboarding.downloadDesc')} (${TOTAL_SIZE_MB.toFixed(1)}MB)`}
+                  : t.downloadComplete
+                : `${t.downloadDesc} (${TOTAL_SIZE_MB.toFixed(1)}MB)`}
             </p>
           </div>
 
           {!isStarted ? (
             <Button onClick={() => setIsStarted(true)} className="w-full" size="lg">
-              {t('onboarding.startDownload')}
+              {t.startDownload}
             </Button>
           ) : (
             <div className="space-y-4">
@@ -102,7 +105,7 @@ export default function DownloadPage() {
             </div>
 
               <p className="text-center text-xs text-muted-foreground mt-6">
-                {Math.round(totalProgress)}% {t('onboarding.completed')}
+                {Math.round(totalProgress)}% {t.completed}
               </p>
             </div>
           )}

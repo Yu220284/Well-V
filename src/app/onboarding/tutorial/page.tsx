@@ -9,30 +9,33 @@ import { useLocalAuth } from '@/lib/hooks/use-local-auth';
 import { ProgressBar } from '@/components/onboarding/ProgressBar';
 import { useTranslations } from '@/lib/hooks/use-translations';
 import { AnimatedBackground } from '@/components/layout/AnimatedBackground';
+import { useLanguage } from '@/lib/hooks/use-language';
+import { translations } from '@/lib/i18n/translations';
 
 
 
 export default function TutorialPage() {
   const router = useRouter();
   const { updateProfile } = useLocalAuth();
-  const { t } = useTranslations();
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].tutorial;
   const [currentStep, setCurrentStep] = useState(0);
   
   const TUTORIAL_STEPS = [
     {
       icon: Play,
-      title: t('tutorial.startSession'),
-      description: t('tutorial.startSessionDesc'),
+      title: t.startSession,
+      description: t.startSessionDesc,
     },
     {
       icon: Diamond,
-      title: t('tutorial.collectDiamonds'),
-      description: t('tutorial.collectDiamondsDesc'),
+      title: t.collectDiamonds,
+      description: t.collectDiamondsDesc,
     },
     {
       icon: Users,
-      title: t('tutorial.joinCommunity'),
-      description: t('tutorial.joinCommunityDesc'),
+      title: t.joinCommunity,
+      description: t.joinCommunityDesc,
     },
   ];
 
@@ -90,7 +93,7 @@ export default function TutorialPage() {
               </Button>
             )}
             <Button onClick={handleNext} className="flex-1" size="lg">
-              {currentStep === TUTORIAL_STEPS.length - 1 ? t('tutorial.start') : t('tutorial.next')}
+              {currentStep === TUTORIAL_STEPS.length - 1 ? t.start : t.next}
               {currentStep < TUTORIAL_STEPS.length - 1 && <ChevronRight className="h-4 w-4 ml-2" />}
             </Button>
           </div>

@@ -142,7 +142,7 @@ export default function TrainersPage() {
       <footer className="text-center py-6 text-sm text-muted-foreground">
         <p className="inline-flex items-center">
           <Sparkles className="inline-block h-4 w-4 text-primary mx-1" />
-          WellV
+          Well-V
         </p>
       </footer>
     </div>

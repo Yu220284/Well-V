@@ -144,6 +144,9 @@ export const translations = {
       favorites: 'お気に入り',
       completed: '完了済み',
       inProgress: '進行中',
+      noSessions: 'このカテゴリのセッションはまだありません',
+      noFavorites: 'お気に入りのセッションがありません',
+      noResults: '該当するセッションが見つかりません',
     },
     
     // Trainers
@@ -187,6 +190,29 @@ export const translations = {
       message: 'メッセージ',
       send: '送信',
       sending: '送信中...',
+    },
+    
+    // Recording
+    recording: {
+      title: '収録支援',
+      selectScript: '台本を選択',
+      startRecording: '収録開始',
+      segment: 'セグメント',
+      ready: '準備',
+      recording: '収録中',
+      recorded: '収録済み',
+      reRecord: '撮り直し',
+      play: '再生',
+      pause: '一時停止',
+      nextSegment: '次へ',
+      prevSegment: '前へ',
+      finish: '完了',
+      review: '確認画面',
+      reviewTitle: '収録内容の確認',
+      removeNoise: 'ノイズ除去',
+      processing: '処理中...',
+      saveSession: 'セッションを保存',
+      saving: '保存中...',
     },
   },
   
@@ -335,6 +361,9 @@ export const translations = {
       favorites: 'Favorites',
       completed: 'Completed',
       inProgress: 'In Progress',
+      noSessions: 'No sessions in this category yet',
+      noFavorites: 'No favorite sessions',
+      noResults: 'No sessions found',
     },
     
     // Trainers
@@ -378,6 +407,29 @@ export const translations = {
       message: 'Message',
       send: 'Send',
       sending: 'Sending...',
+    },
+    
+    // Recording
+    recording: {
+      title: 'Recording Studio',
+      selectScript: 'Select Script',
+      startRecording: 'Start Recording',
+      segment: 'Segment',
+      ready: 'Ready',
+      recording: 'Recording',
+      recorded: 'Recorded',
+      reRecord: 'Re-record',
+      play: 'Play',
+      pause: 'Pause',
+      nextSegment: 'Next',
+      prevSegment: 'Previous',
+      finish: 'Finish',
+      review: 'Review',
+      reviewTitle: 'Review Recording',
+      removeNoise: 'Remove Noise',
+      processing: 'Processing...',
+      saveSession: 'Save Session',
+      saving: 'Saving...',
     },
   },
 };

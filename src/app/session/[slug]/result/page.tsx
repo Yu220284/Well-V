@@ -18,6 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { saveSessionCompletion } from '@/lib/supabase/session-history';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { useLanguage } from '@/lib/hooks/use-language';
 
 export default function SessionResultPage({
   params,
@@ -25,7 +26,17 @@ export default function SessionResultPage({
   params: Promise<{ slug: string }>;
 }) {
   const router = useRouter();
+  const { language } = useLanguage();
+  const [t, setT] = useState<any>(null);
   const [session, setSession] = useState(null);
+  
+  React.useEffect(() => {
+    const loadTranslations = async () => {
+      const messages = await import(`@/../messages/${language || 'ja'}.json`);
+      setT(messages.default.SessionResult);
+    };
+    loadTranslations();
+  }, [language]);
   
   React.useEffect(() => {
     params.then(({ slug }) => {
@@ -44,7 +55,6 @@ export default function SessionResultPage({
       localStorage.setItem('wellv_tutorial_step', '11');
     }
     
-    // セッション完了を保存
     if (session) {
       saveSessionCompletion(session.id, session.duration)
         .catch(error => console.error('Failed to save session completion:', error));
@@ -58,8 +68,7 @@ export default function SessionResultPage({
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Mock followed trainers (in real app, get from user data)
-  const followedTrainerIds = [1, 2, 3, 4, 5]; // Mock followed trainer IDs
+  const followedTrainerIds = [1, 2, 3, 4, 5];
   const sessionTrainerId = session?.trainerId;
   const allFollowedIds = sessionTrainerId && !followedTrainerIds.includes(sessionTrainerId) 
     ? [...followedTrainerIds, sessionTrainerId] 
@@ -76,9 +85,7 @@ export default function SessionResultPage({
   
   const isFav = isFavorite(session?.id || '');
 
-
-
-  if (!session) {
+  if (!session || !t) {
     return <div>Session not found</div>;
   }
 
@@ -95,9 +102,9 @@ export default function SessionResultPage({
               <CheckCircle className="w-7 h-7 text-green-600" />
             </div>
             <h1 className="text-2xl font-bold font-headline mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              セッション完了！
+              {t.title}
             </h1>
-            <p className="text-sm font-medium text-muted-foreground">お疲れさまでした</p>
+            <p className="text-sm font-medium text-muted-foreground">{t.subtitle}</p>
           </div>
 
           <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 shadow-lg">
@@ -113,7 +120,7 @@ export default function SessionResultPage({
               <h2 className="text-xl font-bold mb-1">{session.title}</h2>
               <div className="flex items-center gap-1 text-sm">
                 <Clock className="h-3 w-3" />
-                <span>完了時間: {minutes}分{seconds}秒</span>
+                <span>{t.completion_time.replace('{minutes}', minutes).replace('{seconds}', seconds)}</span>
               </div>
             </div>
           </div>
@@ -149,7 +156,7 @@ export default function SessionResultPage({
             <div className="bg-muted/50 rounded-lg p-3" data-tutorial="post">
               <div className="flex items-center gap-2 mb-2">
                 <Users className="w-4 h-4 text-primary" />
-                <span className="font-medium text-sm">コミュニティに投稿</span>
+                <span className="font-medium text-sm">{t.post_to_community}</span>
               </div>
               
               <div className="mb-2">
@@ -177,7 +184,7 @@ export default function SessionResultPage({
                           </div>
                         </div>
                       ) : (
-                        "トレーナーを選択..."
+                        t.select_trainer
                       )}
                       <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -187,7 +194,7 @@ export default function SessionResultPage({
                       <div className="relative">
                         <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                          placeholder="トレーナーを検索..."
+                          placeholder={t.search_trainers}
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           className="pl-8 h-9"
@@ -224,7 +231,7 @@ export default function SessionResultPage({
                             />
                           </button>
                         )) : (
-                          <p className="text-sm text-muted-foreground text-center py-4">該当するトレーナーが見つかりません</p>
+                          <p className="text-sm text-muted-foreground text-center py-4">{t.no_trainers_found}</p>
                         )}
                       </div>
                     </div>
@@ -234,22 +241,22 @@ export default function SessionResultPage({
               
               <Button 
                 onClick={() => {
-                  const defaultComment = `${session.title}をクリアしました！`;
+                  const defaultComment = t.default_comment.replace('{sessionTitle}', session.title);
                   router.push(`/community/${selectedTrainerId}?comment=${encodeURIComponent(defaultComment)}`);
                 }}
                 className="w-full"
                 size="sm"
               >
-                コミュニティに投稿
+                {t.post_button}
               </Button>
             </div>
           </div>
           <div className="mb-4">
-            <p className="text-center text-sm font-medium text-muted-foreground mb-2">シェアする</p>
+            <p className="text-center text-sm font-medium text-muted-foreground mb-2">{t.share}</p>
             <div className="flex justify-center gap-4" data-tutorial="share">
               <Button 
                 onClick={async () => {
-                  const text = `${session.title}を完了しました！ #WellV`;
+                  const text = t.share_text.replace('{sessionTitle}', session.title);
                   
                   if (navigator.share) {
                     try {
@@ -277,37 +284,34 @@ export default function SessionResultPage({
               </Button>
               <Button 
                 onClick={async () => {
-                  const text = `🏃♀️ ${session.title}を完了しました！\n\n💪 トレーナー: ${trainer?.name || 'トレーナー'}\n⏱️ 時間: ${Math.floor(session.duration / 60)}分\n\n🌱 Well-Vで一緒にフィットネスを始めませんか？`;
+                  const text = t.share_line_text
+                    .replace('{sessionTitle}', session.title)
+                    .replace('{trainerName}', trainer?.name || 'Trainer')
+                    .replace('{minutes}', Math.floor(session.duration / 60).toString());
                   
                   try {
-                    // LINE share URL
                     const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent(text)}`;
                     
-                    // Try LINE app on mobile
                     const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                     
                     if (isMobile) {
-                      // Try LINE app first
                       window.location.href = `line://msg/text/${encodeURIComponent(text)}`;
                       
-                      // Fallback to LINE web after delay
                       setTimeout(() => {
                         window.open(lineUrl, '_blank');
                       }, 1000);
                     } else {
-                      // Desktop: Open LINE web share
                       window.open(lineUrl, '_blank');
                     }
                     
-                    toast({ title: "LINEでシェア", description: "セッション完了をシェアしました" });
+                    toast({ title: t.line_share, description: t.line_share_description });
                     
                   } catch (error) {
-                    // Fallback: Copy text to clipboard
                     try {
                       await navigator.clipboard.writeText(text);
-                      toast({ title: "コピー完了", description: "テキストをコピーしました。LINEでシェアしてください。" });
+                      toast({ title: t.copied, description: t.copy_prompt });
                     } catch {
-                      toast({ title: "エラー", description: "LINEシェアに失敗しました" });
+                      toast({ title: t.error, description: t.share_failed });
                     }
                   }
                 }}
@@ -318,23 +322,22 @@ export default function SessionResultPage({
               </Button>
               <Button 
                 onClick={async () => {
-                  const text = `${session.title}を完了しました！ #WellV`;
+                  const text = t.share_text.replace('{sessionTitle}', session.title);
                   try {
                     if (navigator.clipboard && navigator.clipboard.writeText) {
                       await navigator.clipboard.writeText(text);
-                      toast({ title: "コピー完了", description: "クリップボードにコピーしました" });
+                      toast({ title: t.copied, description: t.copied_description });
                     } else {
-                      // Fallback for older browsers
                       const textArea = document.createElement('textarea');
                       textArea.value = text;
                       document.body.appendChild(textArea);
                       textArea.select();
                       document.execCommand('copy');
                       document.body.removeChild(textArea);
-                      toast({ title: "コピー完了", description: "クリップボードにコピーしました" });
+                      toast({ title: t.copied, description: t.copied_description });
                     }
                   } catch (error) {
-                    toast({ title: "エラー", description: "コピーに失敗しました" });
+                    toast({ title: t.error, description: t.copy_failed });
                   }
                 }}
                 variant="ghost"

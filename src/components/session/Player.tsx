@@ -15,10 +15,21 @@ import {
   Rewind,
   FastForward,
   UserPlus,
+  Gauge,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useSessionStore } from "@/lib/hooks/use-session-store";
 import { useFollowStore } from "@/lib/hooks/use-follow-store";
 import { usePremium } from "@/lib/hooks/use-premium";
@@ -27,7 +38,7 @@ import { SafetyPromptDialog } from "./SafetyPromptDialog";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { TRAINERS } from "@/lib/data";
-import messages from "@/../messages/ja.json";
+import { useLanguage } from "@/lib/hooks/use-language";
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
@@ -36,8 +47,19 @@ function formatTime(seconds: number): string {
 }
 
 export function Player({ session, trainerId = 1 }: { session: Session; trainerId?: number }) {
-  const t = messages.SessionPlayer;
   const router = useRouter();
+  const { language } = useLanguage();
+  const [t, setT] = useState<any>(null);
+  const [tUI, setTUI] = useState<any>(null);
+  
+  useEffect(() => {
+    const loadTranslations = async () => {
+      const messages = await import(`@/../messages/${language || 'ja'}.json`);
+      setT(messages.default.SessionPlayer);
+      setTUI(messages.default.SessionPlayer_UI);
+    };
+    loadTranslations();
+  }, [language]);
   const { addSession, toggleFavorite, isFavorite, isLoaded } = useSessionStore();
   const { toggleFollow, isFollowing } = useFollowStore();
   const { checkPremiumStatus } = usePremium();
@@ -46,10 +68,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
   const isPremium = checkPremiumStatus();
   
   const getAudioUrl = () => {
-    if (selectedTrainer.id === 1 && session.audioUrl) {
-      return session.audioUrl;
-    }
-    return '';
+    return session.audioUrl || '';
   };
   
   const audioUrl = getAudioUrl();
@@ -65,6 +84,10 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
   const [isReady, setIsReady] = useState(false);
   const [actualDuration, setActualDuration] = useState(session.duration);
   const [playbackRate, setPlaybackRate] = useState(1.0);
+  const [showSpeedControl, setShowSpeedControl] = useState(false);
+  const [volume, setVolume] = useState(1.0);
+  const [showVolumeControl, setShowVolumeControl] = useState(false);
+  const [showStopDialog, setShowStopDialog] = useState(false);
 
   const isFav = isLoaded ? isFavorite(session.id) : false;
 
@@ -85,8 +108,11 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
   const handleCanPlay = () => {
     setIsReady(true);
     const media = hasVideo ? videoRef.current : audioRef.current;
-    if (media && media.duration && !isNaN(media.duration) && isFinite(media.duration)) {
-      setActualDuration(media.duration);
+    if (media) {
+      if (media.duration && !isNaN(media.duration) && isFinite(media.duration)) {
+        setActualDuration(media.duration);
+      }
+      media.playbackRate = playbackRate;
     }
   };
 
@@ -149,11 +175,31 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
     }
   };
 
+  const handleVolumeChange = (value: number[]) => {
+    const vol = value[0];
+    setVolume(vol);
+    if (hasVideo && videoRef.current) {
+      videoRef.current.volume = vol;
+    } else if (audioRef.current) {
+      audioRef.current.volume = vol;
+    }
+  };
+
+  const handlePlaybackRateChange = (value: number[]) => {
+    const rate = value[0];
+    setPlaybackRate(rate);
+    if (hasVideo && videoRef.current) {
+      videoRef.current.playbackRate = rate;
+    } else if (audioRef.current) {
+      audioRef.current.playbackRate = rate;
+    }
+  };
+
   const handleFavoriteToggle = () => {
+    if (!t) return;
     const wasIsFav = isFav;
     toggleFavorite(session.id);
     
-    // toast呼び出しを次のレンダリングサイクルまで遅延
     setTimeout(() => {
       toast({
         title: wasIsFav ? t.removed_from_favorites : t.added_to_favorites,
@@ -209,6 +255,8 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
     const media = hasVideo ? videoRef.current : audioRef.current;
     if (!media || (!hasVideo && !audioUrl)) return;
 
+    media.playbackRate = playbackRate;
+
     const updateCurrentTime = () => setCurrentTime(media.currentTime);
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
@@ -233,7 +281,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
       media.removeEventListener("ended", onEnded);
       media.removeEventListener("canplay", handleCanPlay);
     };
-  }, [addSession, session.id, router, toast, t, session.title, audioUrl, hasVideo]);
+  }, [addSession, session.id, router, toast, t, session.title, audioUrl, hasVideo, playbackRate]);
 
   useEffect(() => {
     if ('mediaSession' in navigator) {
@@ -271,6 +319,8 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
       }
     };
   }, [session.title, session.category, session.imageUrl, selectedTrainer.name, togglePlayPause, seek, restart, handleStop]);
+  
+  if (!t || !tUI) return null;
 
   return (
     <>
@@ -279,7 +329,17 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
         onStart={handleStartSession}
       />
 
-      {!hasVideo && audioUrl && <audio ref={audioRef} src={audioUrl} preload="auto" />}
+      {!hasVideo && audioUrl && (
+        <audio 
+          ref={audioRef} 
+          src={audioUrl} 
+          preload="auto"
+          onLoadedMetadata={(e) => {
+            const audio = e.currentTarget;
+            audio.playbackRate = playbackRate;
+          }}
+        />
+      )}
       <div className="relative h-screen w-screen overflow-hidden">
         <Image
           src={session.imageUrl}
@@ -319,7 +379,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
             <div className="text-center">
               <p className="text-sm uppercase tracking-wider text-primary font-semibold">{session.category}</p>
               <h1 className="text-2xl font-bold font-headline mt-1">{session.title}</h1>
-              <p className="text-sm text-muted-foreground mt-2">ガイド: {selectedTrainer.name}</p>
+              <p className="text-sm text-muted-foreground mt-2">{tUI.guide.replace('{trainerName}', selectedTrainer.name)}</p>
             </div>
 
             <div className="space-y-2">
@@ -345,59 +405,120 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
             )}
 
             {isReady && (
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-center items-center gap-4">
-                  <Button
-                    variant="ghost"
-                    onClick={() => seek(-10)}
-                    className="relative h-16 w-16 flex flex-col items-center justify-center gap-0.5"
-                    aria-label={t.seek_backward_aria}
-                    data-tutorial="rewind"
-                  >
-                    <span className="text-sm font-bold ml-1">10</span>
-                    <Rewind className="h-7 w-7" />
-                  </Button>
-                  <Button
-                    variant="default"
-                    onClick={togglePlayPause}
-                    className="h-20 w-20 rounded-full shadow-lg"
-                    aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}
-                    data-tutorial="play-button"
-                  >
-                    {isPlaying ? (
-                      <Pause className="h-10 w-10 fill-primary-foreground" />
-                    ) : (
-                      <Play className="h-10 w-10 fill-primary-foreground" />
-                    )}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={() => seek(10)}
-                    className="relative h-16 w-16 flex flex-col items-center justify-center gap-0.5"
-                    aria-label={t.seek_forward_aria}
-                    data-tutorial="forward"
-                  >
-                    <span className="text-sm font-bold mr-1">10</span>
-                    <FastForward className="h-7 w-7" />
-                  </Button>
+              <>
+                <div className="min-h-[100px] flex items-center justify-center">
+                  {!showSpeedControl && !showVolumeControl && (
+                    <div className="flex justify-center items-center gap-4 animate-in fade-in duration-200">
+                    <Button
+                      variant="ghost"
+                      onClick={() => seek(-10)}
+                      className="relative h-16 w-16 flex flex-col items-center justify-center gap-0.5"
+                      aria-label={t.seek_backward_aria}
+                      data-tutorial="rewind"
+                    >
+                      <span className="text-sm font-bold ml-1">10</span>
+                      <Rewind className="h-7 w-7" />
+                    </Button>
+                    <Button
+                      variant="default"
+                      onClick={togglePlayPause}
+                      className="h-20 w-20 rounded-full shadow-lg"
+                      aria-label={isPlaying ? t.pause_button_aria : t.play_button_aria}
+                      data-tutorial="play-button"
+                    >
+                      {isPlaying ? (
+                        <Pause className="h-10 w-10 fill-primary-foreground" />
+                      ) : (
+                        <Play className="h-10 w-10 fill-primary-foreground" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => seek(10)}
+                      className="relative h-16 w-16 flex flex-col items-center justify-center gap-0.5"
+                      aria-label={t.seek_forward_aria}
+                      data-tutorial="forward"
+                    >
+                      <span className="text-sm font-bold mr-1">10</span>
+                      <FastForward className="h-7 w-7" />
+                    </Button>
+                    </div>
+                  )}
+
+                  {showSpeedControl && isPremium && (
+                    <div className="w-full p-4 bg-muted/50 rounded-lg space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">{tUI.playback_speed}</span>
+                      <span className="text-sm font-mono">{playbackRate.toFixed(1)}x</span>
+                    </div>
+                    <Slider
+                      value={[playbackRate]}
+                      min={0.5}
+                      max={2.0}
+                      step={0.1}
+                      onValueChange={handlePlaybackRateChange}
+                      className="cursor-pointer"
+                    />
+                    <div className="relative h-4">
+                      <div className="absolute left-0 text-xs text-muted-foreground">0.5x</div>
+                      <div className="absolute text-xs text-muted-foreground" style={{ left: 'calc(33.33%)' }}>1.0x</div>
+                      <div className="absolute right-0 text-xs text-muted-foreground">2.0x</div>
+                    </div>
+                    </div>
+                  )}
+
+                  {showVolumeControl && (audioUrl || hasVideo) && (
+                    <div className="w-full p-4 bg-muted/50 rounded-lg space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">{tUI.volume}</span>
+                      <span className="text-sm font-mono">{Math.round(volume * 100)}%</span>
+                    </div>
+                    <Slider
+                      value={[volume]}
+                      min={0}
+                      max={1}
+                      step={0.01}
+                      onValueChange={handleVolumeChange}
+                      className="cursor-pointer"
+                    />
+                    <div className="relative h-4">
+                      <div className="absolute left-0 text-xs text-muted-foreground">0%</div>
+                      <div className="absolute left-1/2 -translate-x-1/2 text-xs text-muted-foreground">50%</div>
+                      <div className="absolute right-0 text-xs text-muted-foreground">100%</div>
+                    </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-5 items-center gap-2">
                   <Button
                     variant="ghost"
-                    onClick={toggleMute}
+                    onClick={() => {
+                      setShowVolumeControl(!showVolumeControl);
+                      if (!showVolumeControl) setShowSpeedControl(false);
+                    }}
                     className="h-16 w-16"
-                    aria-label={isMuted ? t.unmute_button_aria : t.mute_button_aria}
+                    aria-label={tUI.volume_control}
                     disabled={!audioUrl && !hasVideo}
                     data-tutorial="volume"
                   >
-                    {isMuted ? <VolumeX className="h-8 w-8" /> : <Volume2 className="h-8 w-8" />}
+                    {isMuted ? <VolumeX className={cn("h-8 w-8 transition-colors", showVolumeControl && "text-primary")} /> : <Volume2 className={cn("h-8 w-8 transition-colors", showVolumeControl && "text-primary")} />}
                   </Button>
 
                   <div className="col-span-3 flex justify-center items-center gap-2">
-                    <Button variant="ghost" onClick={restart} className="h-16 w-16" aria-label={t.restart_button_aria}>
-                      <RotateCcw className="h-8 w-8" />
-                    </Button>
+                    {isPremium && (
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          setShowSpeedControl(!showSpeedControl);
+                          if (!showSpeedControl) setShowVolumeControl(false);
+                        }}
+                        className="h-16 w-16"
+                        aria-label={tUI.speed_control}
+                      >
+                        <Gauge className={cn("h-8 w-8 transition-colors", showSpeedControl && "text-primary")} />
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       onClick={handleFavoriteToggle}
@@ -414,13 +535,13 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                         toggleFollow(selectedTrainer.id);
                         setTimeout(() => {
                           toast({
-                            title: wasFollowing ? "フォローを解除しました" : "フォローしました",
+                            title: wasFollowing ? tUI.unfollowed : tUI.followed,
                             description: selectedTrainer.name,
                           });
                         }, 0);
                       }}
                       className="h-16 w-16"
-                      aria-label={isFollowing(selectedTrainer.id) ? "フォロー解除" : "フォロー"}
+                      aria-label={isFollowing(selectedTrainer.id) ? tUI.unfollow : tUI.follow}
                     >
                       <UserPlus className={cn("h-8 w-8 transition-colors", isFollowing(selectedTrainer.id) && "text-primary")} />
                     </Button>
@@ -428,11 +549,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
 
                   <Button 
                     variant="ghost" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleStop();
-                    }} 
+                    onClick={() => setShowStopDialog(true)} 
                     className="h-16 w-16" 
                     aria-label={t.stop_button_aria}
                     type="button"
@@ -440,11 +557,44 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                     <X className="h-8 w-8" />
                   </Button>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </Card>
       </div>
+
+      <AlertDialog open={showStopDialog} onOpenChange={setShowStopDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader className="text-center">
+            <AlertDialogTitle className="text-center">{tUI.stop_dialog_title}</AlertDialogTitle>
+            <AlertDialogDescription className="text-center">
+              {tUI.stop_dialog_description}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex flex-col gap-2 items-center sm:flex-col">
+            <AlertDialogAction
+              onClick={() => {
+                restart();
+                setShowStopDialog(false);
+              }}
+              className="w-full"
+            >
+              {tUI.restart_from_beginning}
+            </AlertDialogAction>
+            <AlertDialogAction
+              onClick={() => {
+                handleStop();
+                setShowStopDialog(false);
+              }}
+              className="w-full"
+              variant="destructive"
+            >
+              {tUI.end_session}
+            </AlertDialogAction>
+            <AlertDialogCancel className="w-full">{tUI.cancel}</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

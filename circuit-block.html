@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Well-V デバイス回路ブロック図</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --box: #334155;
+      --accent: #3b82f6;
+      --accent2: #8b5cf6;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #475569;
+      --power: #ef4444;
+      --signal: #10b981;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 26px; margin: 0 0 20px; color: var(--accent); }
+    h2 { font-size: 20px; margin: 20px 0 10px; color: var(--accent2); }
+    h3 { font-size: 16px; margin: 10px 0 5px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .block {
+      background: var(--box);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      position: relative;
+    }
+    .block h4 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #fff;
+      font-weight: 600;
+    }
+    .pin-list {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .pin-list div {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 8px;
+      margin: 3px 0;
+    }
+    .pin-name { color: var(--signal); font-family: monospace; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+    }
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+    .arrow {
+      color: var(--accent);
+      font-size: 18px;
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid var(--accent);
+      color: var(--text);
+    }
+    .tag.power { background: rgba(239, 68, 68, 0.2); border-color: var(--power); }
+    .tag.signal { background: rgba(16, 185, 129, 0.2); border-color: var(--signal); }
+    .circuit-diagram {
+      background: #1a1a2e;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+    .note {
+      background: rgba(139, 92, 246, 0.1);
+      border-left: 3px solid var(--accent2);
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: var(--box);
+      font-weight: 600;
+    }
+    @media (max-width: 900px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Well-V ウェアラブルデバイス 回路ブロック図（詳細版）</h1>
+    
+    <div class="panel">
+      <h2>システム全体構成</h2>
+      <div class="flow">
+        <span class="tag signal">IMU</span>
+        <span class="arrow">→</span>
+        <span class="tag">I2C/SPI</span>
+        <span class="arrow">→</span>
+        <span class="tag">MCU (nRF52840)</span>
+        <span class="arrow">→</span>
+        <span class="tag">BLE 5.0</span>
+        <span class="arrow">→</span>
+        <span class="tag">スマホ</span>
+      </div>
+      <div class="flow">
+        <span class="tag power">バッテリ</span>
+        <span class="arrow">→</span>
+        <span class="tag power">充電IC</span>
+        <span class="arrow">→</span>
+        <span class="tag power">電源管理</span>
+        <span class="arrow">→</span>
+        <span class="tag power">各ブロック</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>1. メインMCU（nRF52840）</h2>
+      <div class="block">
+        <h4>Nordic nRF52840 — ARM Cortex-M4F + BLE 5.0</h4>
+        <div class="pin-list">
+          <div><span class="pin-name">VDD</span><span>3.3V 電源入力</span></div>
+          <div><span class="pin-name">GND</span><span>グランド</span></div>
+          <div><span class="pin-name">P0.26/27</span><span>I2C (SCL/SDA) → IMU接続</span></div>
+          <div><span class="pin-name">P0.03/04</span><span>SPI (SCK/MOSI) → 代替IMU接続</span></div>
+          <div><span class="pin-name">P0.13</span><span>GPIO → LED制御</span></div>
+          <div><span class="pin-name">P0.14</span><span>GPIO → 振動モータ制御</span></div>
+          <div><span class="pin-name">P0.15</span><span>GPIO → ボタン入力（プルアップ）</span></div>
+          <div><span class="pin-name">P0.05</span><span>ADC → バッテリ電圧監視</span></div>
+          <div><span class="pin-name">SWDIO/CLK</span><span>デバッグ/プログラミング</span></div>
+          <div><span class="pin-name">ANT</span><span>2.4GHz アンテナ（PCBアンテナまたは外付け）</span></div>
+        </div>
+      </div>
+      
+      <div class="note">
+        <strong>特徴：</strong>
+        <ul style="margin: 5px 0; padding-left: 20px;">
+          <li>64MHz ARM Cortex-M4F（FPU付き）</li>
+          <li>1MB Flash / 256KB RAM</li>
+          <li>BLE 5.0, 5.1対応（方向検出可能）</li>
+          <li>低消費電力：スリープ時 0.4μA, BLE接続時 4.8mA</li>
+          <li>USB 2.0デバイス内蔵（充電・デバッグ兼用可）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>2. IMUセンサ（ICM-20948）</h2>
+      <div class="block">
+        <h4>InvenSense ICM-20948 — 9軸IMU</h4>
+        <div class="pin-list">
+          <div><span class="pin-name">VDD</span><span>1.71～3.6V（3.3V推奨）</span></div>
+          <div><span class="pin-name">VDDIO</span><span>I/O電圧（3.3V）</span></div>
+          <div><span class="pin-name">GND</span><span>グランド</span></div>
+          <div><span class="pin-name">SCL/SDA</span><span>I2C通信（400kHz推奨）</span></div>
+          <div><span class="pin-name">INT</span><span>割り込み出力 → MCU GPIO</span></div>
+          <div><span class="pin-name">FSYNC</span><span>外部同期入力（未使用時GND）</span></div>
+          <div><span class="pin-name">AD0</span><span>I2Cアドレス選択（GND=0x68, VDD=0x69）</span></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>センサ仕様</h3>
+          <table>
+            <tr><th>項目</th><th>仕様</th></tr>
+            <tr><td>加速度計</td><td>±2/4/8/16g 選択可能</td></tr>
+            <tr><td>ジャイロ</td><td>±250/500/1000/2000 dps</td></tr>
+            <tr><td>磁気計</td><td>±4900μT（内蔵AK09916）</td></tr>
+            <tr><td>サンプリング</td><td>最大1.125kHz（加速度）</td></tr>
+            <tr><td>消費電流</td><td>3.4mA（全センサ動作時）</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3>信号処理</h3>
+          <div class="note">
+            <strong>MCU側で実装：</strong>
+            <ul style="margin: 5px 0; padding-left: 20px;">
+              <li>ローパスフィルタ（20-50Hz）</li>
+              <li>ハイパスフィルタ（0.5Hz）</li>
+              <li>ピーク検出アルゴリズム</li>
+              <li>レップカウント状態機械</li>
+              <li>誤検出抑制（デバウンス）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. 電源回路</h2>
+      
+      <div class="grid-3">
+        <div class="block">
+          <h4>バッテリ</h4>
+          <div class="pin-list">
+            <div><span class="pin-name">型番</span><span>LiPo 3.7V 800mAh</span></div>
+            <div><span class="pin-name">サイズ</span><span>約 40×30×5mm</span></div>
+            <div><span class="pin-name">保護</span><span>内蔵保護回路（過充電/過放電/短絡）</span></div>
+            <div><span class="pin-name">コネクタ</span><span>JST-PH 2.0mm 2pin</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h4>充電IC（MCP73831）</h4>
+          <div class="pin-list">
+            <div><span class="pin-name">VIN</span><span>USB 5V入力</span></div>
+            <div><span class="pin-name">VBAT</span><span>バッテリ接続</span></div>
+            <div><span class="pin-name">PROG</span><span>充電電流設定（2kΩ=500mA）</span></div>
+            <div><span class="pin-name">STAT</span><span>充電状態LED出力</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h4>レギュレータ</h4>
+          <div class="pin-list">
+            <div><span class="pin-name">入力</span><span>3.7V（バッテリ直結）</span></div>
+            <div><span class="pin-name">出力</span><span>3.3V / 300mA</span></div>
+            <div><span class="pin-name">型番例</span><span>MCP1700-3302E（LDO）</span></div>
+            <div><span class="pin-name">効率</span><span>約85%（LDO）</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="circuit-diagram">
+USB 5V ──┬─── MCP73831 ────┬──── LiPo 3.7V 800mAh
+         │                  │
+         │                  ├──── 保護IC ────┬──── MCP1700 (LDO) ──── 3.3V
+         │                  │                │
+         └─ 充電LED         └─ STAT          └──── バッテリ電圧監視 → MCU ADC
+      </div>
+
+      <div class="note">
+        <strong>電源管理機能：</strong>
+        <ul style="margin: 5px 0; padding-left: 20px;">
+          <li>バッテリ電圧監視（ADC経由）→ 残量推定</li>
+          <li>低電圧警告（3.3V以下でLED点滅）</li>
+          <li>MCUスリープモード制御（未使用時は深いスリープ）</li>
+          <li>充電中はBLE通信継続可能</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>4. 周辺回路</h2>
+      
+      <div class="grid-2">
+        <div class="block">
+          <h4>ステータスLED（RGB）</h4>
+          <div class="pin-list">
+            <div><span class="pin-name">型番</span><span>WS2812B（1個）またはRGB LED 3個</span></div>
+            <div><span class="pin-name">制御</span><span>MCU GPIO → トランジスタ駆動</span></div>
+            <div><span class="pin-name">電流</span><span>各色 20mA（合計60mA max）</span></div>
+            <div><span class="pin-name">用途</span><span>電源ON/充電中/BLE接続/エラー表示</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h4>振動モータ</h4>
+          <div class="pin-list">
+            <div><span class="pin-name">型番</span><span>ERM 3V 小型（10mm径）</span></div>
+            <div><span class="pin-name">駆動</span><span>MCU GPIO → MOSFETスイッチ</span></div>
+            <div><span class="pin-name">電流</span><span>80-100mA（動作時）</span></div>
+            <div><span class="pin-name">用途</span><span>レップ検出時の触覚フィードバック</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h4>ボタン</h4>
+          <div class="pin-list">
+            <div><span class="pin-name">型番</span><span>タクトスイッチ 6×6mm</span></div>
+            <div><span class="pin-name">接続</span><span>MCU GPIO（内部プルアップ）</span></div>
+            <div><span class="pin-name">機能</span><span>電源ON/OFF、モード切替、ペアリング</span></div>
+            <div><span class="pin-name">長押し</span><span>3秒でペアリングモード</span></div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h4>USB-Cコネクタ</h4>
+          <div class="pin-list">
+            <div><span class="pin-name">VBUS</span><span>5V入力 → 充電IC</span></div>
+            <div><span class="pin-name">D+/D-</span><span>データ通信（オプション：デバッグ用）</span></div>
+            <div><span class="pin-name">GND</span><span>グランド</span></div>
+            <div><span class="pin-name">CC1/CC2</span><span>5.1kΩプルダウン（電流モード設定）</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>5. BLE通信仕様</h2>
+      
+      <div class="block">
+        <h4>GATTサービス定義</h4>
+        <table>
+          <tr>
+            <th>サービス</th>
+            <th>UUID</th>
+            <th>特性</th>
+            <th>説明</th>
+          </tr>
+          <tr>
+            <td>デバイス情報</td>
+            <td>0x180A</td>
+            <td>製造者名、モデル番号、ファームウェアバージョン</td>
+            <td>標準サービス</td>
+          </tr>
+          <tr>
+            <td>バッテリ</td>
+            <td>0x180F</td>
+            <td>バッテリ残量（%）</td>
+            <td>標準サービス</td>
+          </tr>
+          <tr>
+            <td>レップカウント</td>
+            <td>カスタム</td>
+            <td>rep_event（通知）、rep_config（読み書き）</td>
+            <td>カスタムサービス</td>
+          </tr>
+          <tr>
+            <td>モーションストリーム</td>
+            <td>カスタム</td>
+            <td>motion_data（通知）、sampling_rate（読み書き）</td>
+            <td>デバッグ用</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="block">
+        <h4>rep_event データフォーマット（6バイト）</h4>
+        <div class="circuit-diagram">
+Byte 0: イベントタイプ（0x01=レップ開始, 0x02=レップ完了, 0x03=セット完了）
+Byte 1-4: タイムスタンプ（uint32, ミリ秒）
+Byte 5: 品質スコア（0-100, 検出信頼度）
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>通信パラメータ：</strong>
+        <ul style="margin: 5px 0; padding-left: 20px;">
+          <li>接続間隔：7.5ms（低レイテンシモード）</li>
+          <li>スレーブレイテンシ：0（即時応答）</li>
+          <li>監視タイムアウト：4秒</li>
+          <li>MTU：247バイト（BLE 5.0拡張）</li>
+          <li>通知優先度：High（QoS保証）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>6. PCB設計ガイドライン</h2>
+      
+      <div class="grid-2">
+        <div>
+          <h3>レイアウト推奨事項</h3>
+          <ul>
+            <li><strong>2層基板</strong>（Top: 信号, Bottom: GND）</li>
+            <li><strong>IMU配置</strong>：基板中央、振動源から離す</li>
+            <li><strong>アンテナ</strong>：基板端に配置、下にGNDなし（キープアウト）</li>
+            <li><strong>電源ライン</strong>：太く短く（0.5mm以上）</li>
+            <li><strong>デカップリング</strong>：各IC近傍に0.1μF + 10μF</li>
+            <li><strong>サイズ目標</strong>：40×25mm以内</li>
+          </ul>
+        </div>
+        <div>
+          <h3>ノイズ対策</h3>
+          <ul>
+            <li>IMU電源に専用LDO（ノイズ低減）</li>
+            <li>I2C信号に10kΩプルアップ + 100pFフィルタ</li>
+            <li>モータ駆動にフライバックダイオード</li>
+            <li>USB信号に90Ω差動インピーダンス</li>
+            <li>BLEアンテナ周辺に金属部品を配置しない</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>7. 消費電力試算</h2>
+      
+      <table>
+        <tr>
+          <th>動作モード</th>
+          <th>MCU</th>
+          <th>IMU</th>
+          <th>BLE</th>
+          <th>その他</th>
+          <th>合計</th>
+          <th>稼働時間（800mAh）</th>
+        </tr>
+        <tr>
+          <td>アクティブ（運動中）</td>
+          <td>8mA</td>
+          <td>3.4mA</td>
+          <td>4.8mA</td>
+          <td>2mA</td>
+          <td>18.2mA</td>
+          <td>約44時間</td>
+        </tr>
+        <tr>
+          <td>待機（BLE接続維持）</td>
+          <td>1mA</td>
+          <td>0.5mA</td>
+          <td>0.8mA</td>
+          <td>0.2mA</td>
+          <td>2.5mA</td>
+          <td>約320時間</td>
+        </tr>
+        <tr>
+          <td>ディープスリープ</td>
+          <td>0.004mA</td>
+          <td>0.008mA</td>
+          <td>0mA</td>
+          <td>0.001mA</td>
+          <td>0.013mA</td>
+          <td>約6万時間</td>
+        </tr>
+      </table>
+
+      <div class="note">
+        <strong>実使用想定：</strong> 1日1時間運動（アクティブ）+ 23時間待機 = 約40日間稼働
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>8. 機械設計との接続</h2>
+      
+      <div class="grid-2">
+        <div class="block">
+          <h4>筐体要件</h4>
+          <ul>
+            <li>材質：ABS樹脂（本体）+ TPU（ストラップ）</li>
+            <li>防水：IP54以上（シール + 防水USB蓋）</li>
+            <li>サイズ：50×35×15mm以内</li>
+            <li>重量：50g以下（バッテリ含む）</li>
+            <li>固定：幅30mmストラップ、面ファスナー式</li>
+          </ul>
+        </div>
+        <div class="block">
+          <h4>組み立て構造</h4>
+          <ul>
+            <li>PCBは筐体内部にネジ固定（4点）</li>
+            <li>バッテリは両面テープ + 固定枠</li>
+            <li>IMUは基板実装（追加マウント不要）</li>
+            <li>ボタンは防水ラバーキャップ</li>
+            <li>LEDは筐体に導光パイプ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>9. テスト・検証ポイント</h2>
+      
+      <div class="grid-3">
+        <div class="block">
+          <h4>電気試験</h4>
+          <ul>
+            <li>電源投入シーケンス確認</li>
+            <li>消費電流測定（各モード）</li>
+            <li>充電電流・電圧測定</li>
+            <li>BLE通信距離・安定性</li>
+            <li>EMC試験（放射・伝導）</li>
+          </ul>
+        </div>
+        <div class="block">
+          <h4>センサ試験</h4>
+          <ul>
+            <li>IMUキャリブレーション</li>
+            <li>レップ検出精度評価</li>
+            <li>誤検出率測定</li>
+            <li>温度特性確認</li>
+            <li>振動耐性試験</li>
+          </ul>
+        </div>
+        <div class="block">
+          <h4>環境試験</h4>
+          <ul>
+            <li>防水試験（IPX4）</li>
+            <li>落下試験（1m）</li>
+            <li>温度サイクル試験</li>
+            <li>塩水噴霧試験</li>
+            <li>長期稼働試験</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>10. 次ステップ推奨アクション</h2>
+      
+      <div class="note">
+        <ol style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+          <li><strong>回路図作成</strong>：KiCad/Altium Designerで詳細回路図を作成</li>
+          <li><strong>PCBレイアウト</strong>：2層基板、40×25mm目標でレイアウト設計</li>
+          <li><strong>部品調達</strong>：DigiKey/Mouserで試作用部品を発注（2セット分）</li>
+          <li><strong>基板製造</strong>：JLCPCB/Elecrowで試作基板製造（5枚程度）</li>
+          <li><strong>組み立て</strong>：手はんだまたはリフロー炉で実装</li>
+          <li><strong>ファームウェア開発</strong>：nRF5 SDKでBLE + IMU制御を実装</li>
+          <li><strong>初期動作確認</strong>：電源投入、BLE接続、IMUデータ取得</li>
+          <li><strong>アルゴリズム実装</strong>：レップ検出ロジックを実装・調整</li>
+          <li><strong>スマホアプリ連携</strong>：BLE通信とデータ表示を実装</li>
+          <li><strong>ユーザーテスト</strong>：実際の運動で精度・使い勝手を評価</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

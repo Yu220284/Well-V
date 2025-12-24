@@ -95,3 +95,19 @@ export interface Trainer {
   followers: number;
   tags: string[];
 }
+
+export interface ScriptSegment {
+  id: string;
+  text: string;
+  duration: number; // seconds
+  audioBlob?: Blob;
+  audioUrl?: string;
+}
+
+export interface RecordingScript {
+  id: string;
+  title: string;
+  category: SessionCategory;
+  segments: ScriptSegment[];
+  totalDuration: number;
+}

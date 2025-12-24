@@ -6,7 +6,7 @@ import { PageTransition } from '@/components/layout/PageTransition';
 import { AdBanner } from '@/components/layout/AdBanner';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
-import { User, Bell, Heart, Star, Award, Settings as SettingsIcon, Mail, ChevronRight, PlusCircle } from 'lucide-react';
+import { User, Bell, Heart, Star, Award, Settings as SettingsIcon, Mail, ChevronRight, PlusCircle, Sparkles } from 'lucide-react';
 import { useLanguage } from '@/lib/hooks/use-language';
 import { translations } from '@/lib/i18n/translations';
 
@@ -45,6 +45,13 @@ export default function MenuPage() {
         description: language === 'ja' ? "お気に入りしたセッション" : "Your favorite sessions",
         icon: Star,
         href: '/favorites'
+    },
+    { 
+        id: 'ai-script',
+        title: language === 'ja' ? "AI台本生成" : "AI Script Generator", 
+        description: language === 'ja' ? "あなた専用のセッション台本を自動生成" : "Generate custom session scripts",
+        icon: Sparkles,
+        href: '/ai-script'
     },
     { 
         id: 'membership',

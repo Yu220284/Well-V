@@ -1,11 +1,10 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import type { User } from '@supabase/supabase-js';
+import { useLocalAuth } from '@/lib/hooks/use-local-auth';
 
 type AuthContextType = {
-  user: User | null;
+  user: any | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
@@ -14,58 +13,25 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, isLoaded, signIn: localSignIn, signOut: localSignOut } = useLocalAuth();
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+    if (isLoaded) {
       setLoading(false);
-    };
-
-    getUser();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, [supabase.auth]);
+    }
+  }, [isLoaded]);
 
   const signIn = async (email: string, password: string) => {
-    try {
-      const { error, data } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      
-      if (error) {
-        return { error: error.message };
-      }
-      
-      // ローカルストレージにもユーザー情報を保存
-      if (data.user) {
-        const authUser = { 
-          email: data.user.email || email, 
-          displayName: data.user.email?.split('@')[0] || 'User', 
-          onboardingCompleted: true 
-        };
-        localStorage.setItem('wellv_auth_user', JSON.stringify(authUser));
-      }
-      
-      return {};
-    } catch (error) {
-      return { error: 'ログインに失敗しました' };
+    const result = localSignIn(email, password);
+    if (!result.success) {
+      return { error: result.error };
     }
+    return {};
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    localSignOut();
   };
 
   return (

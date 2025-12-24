@@ -11,10 +11,13 @@ import { useFollowStore } from '@/lib/hooks/use-follow-store';
 import { ProgressBar } from '@/components/onboarding/ProgressBar';
 import { useTranslations } from '@/lib/hooks/use-translations';
 import { AnimatedBackground } from '@/components/layout/AnimatedBackground';
+import { useLanguage } from '@/lib/hooks/use-language';
+import { translations } from '@/lib/i18n/translations';
 
 export default function FollowPage() {
   const router = useRouter();
-  const { t } = useTranslations();
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].onboarding;
   const { followedTrainers } = useFollowStore();
   const recommendedTrainers = TRAINERS.slice(0, 6);
   const [localFollowed, setLocalFollowed] = useState<number[]>([]);
@@ -57,9 +60,9 @@ export default function FollowPage() {
       <Card className="w-full max-w-2xl relative z-10">
         <CardContent className="pt-6">
           <ProgressBar currentStep={5} totalSteps={6} />
-          <h1 className="text-xl font-bold text-center mb-1 mt-1">{t('onboarding.recommendedTrainers')}</h1>
+          <h1 className="text-xl font-bold text-center mb-1 mt-1">{t.recommendedTrainers}</h1>
           <p className="text-sm text-muted-foreground text-center mb-4">
-            {t('onboarding.followTrainers')}
+            {t.followTrainers}
           </p>
 
           <div className="grid grid-cols-2 gap-3 mb-4">
@@ -97,7 +100,7 @@ export default function FollowPage() {
           </div>
 
           <Button onClick={handleContinue} disabled={selectedCount === 0} className="w-full" size="lg">
-            {t('onboarding.nextWithCount')} ({selectedCount}{t('onboarding.following')})
+            {t.nextWithCount} ({selectedCount}{t.following})
           </Button>
         </CardContent>
       </Card>

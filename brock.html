@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Well‑V 外部デバイス連携ブロック図</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;        /* slate-900 */
+      --panel: #111827;     /* gray-900 */
+      --box: #1f2937;       /* gray-800 */
+      --accent: #22d3ee;    /* cyan-400 */
+      --accent2: #f472b6;   /* pink-400 */
+      --accent3: #34d399;   /* green-400 */
+      --text: #e5e7eb;      /* gray-200 */
+      --muted: #9ca3af;     /* gray-400 */
+      --border: #374151;    /* gray-700 */
+      --warn: #f59e0b;      /* amber-500 */
+      --ok: #86efac;        /* green-300 */
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Segoe UI Symbol";
+      background: linear-gradient(180deg, #0b1224 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    h1, h2, h3 { margin: 0 0 12px; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 22px; color: var(--accent); }
+    h3 { font-size: 18px; color: var(--muted); }
+    p { margin: 8px 0 0; color: var(--muted); }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+    }
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+    @media (min-width: 900px) {
+      .grid-cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+      .grid-cols-2 { grid-template-columns: 1.2fr 1fr; }
+    }
+    .box {
+      background: var(--box);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .box h4 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      color: #fff;
+      letter-spacing: 0.2px;
+    }
+    .kv {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 8px;
+      align-items: start;
+      margin: 6px 0;
+    }
+    .kv .k { color: var(--muted); }
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px;
+      margin: 4px 4px 0 0;
+      background: rgba(255,255,255,0.03);
+    }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0 4px;
+      font-size: 13px;
+    }
+    .arrow {
+      color: var(--accent);
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .legend .tag { border-color: #1f9fb5; }
+    .section-title {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .accent { color: var(--accent2); }
+    .accent3 { color: var(--accent3); }
+    .note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .divider { height: 1px; background: var(--border); margin: 12px 0; opacity: 0.7; }
+    /* Simple swimlanes */
+    .lanes {
+      display: grid;
+      gap: 16px;
+    }
+    @media (min-width: 1000px) {
+      .lanes {
+        grid-template-columns: 1.1fr 1.3fr 1fr;
+      }
+    }
+    .lane-title {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0 0 8px;
+    }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="panel">
+      <div class="section-title">
+        <h1>Well‑V 外部デバイス連携 — 詳細ブロック図（HTML）</h1>
+        <span class="tag">焦点：推しボイスカウントがユーザーの動きに反応</span>
+        <span class="tag">プラットフォーム：iOS / Android</span>
+        <span class="tag">モード：基本無料 + プレミアム</span>
+      </div>
+      <p>この図は、外部デバイスが動きを検知し、Well‑Vアプリ内で推しボイスカウントをトリガーする仕組みを、モバイル、クラウド、コンテンツ、分析サブシステムを含めて概説しています。</p>
+    </div>
+
+    <!-- High-level swimlanes -->
+    <div class="lanes">
+      <!-- Lane 1: External Device -->
+      <div class="panel">
+        <h2>外部デバイスサブシステム</h2>
+        <p>動きをキャプチャしてモバイルアプリにイベントをストリーミングする軽量ウェアラブルまたはクリップオンアクセサリー。</p>
+        <div class="grid grid-cols-3">
+          <div class="box">
+            <h4>モーションセンサー</h4>
+            <div class="kv"><div class="k">種類</div><div>IMU（加速度計、ジャイロスコープ）、オプションで磁力計</div></div>
+            <div class="kv"><div class="k">サンプリング</div><div>50〜200 Hz設定可能；デバイス上でイベントレートにダウンサンプリング</div></div>
+            <div class="kv"><div class="k">ファームウェア</div><div>ステップ/レップ検出、デバウンス、イベント集約</div></div>
+            <span class="tag">低消費電力</span><span class="tag">エッジフィルタリング</span><span class="tag">キャリブレーション済み</span>
+          </div>
+          <div class="box">
+            <h4>BLE通信</h4>
+            <div class="kv"><div class="k">プロファイル</div><div>カスタムGATT：<span class="mono">rep_event</span>、<span class="mono">motion_stream</span>、<span class="mono">battery_status</span></div></div>
+            <div class="kv"><div class="k">レイテンシ</div><div>&lt; 50 ms 標準（接続間隔調整済み）</div></div>
+            <div class="kv"><div class="k">セキュリティ</div><div>ペアリング + 暗号化；ユーザーごとのデバイスホワイトリスト</div></div>
+            <span class="tag">GATT</span><span class="tag">通知</span><span class="tag">OTAアップデート</span>
+          </div>
+          <div class="box">
+            <h4>デバイス管理</h4>
+            <div class="kv"><div class="k">プロビジョニング</div><div>QR/アプリベースのリンク；ファームウェアバージョン管理</div></div>
+            <div class="kv"><div class="k">ヘルス</div><div>バッテリー/温度；エラーテレメトリ</div></div>
+            <div class="kv"><div class="k">ID</div><div>ユーザーごとのバインディング、取り消し、紛失/リセットフロー</div></div>
+            <span class="tag">テレメトリ</span><span class="tag">セキュアID</span><span class="tag">診断</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="flow">
+          <span class="tag">IMU</span> <span class="arrow">→</span> <span class="tag">レップ検出</span> <span class="arrow">→</span> <span class="tag">BLE rep_event</span>
+          <span class="arrow">→</span> <span class="tag">モバイルアプリ反応（推しボイスカウント）</span>
+        </div>
+        <div class="legend">
+          <span class="tag">イベント駆動</span><span class="tag">低レイテンシ</span><span class="tag">プライバシー保護</span>
+        </div>
+      </div>
+
+      <!-- Lane 2: Mobile App -->
+      <div class="panel">
+        <h2>モバイルアプリサブシステム（Well‑V）</h2>
+        <p>デバイスイベントを受信し、スケジュールと同期し、推しボイス再生をトリガーし、セッションUXを管理します。</p>
+
+        <div class="grid grid-cols-2">
+          <div class="box">
+            <h4>デバイスブリッジ</h4>
+            <div class="kv"><div class="k">スタック</div><div>iOS CoreBluetooth / Android BluetoothLeGatt</div></div>
+            <div class="kv"><div class="k">クロック同期</div><div>ドリフト補正：デバイスタイムスタンプ → アプリクロック</div></div>
+            <div class="kv"><div class="k">バッファ</div><div>バックプレッシャーとリトライ付きイベントキュー</div></div>
+            <span class="tag">BLEクライアント</span><span class="tag">ステートマシン</span>
+          </div>
+          <div class="box">
+            <h4>セッションエンジン</h4>
+            <div class="kv"><div class="k">モード</div><div>カウントアロング、インターバル、ビデオガイド、配信者モード</div></div>
+            <div class="kv"><div class="k">ルール</div><div>エクササイズごとのしきい値、レップグルーピング、休憩タイマー</div></div>
+            <div class="kv"><div class="k">安全性</div><div>最大レート制限、一時停止/再開、ユーザー上書き</div></div>
+            <span class="tag">リアルタイム</span><span class="tag">設定可能</span>
+          </div>
+
+          <div class="box">
+            <h4>推しボイス再生</h4>
+            <div class="kv"><div class="k">コンテンツ</div><div>事前録音パック + TTS（ライセンスあり）</div></div>
+            <div class="kv"><div class="k">同期</div><div>レップに合わせたプロンプト：「1… 2… 3… いいよ！」</div></div>
+            <div class="kv"><div class="k">エフェクト</div><div>BGMダッキング、空間化、レイテンシ調整</div></div>
+            <span class="tag">低レイテンシオーディオ</span><span class="tag">ボイスパック</span><span class="tag">ロケール</span>
+          </div>
+          <div class="box">
+            <h4>ヘルスケアカレンダー連携</h4>
+            <div class="kv"><div class="k">ソース</div><div>アプリ内カレンダー、OSヘルスAPI（オプトイン）</div></div>
+            <div class="kv"><div class="k">同期</div><div>セッション → スケジュール；リマインダー；ストリーク</div></div>
+            <div class="kv"><div class="k">プライバシー</div><div>ユーザー同意、詳細スコープ、取り消し可能</div></div>
+            <span class="tag accent3">カレンダー統合</span><span class="tag">リマインダー</span><span class="tag">メトリクス</span>
+          </div>
+
+          <div class="box">
+            <h4>ビデオセッションプレーヤー</h4>
+            <div class="kv"><div class="k">フォーマット</div><div>3Dモデルシーケンス、FXオーバーレイ、HLS/DASH</div></div>
+            <div class="kv"><div class="k">同期</div><div>レップイベント → ビジュアルキュー → ボイスタイミング</div></div>
+            <div class="kv"><div class="k">プレミアム</div><div>月額500円でアンロック</div></div>
+            <span class="tag">GPU高速化</span><span class="tag">字幕</span>
+          </div>
+          <div class="box">
+            <h4>録音サポート（トレーナー向け）</h4>
+            <div class="kv"><div class="k">ツール</div><div>ノイズリダクション、タイミンググリッド、パンチイン/アウト</div></div>
+            <div class="kv"><div class="k">エクスポート</div><div>パックビルダー → コンテンツカタログ</div></div>
+            <div class="kv"><div class="k">アクセス</div><div>プレミアムクリエイターツール</div></div>
+            <span class="tag">クリエイタースタジオ</span><span class="tag">QAチェック</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="flow">
+          <span class="tag">rep_event</span> <span class="arrow">→</span>
+          <span class="tag">セッションエンジン</span> <span class="arrow">→</span>
+          <span class="tag">推しボイスプロンプト</span> <span class="arrow">→</span>
+          <span class="tag">カレンダー更新 & 分析</span>
+        </div>
+        <p class="note">すべてのユーザー向けインタラクションは、同意、明確性、一時停止/終了パスを優先します。</p>
+      </div>
+
+      <!-- Lane 3: Cloud & Content -->
+      <div class="panel">
+        <h2>クラウド、コンテンツ、分析</h2>
+        <p>AI生成エクササイズを提供し、音声/ビデオコンテンツをホストし、エンゲージメントと信頼性を測定します。</p>
+
+        <div class="box">
+          <h4>AIエクササイズ生成</h4>
+          <div class="kv"><div class="k">入力</div><div>ユーザー目標、レベル、時間、過去のセッション、制約</div></div>
+          <div class="kv"><div class="k">出力</div><div>パーソナライズされたプラン：セット/レップ/休憩 + ボイスキュースクリプト</div></div>
+          <div class="kv"><div class="k">安全性</div><div>ルールベースの除外、保守的なデフォルト</div></div>
+          <span class="tag">パーソナライゼーション</span><span class="tag">テンプレート</span>
+        </div>
+
+        <div class="box">
+          <h4>ボイスコンテンツライブラリ</h4>
+          <div class="kv"><div class="k">カタログ</div><div>ライセンス済みボイスパック；メタデータ（ロケール、ペルソナ、エネルギー）</div></div>
+          <div class="kv"><div class="k">配信</div><div>CDN；プリフェッチ；オフラインキャッシュ；権利期間</div></div>
+          <div class="kv"><div class="k">コンプライアンス</div><div>使用上限、帰属、削除ワークフロー</div></div>
+          <span class="tag accent">ライセンシング</span><span class="tag">DRM</span><span class="tag">キャッシング</span>
+        </div>
+
+        <div class="box">
+          <h4>配信者モードバックエンド</h4>
+          <div class="kv"><div class="k">リアルタイム</div><div>視聴者トリガー（投票） → セッション内ボイス切り替え</div></div>
+          <div class="kv"><div class="k">制限</div><div>レート制御；不正防止；監査証跡</div></div>
+          <div class="kv"><div class="k">統合</div><div>プラットフォームへのWebhook；クリエイターダッシュボード</div></div>
+          <span class="tag">インタラクティブ</span><span class="tag">モデレーション</span>
+        </div>
+
+        <div class="box">
+          <h4>分析 & 可観測性</h4>
+          <div class="kv"><div class="k">エンゲージメント</div><div>DAU/MAU、セッション長、完了率、ストリーク</div></div>
+          <div class="kv"><div class="k">品質</div><div>オーディオレイテンシ、レップ検出精度、クラッシュ率</div></div>
+          <div class="kv"><div class="k">コマース</div><div>プレミアムコンバージョン、解約率、グッズ売上</div></div>
+          <span class="tag">ダッシュボード</span><span class="tag">コホート</span><span class="tag">A/Bテスト</span>
+        </div>
+
+        <div class="box">
+          <h4>ID、プライバシー、ポリシー</h4>
+          <div class="kv"><div class="k">アカウント</div><div>メール/ソーシャルログイン；MFAオプション；デバイスバインディング</div></div>
+          <div class="kv"><div class="k">同意</div><div>ヘルスカレンダー、分析、通知の詳細トグル</div></div>
+          <div class="kv"><div class="k">ストレージ</div><div>保存時暗号化；保持ポリシー；エクスポート/削除</div></div>
+          <span class="tag">ユーザーコントロール</span><span class="tag">コンプライアンス</span><span class="tag">データ最小化</span>
+        </div>
+
+        <div class="divider"></div>
+        <div class="flow">
+          <span class="tag">モバイルセッション</span> <span class="arrow">→</span>
+          <span class="tag">AIプラン + ボイススクリプト</span> <span class="arrow">→</span>
+          <span class="tag">CDN配信</span> <span class="arrow">→</span>
+          <span class="tag">再生 & カウント</span> <span class="arrow">→</span>
+          <span class="tag">分析</span>
+        </div>
+        <p class="note">コンテンツ配信は、推しボイスプロンプトを低レイテンシに保つためにプリフェッチとオフラインキャッシュを優先します。</p>
+      </div>
+    </div>
+
+    <!-- End-to-end flow summary -->
+    <div class="panel">
+      <h2>エンドツーエンドイベントフロー</h2>
+      <ol>
+        <li><strong>センサーキャプチャ：</strong>外部デバイスIMUが反復パターンを検出。</li>
+        <li><strong>イベント発行：</strong>ファームウェアがBLE経由で<span class="mono">rep_event</span>を発行（タイムスタンプ付き）。</li>
+        <li><strong>アプリ取り込み：</strong>モバイルブリッジがイベントを検証、キューイング、時間調整。</li>
+        <li><strong>セッション反応：</strong>セッションエンジンがイベントを現在のエクササイズとケイデンスにマッピング。</li>
+        <li><strong>ボイス出力：</strong>推しボイスが同期してカウントと励まし；必要に応じてBGMダッキング。</li>
+        <li><strong>カレンダー & ストリーク：</strong>セッション完了でヘルスケアカレンダー、目標、ストリークカウンターを更新。</li>
+        <li><strong>分析 & ストレージ：</strong>主要メトリクスをログ；コンテンツ使用はライセンス上限を尊重。</li>
+      </ol>
+      <p class="note">接続が切れた場合、アプリはローカルモーション推定にフォールバックし、BLE再接続時にカウントを再開します。</p>
+    </div>
+
+    <!-- Premium features callout -->
+    <div class="panel">
+      <h2>プレミアム機能連携（月額500円）</h2>
+      <div class="grid grid-cols-3">
+        <div class="box">
+          <h4>広告なしUI</h4>
+          <p>バナー広告を削除し、セッション中の視覚的ノイズを軽減。</p>
+        </div>
+        <div class="box">
+          <h4>ビデオセッション</h4>
+          <p>レップイベントに同期した3DモデルとFXオーバーレイ。</p>
+        </div>
+        <div class="box">
+          <h4>AIパーソナライズエクササイズ</h4>
+          <p>目標と制約に合わせたカスタムプランとボイススクリプト。</p>
+        </div>
+        <div class="box">
+          <h4>録音サポート（トレーナー向け）</h4>
+          <p>洗練されたボイスパック作成のためのノイズリダクションとタイミングツール。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Non-functional requirements -->
+    <div class="panel">
+      <h2>非機能要件</h2>
+      <ul>
+        <li><strong>レイテンシ：</strong>エンドツーエンドのレップからボイスまで &lt; 120 ms 目標。</li>
+        <li><strong>信頼性：</strong>イベント損失 &lt; 0.5%；グレースフルなリトライとバッファリング。</li>
+        <li><strong>バッテリー：</strong>デバイス &gt; 24時間標準；アプリはスキャンを最小化し、短い接続間隔を維持。</li>
+        <li><strong>アクセシビリティ：</strong>ボイスプロンプトの字幕；高コントラストUI；言語パック。</li>
+        <li><strong>セキュリティ：</strong>暗号化BLE、認証済みコンテンツ配信、セキュアストレージ。</li>
+        <li><strong>プライバシー：</strong>ヘルスカレンダーと分析への明示的同意；簡単なオプトアウト。</li>
+      </ul>
+    </div>
+
+    <!-- Notes -->
+    <div class="panel">
+      <h2>実装ノート</h2>
+      <ul>
+        <li><strong>BLEスキーマ：</strong><span class="mono">rep_event</span>特性を定義（uint8 count、uint32 timestamp、uint8 quality、uint8 exercise_id）。</li>
+        <li><strong>クロック：</strong>定期的な時刻同期パケットを使用してドリフトマップを維持。</li>
+        <li><strong>オーディオ：</strong>次のボイスクリップをプリロード；無音をトリミング；サンプル精度のアライメントを維持。</li>
+        <li><strong>カレンダー：</strong>セッションサマリーとストリーク更新をクライアント側に保存し、オンライン時にクラウドに同期。</li>
+        <li><strong>クリエイターツール：</strong>公開前にラウドネス（LUFS）、歯擦音、タイミングマークを検証。</li>
+        <li><strong>フォールバック：</strong>デバイスが利用できない場合、アプリは信頼度を下げて電話センサーを使用し、明確なUXメッセージを表示。</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

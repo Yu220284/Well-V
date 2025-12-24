@@ -13,6 +13,8 @@ import { useAuth } from '@/lib/auth/auth-context'
 import { ProgressBar } from '@/components/onboarding/ProgressBar'
 import { useTranslations } from '@/lib/hooks/use-translations'
 import { AnimatedBackground } from '@/components/layout/AnimatedBackground'
+import { useLanguage } from '@/lib/hooks/use-language'
+import { translations } from '@/lib/i18n/translations'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -21,12 +23,13 @@ export default function LoginPage() {
   const router = useRouter()
   const { toast } = useToast()
   const { signIn } = useAuth()
-  const { t } = useTranslations()
+  const { language } = useLanguage()
+  const t = translations[language || 'ja'].auth
 
   const handleSocialLogin = async (provider: 'google' | 'microsoft' | 'apple' | 'discord' | 'twitter' | 'instagram') => {
     toast({
-      title: t('auth.preparing'),
-      description: `${provider}${t('auth.socialSignupPreparing')}`
+      title: t.preparing,
+      description: `${provider}${t.socialSignupPreparing}`
     })
   }
 
@@ -38,7 +41,7 @@ export default function LoginPage() {
     
     if (error) {
       toast({
-        title: t('auth.loginError'),
+        title: t.loginError,
         description: error,
         variant: 'destructive'
       })
@@ -60,7 +63,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md relative z-10">
         <CardContent className="pt-6">
           <ProgressBar currentStep={2} totalSteps={6} />
-          <h1 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">{t('auth.login')}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">{t.login}</h1>
           <div className="space-y-4">
             <div className="grid grid-cols-6 gap-2">
               <Button variant="ghost" size="icon" className="border-0 hover:bg-accent" onClick={() => handleSocialLogin('google')}>
@@ -108,7 +111,7 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">{t('auth.registerWithPhone')}</Label>
+              <Label htmlFor="phone">{t.registerWithPhone}</Label>
               <div className="flex gap-2">
                 <select className="flex h-10 w-24 rounded-md border border-input bg-background px-3 py-2 text-sm">
                   <option value="+81">+81</option>
@@ -127,13 +130,13 @@ export default function LoginPage() {
             <div className="relative">
               <Separator className="my-4" />
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">
-                {t('auth.or')}
+                {t.or}
               </span>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <Label htmlFor="email">{t('auth.email')}</Label>
+                <Label htmlFor="email">{t.email}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -143,7 +146,7 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="password">{t('auth.password')}</Label>
+                <Label htmlFor="password">{t.password}</Label>
                 <Input
                   id="password"
                   type="password"
@@ -153,13 +156,13 @@ export default function LoginPage() {
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? t('auth.loggingIn') : t('auth.login')}
+                {loading ? t.loggingIn : t.login}
               </Button>
             </form>
 
             <div className="text-center">
               <Link href="/auth/signup" className="text-sm text-primary hover:underline">
-                {t('auth.noAccount')}
+                {t.noAccount}
               </Link>
             </div>
           </div>

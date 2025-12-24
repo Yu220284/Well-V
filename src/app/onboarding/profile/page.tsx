@@ -11,6 +11,8 @@ import { useLocalAuth } from '@/lib/hooks/use-local-auth';
 import { useTranslations } from '@/lib/hooks/use-translations';
 import { AnimatedBackground } from '@/components/layout/AnimatedBackground';
 import useEmblaCarousel from 'embla-carousel-react';
+import { useLanguage } from '@/lib/hooks/use-language';
+import { translations } from '@/lib/i18n/translations';
 
 const avatarOptions = [
   { bg: 'bg-gradient-to-br from-pink-200 to-rose-300' },
@@ -26,7 +28,9 @@ const avatarOptions = [
 export default function ProfilePage() {
   const router = useRouter();
   const { updateProfile } = useLocalAuth();
-  const { t } = useTranslations();
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].onboarding;
+  const tCommon = translations[language || 'ja'];
   const initialIndex = Math.floor(Math.random() * avatarOptions.length);
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: true, 
@@ -70,13 +74,13 @@ export default function ProfilePage() {
         <CardContent className="pt-6">
           <ProgressBar currentStep={4} totalSteps={6} />
           <div className="text-center mb-4 mt-1">
-            <h1 className="text-xl font-bold mb-1">{t('onboarding.profileSetup')}</h1>
-            <p className="text-muted-foreground">{t('onboarding.profileSetupDesc')}</p>
+            <h1 className="text-xl font-bold mb-1">{t.profileSetup}</h1>
+            <p className="text-muted-foreground">{t.profileSetupDesc}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 relative">
             <div className="mb-6">
-              <Label className="text-sm font-medium mb-3 block">{t('onboarding.selectAvatar')}</Label>
+              <Label className="text-sm font-medium mb-3 block">{t.selectAvatar}</Label>
               <div className="overflow-hidden h-[120px]" ref={emblaRef}>
                 <div className="flex">
                   {avatarOptions.map((option, index) => (
@@ -116,18 +120,18 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="displayName">{t('onboarding.displayName')}</Label>
+              <Label htmlFor="displayName">{t.displayName}</Label>
               <Input
                 id="displayName"
                 value={profile.displayName}
                 onChange={(e) => setProfile(prev => ({ ...prev, displayName: e.target.value }))}
-                placeholder={t('onboarding.displayNamePlaceholder')}
+                placeholder={t.displayNamePlaceholder}
                 required
               />
             </div>
 
             <Button type="submit" className="w-full" size="lg">
-              {t('continue')}
+              {tCommon.continue}
             </Button>
           </form>
         </CardContent>

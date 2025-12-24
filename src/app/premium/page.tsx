@@ -7,9 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, Crown, Video, Sparkles as SparklesIcon, Mic, Radio, Gauge, ArrowLeft, Ban } from "lucide-react";
 import { usePremium } from "@/lib/hooks/use-premium";
+import { useLanguage } from "@/lib/hooks/use-language";
+import { translations } from "@/lib/i18n/translations";
 
 export default function PremiumPage() {
   const router = useRouter();
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'].premium;
   const { isPremium, setPremium, checkPremiumStatus } = usePremium();
   const [selectedPlan, setSelectedPlan] = useState<"monthly" | "yearly">("monthly");
   const isCurrentlyPremium = checkPremiumStatus();
@@ -17,33 +21,33 @@ export default function PremiumPage() {
   const features = [
     {
       icon: Ban,
-      title: "広告非表示",
-      description: "すべての広告を非表示にして快適に利用できます",
+      title: language === 'ja' ? "広告非表示" : "Ad-Free",
+      description: language === 'ja' ? "すべての広告を非表示にして快適に利用できます" : "Remove all ads for a seamless experience",
     },
     {
       icon: Video,
-      title: "動画セッション再生",
-      description: "トレーナーの動きを見ながら正しいフォームで運動できます",
+      title: language === 'ja' ? "動画セッション再生" : "Video Sessions",
+      description: language === 'ja' ? "音声だけでなく動画でもセッションを楽しめます" : "Enjoy sessions with video, not just audio",
     },
     {
       icon: SparklesIcon,
-      title: "AI台本生成",
-      description: "あなた専用のセッション台本をAIが自動生成します",
+      title: language === 'ja' ? "AI台本生成" : "AI Script Generation",
+      description: language === 'ja' ? "あなた専用のセッション台本をAIが自動生成します" : "AI generates personalized session scripts",
     },
     {
       icon: Mic,
-      title: "収録支援機能",
-      description: "オリジナルセッションを簡単に収録・編集できます",
+      title: language === 'ja' ? "収録支援機能" : "Recording Support",
+      description: language === 'ja' ? "オリジナルセッションを簡単に収録・編集できます" : "Easily record and edit custom sessions",
     },
     {
       icon: Radio,
-      title: "バックグラウンド再生",
-      description: "画面を閉じても音声ガイドが継続します",
+      title: language === 'ja' ? "バックグラウンド再生" : "Background Play",
+      description: language === 'ja' ? "画面を閉じても音声ガイドが継続します" : "Audio continues when screen is off",
     },
     {
       icon: Gauge,
-      title: "速度調整機能",
-      description: "0.5倍〜2.0倍まで再生速度を自由に調整できます",
+      title: language === 'ja' ? "速度調整機能" : "Speed Control",
+      description: language === 'ja' ? "0.5倍〜2.0倍まで再生速度を自由に調整できます" : "Adjust playback speed from 0.5x to 2.0x",
     },
   ];
 
@@ -70,7 +74,7 @@ export default function PremiumPage() {
           className="mb-6"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          戻る
+          {language === 'ja' ? '戻る' : 'Back'}
         </Button>
 
         <div className="text-center mb-8">
@@ -79,15 +83,15 @@ export default function PremiumPage() {
           </div>
           <h1 className="text-3xl font-bold mb-2">Well-V Premium</h1>
           <p className="text-muted-foreground">
-            すべての機能を解放して、最高のフィットネス体験を
+            {t.description}
           </p>
         </div>
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle>プレミアム機能</CardTitle>
+            <CardTitle>{t.features}</CardTitle>
             <CardDescription>
-              プレミアムプランで利用できるすべての機能
+              {language === 'ja' ? 'プレミアムプランで利用できるすべての機能' : 'All features available with Premium'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -112,7 +116,7 @@ export default function PremiumPage() {
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle>プランを選択</CardTitle>
+            <CardTitle>{language === 'ja' ? 'プランを選択' : 'Select a Plan'}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -125,7 +129,7 @@ export default function PremiumPage() {
                 }`}
               >
                 <div className="text-left">
-                  <div className="font-semibold mb-1">月額プラン</div>
+                  <div className="font-semibold mb-1">{language === 'ja' ? '月額プラン' : 'Monthly Plan'}</div>
                   <div className="text-2xl font-bold mb-1">
                     {plans.monthly.price}
                     <span className="text-sm font-normal text-muted-foreground">
@@ -133,7 +137,7 @@ export default function PremiumPage() {
                     </span>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {plans.monthly.description}
+                    {language === 'ja' ? plans.monthly.description : 'Cancel anytime'}
                   </div>
                 </div>
                 {selectedPlan === "monthly" && (
@@ -157,7 +161,7 @@ export default function PremiumPage() {
                   </Badge>
                 )}
                 <div className="text-left">
-                  <div className="font-semibold mb-1">年額プラン</div>
+                  <div className="font-semibold mb-1">{language === 'ja' ? '年額プラン' : 'Yearly Plan'}</div>
                   <div className="text-2xl font-bold mb-1">
                     {plans.yearly.price}
                     <span className="text-sm font-normal text-muted-foreground">
@@ -165,7 +169,7 @@ export default function PremiumPage() {
                     </span>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {plans.yearly.description}
+                    {language === 'ja' ? plans.yearly.description : 'Save 2 months!'}
                   </div>
                 </div>
                 {selectedPlan === "yearly" && (
@@ -184,7 +188,7 @@ export default function PremiumPage() {
                 disabled
               >
                 <Check className="h-5 w-5 mr-2" />
-                プレミアム会員です
+                {language === 'ja' ? 'プレミアム会員です' : 'Premium Member'}
               </Button>
             ) : (
               <Button
@@ -195,29 +199,31 @@ export default function PremiumPage() {
                     ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
                     : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
                   setPremium(true, until);
-                  alert(`プレミアムプラン（${selectedPlan === "yearly" ? "年額" : "月額"}）に登録しました！\n\n※これはデモ機能です。実際の決済は行われていません。`);
+                  alert(language === 'ja' 
+                    ? `プレミアムプラン（${selectedPlan === "yearly" ? "年額" : "月額"}）に登録しました！\n\n※これはデモ機能です。実際の決済は行われていません。`
+                    : `Subscribed to Premium (${selectedPlan === "yearly" ? "Yearly" : "Monthly"})!\n\n*This is a demo. No actual payment was made.`);
                   router.push('/');
                 }}
               >
                 <Crown className="h-5 w-5 mr-2" />
-                プレミアムにアップグレード
+                {language === 'ja' ? 'プレミアムにアップグレード' : 'Upgrade to Premium'}
               </Button>
             )}
 
             <p className="text-xs text-center text-muted-foreground">
-              7日間の無料トライアル付き。いつでもキャンセル可能です。
+              {language === 'ja' ? '7日間の無料トライアル付き。いつでもキャンセル可能です。' : '7-day free trial. Cancel anytime.'}
             </p>
           </CardContent>
         </Card>
 
         <div className="text-center text-sm text-muted-foreground">
-          <p>お支払いは安全に処理されます</p>
+          <p>{language === 'ja' ? 'お支払いは安全に処理されます' : 'Payments are processed securely'}</p>
           <p className="mt-2">
-            ご質問がある場合は
+            {language === 'ja' ? 'ご質問がある場合は' : 'For questions, contact'}
             <button className="text-primary hover:underline ml-1">
-              サポートセンター
+              {language === 'ja' ? 'サポートセンター' : 'Support Center'}
             </button>
-            までお問い合わせください
+            {language === 'ja' && 'までお問い合わせください'}
           </p>
         </div>
       </div>
