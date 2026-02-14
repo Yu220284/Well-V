@@ -97,3 +97,14 @@ export async function getUserProfile(authUserId: string) {
   
   return { data, error }
 }
+
+// セッション追加
+export async function addSession(sessionData: any) {
+  const { data, error } = await supabase
+    .from('sessions')
+    .insert(sessionData)
+    .select()
+    .single()
+  
+  return { data, error }
+}

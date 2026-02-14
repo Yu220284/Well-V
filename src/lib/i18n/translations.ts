@@ -194,7 +194,7 @@ export const translations = {
     
     // Recording
     recording: {
-      title: '収録支援',
+      title: 'セッション収録',
       selectScript: '台本を選択',
       startRecording: '収録開始',
       segment: 'セグメント',
@@ -411,7 +411,7 @@ export const translations = {
     
     // Recording
     recording: {
-      title: 'Recording Studio',
+      title: 'Session Recording',
       selectScript: 'Select Script',
       startRecording: 'Start Recording',
       segment: 'Segment',

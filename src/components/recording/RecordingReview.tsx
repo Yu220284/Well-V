@@ -17,13 +17,14 @@ interface RecordingReviewProps {
 export function RecordingReview({ segments, script, onBack }: RecordingReviewProps) {
   const { language } = useLanguage();
   const t = translations[language || 'ja'].recording;
+  const [localSegments, setLocalSegments] = useState<ScriptSegment[]>(segments);
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [processingIndex, setProcessingIndex] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handlePlay = (index: number) => {
-    const segment = segments[index];
+    const segment = localSegments[index];
     if (!segment.audioUrl) return;
 
     if (playingIndex === index) {
@@ -45,9 +46,96 @@ export function RecordingReview({ segments, script, onBack }: RecordingReviewPro
 
   const handleRemoveNoise = async (index: number) => {
     setProcessingIndex(index);
-    // Simulate noise removal processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const segment = localSegments[index];
+    if (!segment.audioBlob) {
+      setProcessingIndex(null);
+      return;
+    }
+
+    try {
+      const audioContext = new AudioContext();
+      const arrayBuffer = await segment.audioBlob.arrayBuffer();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+      
+      // Apply noise reduction filter
+      const offlineContext = new OfflineAudioContext(
+        audioBuffer.numberOfChannels,
+        audioBuffer.length,
+        audioBuffer.sampleRate
+      );
+      
+      const source = offlineContext.createBufferSource();
+      source.buffer = audioBuffer;
+      
+      // High-pass filter to remove low-frequency noise
+      const highPassFilter = offlineContext.createBiquadFilter();
+      highPassFilter.type = 'highpass';
+      highPassFilter.frequency.value = 80;
+      
+      // Low-pass filter to remove high-frequency noise
+      const lowPassFilter = offlineContext.createBiquadFilter();
+      lowPassFilter.type = 'lowpass';
+      lowPassFilter.frequency.value = 8000;
+      
+      source.connect(highPassFilter);
+      highPassFilter.connect(lowPassFilter);
+      lowPassFilter.connect(offlineContext.destination);
+      
+      source.start();
+      const renderedBuffer = await offlineContext.startRendering();
+      
+      // Convert back to blob
+      const wavBlob = await audioBufferToWav(renderedBuffer);
+      const url = URL.createObjectURL(wavBlob);
+      
+      setLocalSegments(prev => prev.map((seg, idx) => 
+        idx === index ? { ...seg, audioBlob: wavBlob, audioUrl: url } : seg
+      ));
+    } catch (error) {
+      console.error('Noise removal error:', error);
+    }
+    
     setProcessingIndex(null);
+  };
+
+  const audioBufferToWav = async (buffer: AudioBuffer): Promise<Blob> => {
+    const length = buffer.length * buffer.numberOfChannels * 2;
+    const arrayBuffer = new ArrayBuffer(44 + length);
+    const view = new DataView(arrayBuffer);
+    
+    // WAV header
+    const writeString = (offset: number, string: string) => {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+      }
+    };
+    
+    writeString(0, 'RIFF');
+    view.setUint32(4, 36 + length, true);
+    writeString(8, 'WAVE');
+    writeString(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, buffer.numberOfChannels, true);
+    view.setUint32(24, buffer.sampleRate, true);
+    view.setUint32(28, buffer.sampleRate * buffer.numberOfChannels * 2, true);
+    view.setUint16(32, buffer.numberOfChannels * 2, true);
+    view.setUint16(34, 16, true);
+    writeString(36, 'data');
+    view.setUint32(40, length, true);
+    
+    // Write audio data
+    let offset = 44;
+    for (let i = 0; i < buffer.length; i++) {
+      for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+        const sample = Math.max(-1, Math.min(1, buffer.getChannelData(channel)[i]));
+        view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+        offset += 2;
+      }
+    }
+    
+    return new Blob([arrayBuffer], { type: 'audio/wav' });
   };
 
   const handleSave = async () => {
@@ -71,7 +159,7 @@ export function RecordingReview({ segments, script, onBack }: RecordingReviewPro
       </div>
 
       <div className="space-y-3">
-        {segments.map((segment, index) => (
+        {localSegments.map((segment, index) => (
           <Card key={segment.id}>
             <CardContent className="p-4">
               <div className="flex items-start gap-4">

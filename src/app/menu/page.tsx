@@ -6,7 +6,7 @@ import { PageTransition } from '@/components/layout/PageTransition';
 import { AdBanner } from '@/components/layout/AdBanner';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
-import { User, Bell, Heart, Star, Award, Settings as SettingsIcon, Mail, ChevronRight, PlusCircle, Sparkles } from 'lucide-react';
+import { User, Bell, Heart, Star, Award, Settings as SettingsIcon, Mail, ChevronRight, PlusCircle, Sparkles, Mic } from 'lucide-react';
 import { useLanguage } from '@/lib/hooks/use-language';
 import { translations } from '@/lib/i18n/translations';
 
@@ -16,6 +16,7 @@ export default function MenuPage() {
   const { language } = useLanguage();
   const t = translations[language || 'ja'].menu;
   const tSettings = translations[language || 'ja'].settings;
+  const tRecording = translations[language || 'ja'].recording;
   
   const menuItems = [
     { 
@@ -47,11 +48,12 @@ export default function MenuPage() {
         href: '/favorites'
     },
     { 
-        id: 'ai-script',
-        title: language === 'ja' ? "AI台本生成" : "AI Script Generator", 
-        description: language === 'ja' ? "あなた専用のセッション台本を自動生成" : "Generate custom session scripts",
-        icon: Sparkles,
-        href: '/ai-script'
+        id: 'recording',
+        title: tRecording.title,
+        description: language === 'ja' ? "台本を読んでセッションを収録" : "Record sessions with scripts",
+        icon: Mic,
+        href: '/recording',
+        premium: true
     },
     { 
         id: 'membership',
@@ -103,11 +105,14 @@ export default function MenuPage() {
                 <Card className="hover:bg-primary/5 transition-colors">
                   <CardHeader className="flex flex-row items-center justify-between p-4">
                     <div className="flex items-center gap-4">
-                      <div className="bg-accent/80 p-3 rounded-lg">
-                        <item.icon className="h-5 w-5 text-primary" />
+                      <div className={`${item.premium ? 'bg-amber-500/20' : 'bg-accent/80'} p-3 rounded-lg`}>
+                        <item.icon className={`h-5 w-5 ${item.premium ? 'text-amber-500' : 'text-primary'}`} />
                       </div>
                       <div>
-                        <CardTitle className="text-base">{item.title}</CardTitle>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          {item.title}
+                          {item.premium && <span className="text-xs px-1.5 py-0.5 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded">Premium</span>}
+                        </CardTitle>
                         <CardDescription className="text-xs">{item.description}</CardDescription>
                       </div>
                     </div>

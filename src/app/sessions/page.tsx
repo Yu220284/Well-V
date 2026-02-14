@@ -23,7 +23,7 @@ export default function SessionsPage() {
   const t = translations[language || 'ja'].sessions;
   const tTags = translations[language || 'ja'].tags;
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('favorites');
+  const [activeTab, setActiveTab] = useState('new');
   const { favorites } = useFavoriteStore();
 
   const handleSearch = (query: string) => {
@@ -39,6 +39,7 @@ export default function SessionsPage() {
     );
   };
 
+  const newSessions = filterSessions([...SESSIONS].sort((a, b) => parseInt(b.id) - parseInt(a.id)).slice(0, 8));
   const favoriteSessions = filterSessions(SESSIONS.filter(s => favorites.includes(s.id)));
   const workoutSessions = filterSessions(SESSIONS.filter(s => s.category === 'workout'));
   const yogaSessions = filterSessions(SESSIONS.filter(s => s.category === 'yoga'));
@@ -67,14 +68,33 @@ export default function SessionsPage() {
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-3">
               <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="favorites">
-                  <Heart className="h-4 w-4 mr-1" />
-                  {t.favorites}
+                <TabsTrigger value="new">
+                  <Sparkles className="h-4 w-4 mr-1" />
+                  {language === 'ja' ? '新着' : 'New'}
                 </TabsTrigger>
                 <TabsTrigger value="workout">{tTags.workout}</TabsTrigger>
                 <TabsTrigger value="yoga">{tTags.yoga}</TabsTrigger>
                 <TabsTrigger value="stretch">{tTags.stretch}</TabsTrigger>
               </TabsList>
+
+              <TabsContent value="new" className="mt-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {newSessions.map((session) => (
+                    <Link key={session.id} href={`/session/${session.id}`}>
+                      <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                        <div className="aspect-video relative">
+                          <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                          <div className="absolute bottom-2 left-2 right-2 text-white">
+                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                            <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
+                          </div>
+                        </div>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </TabsContent>
 
               <TabsContent value="favorites" className="mt-4">
                 {favoriteSessions.length === 0 ? (

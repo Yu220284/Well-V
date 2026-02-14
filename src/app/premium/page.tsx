@@ -53,15 +53,15 @@ export default function PremiumPage() {
 
   const plans = {
     monthly: {
-      price: "¥980",
-      period: "/月",
-      description: "いつでもキャンセル可能",
+      price: language === 'ja' ? "¥490" : "$4.9",
+      period: language === 'ja' ? "/月" : "/mo",
+      description: language === 'ja' ? "いつでもキャンセル可能" : "Cancel anytime",
     },
     yearly: {
-      price: "¥9,800",
-      period: "/年",
-      description: "2ヶ月分お得！",
-      badge: "人気",
+      price: language === 'ja' ? "¥4,900" : "$49",
+      period: language === 'ja' ? "/年" : "/yr",
+      description: language === 'ja' ? "2ヶ月分お得！" : "Save 2 months!",
+      badge: language === 'ja' ? "人気" : "Popular",
     },
   };
 
@@ -137,7 +137,7 @@ export default function PremiumPage() {
                     </span>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {language === 'ja' ? plans.monthly.description : 'Cancel anytime'}
+                    {plans.monthly.description}
                   </div>
                 </div>
                 {selectedPlan === "monthly" && (
@@ -169,7 +169,7 @@ export default function PremiumPage() {
                     </span>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {language === 'ja' ? plans.yearly.description : 'Save 2 months!'}
+                    {plans.yearly.description}
                   </div>
                 </div>
                 {selectedPlan === "yearly" && (

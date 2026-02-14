@@ -6,6 +6,13 @@ const t = messages.AddSessionPage;
 
 export type SessionCategory = 'workout' | 'yoga' | 'stretch';
 
+export interface SessionSegment {
+  id: string;
+  action: string;
+  duration: number; // 動作の実行時間（秒）
+  pauseAfter?: number; // 動作後の休憩時間（秒）
+}
+
 // Zod schema for a Session, used for validation
 export const SessionSchema = z.object({
   id: z.string(),
@@ -13,6 +20,12 @@ export const SessionSchema = z.object({
   description: z.string().optional(),
   category: z.enum(['workout', 'yoga', 'stretch']),
   duration: z.number().positive(), // in seconds
+  segments: z.array(z.object({
+    id: z.string(),
+    action: z.string(),
+    duration: z.number(),
+    pauseAfter: z.number().optional(),
+  })).optional(),
   audioUrl: z.string().optional(),
   videoUrl: z.string().optional(),
   hasVideo: z.boolean().optional(),
@@ -102,6 +115,8 @@ export interface ScriptSegment {
   duration: number; // seconds
   audioBlob?: Blob;
   audioUrl?: string;
+  images?: string[]; // URLs to reference images
+  videoUrl?: string; // URL to reference video
 }
 
 export interface RecordingScript {
@@ -110,4 +125,7 @@ export interface RecordingScript {
   category: SessionCategory;
   segments: ScriptSegment[];
   totalDuration: number;
+  tags?: string[];
+  language?: string;
+  isRecorded?: boolean;
 }

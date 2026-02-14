@@ -1,234 +1,88 @@
-
-'use client';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { toast } from '@/hooks/use-toast';
 import { Header } from '@/components/layout/Header';
 import { PageTransition } from '@/components/layout/PageTransition';
-import { CATEGORIES } from '@/lib/data';
-import React from 'react';
-import messages from '@/../messages/ja.json';
-import { createSession } from '@/ai/flows/create-session-flow';
-import { Loader2 } from 'lucide-react';
-import { CreateSessionInputSchema } from '@/lib/types';
-import { useSubmissionStore } from '@/lib/hooks/use-submission-store';
-import { useRouter } from 'next/navigation';
-
-const t = messages.AddSessionPage;
-const tCat = messages.categories;
-const categories = CATEGORIES.map((c) => ({
-  ...c,
-  name: (tCat as any)[c.id],
-}));
-
-const FormSchema = CreateSessionInputSchema.extend({
-  audio: z
-    .any()
-    .refine((files) => files?.length == 1, t.form_audio_validation_error)
-    .refine(
-      (files) => files?.[0]?.type.startsWith('audio/'),
-      t.form_audio_validation_error
-    ),
-  thumbnail: z
-    .any()
-    .optional(),
-}).omit({ audioDataUri: true, thumbnailDataUri: true });
-
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { Mic, Upload, ArrowLeft } from 'lucide-react';
+import { useLanguage } from '@/lib/hooks/use-language';
+import { translations } from '@/lib/i18n/translations';
 
 export default function AddSessionPage() {
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const { addSubmission, updateSubmissionStatus } = useSubmissionStore();
-  const router = useRouter();
+  const { language } = useLanguage();
+  const t = translations[language || 'ja'];
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      title: '',
-      category: 'workout',
-    }
-  });
-
-  const readFileAsDataURL = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(file);
-    });
-  }
-
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    setIsSubmitting(true);
-    let submissionId : string | null = null;
-
-    try {
-        const audioDataUri = await readFileAsDataURL(data.audio[0]);
-        const thumbnailDataUri = data.thumbnail?.[0] ? await readFileAsDataURL(data.thumbnail[0]) : undefined;
-        
-        submissionId = addSubmission({ title: data.title, category: data.category });
-
-        toast({
-          title: t.toast_submitted_title,
-          description: t.toast_submitted_description,
-        });
-        
-        router.push('/menu');
-        form.reset();
-
-        // No need to await here, run in the background
-        createSession({
-          title: data.title,
-          category: data.category,
-          audioDataUri: audioDataUri,
-          thumbnailDataUri: thumbnailDataUri
-        }).then(result => {
-          updateSubmissionStatus(submissionId!, 'completed', result);
-        }).catch(error => {
-          console.error("Flow execution error:", error);
-          updateSubmissionStatus(submissionId!, 'failed');
-          // Optionally show another toast for failure
-        });
-
-    } catch (error) {
-        console.error("File reading error or initial submission error:", error);
-        if (submissionId) {
-            updateSubmissionStatus(submissionId, 'failed');
-        }
-
-        toast({
-            variant: "destructive",
-            title: t.toast_error_title,
-            description: t.toast_file_error_description,
-        });
-    } finally {
-        // This runs before the background process finishes, which is fine.
-        setIsSubmitting(false);
-    }
-  }
+  const options = [
+    {
+      id: 'script',
+      title: language === 'ja' ? '台本を読んでセッションを追加' : 'Add Session from Script',
+      description: language === 'ja' ? '台本を選んで収録し、セッションを作成' : 'Record with a script to create a session',
+      icon: Mic,
+      href: '/recording',
+      premium: true,
+    },
+    {
+      id: 'audio',
+      title: language === 'ja' ? '音声データからセッションを追加' : 'Add Session from Audio',
+      description: language === 'ja' ? '既存の音声ファイルをアップロード' : 'Upload an existing audio file',
+      icon: Upload,
+      href: '/add-session/upload',
+    },
+  ];
 
   return (
     <div className="pb-24">
       <Header />
       <PageTransition>
-        <div className="pt-24">
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="mb-8">
-            <div className="relative mb-6">
-              <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-8 mr-8 rounded-r-lg"></div>
-              <h1 className="relative text-2xl font-bold font-headline py-2 pl-2">{t.title}</h1>
+        <div className="pt-12">
+          <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div className="max-w-2xl mx-auto">
+              <Link href="/menu">
+                <Button variant="ghost" className="mb-4">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  {t.back}
+                </Button>
+              </Link>
+
+              <div className="mb-6">
+                <div className="relative mb-2">
+                  <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
+                  <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">
+                    {language === 'ja' ? '新規セッションを追加' : 'Add New Session'}
+                  </h1>
+                </div>
+                <p className="text-muted-foreground">
+                  {language === 'ja' ? '追加方法を選択してください' : 'Choose how to add your session'}
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {options.map((option) => (
+                  <Link key={option.id} href={option.href}>
+                    <Card className="hover:shadow-lg transition-all hover:-translate-y-0.5">
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-4">
+                          <div className={`${option.premium ? 'bg-amber-500/20' : 'bg-primary/10'} p-4 rounded-lg`}>
+                            <option.icon className={`h-6 w-6 ${option.premium ? 'text-amber-500' : 'text-primary'}`} />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-lg mb-1 flex items-center gap-2">
+                              {option.title}
+                              {option.premium && (
+                                <span className="text-xs px-2 py-0.5 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded">
+                                  Premium
+                                </span>
+                              )}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">{option.description}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
             </div>
-            <p className="text-lg text-muted-foreground">
-              {t.description}
-            </p>
-          </div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t.form_title_label}</FormLabel>
-                    <FormControl>
-                      <Input placeholder={t.form_title_placeholder} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t.form_category_label}</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder={t.form_category_placeholder} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
-                control={form.control}
-                name="thumbnail"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>サムネイル画像</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => field.onChange(e.target.files)}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      セッションのサムネイル画像をアップロードしてください。
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="audio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t.form_audio_label}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        accept="audio/*"
-                        onChange={(e) => field.onChange(e.target.files)}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {t.form_audio_description}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isSubmitting ? t.submitting_button : t.submit_button}
-              </Button>
-            </form>
-          </Form>
-        </div>
-      </main>
+          </main>
         </div>
       </PageTransition>
     </div>

@@ -88,8 +88,13 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
   const [volume, setVolume] = useState(1.0);
   const [showVolumeControl, setShowVolumeControl] = useState(false);
   const [showStopDialog, setShowStopDialog] = useState(false);
+  const [currentSegmentIndex, setCurrentSegmentIndex] = useState(0);
+  const [segmentTime, setSegmentTime] = useState(0);
+  const [isInPause, setIsInPause] = useState(false);
 
   const isFav = isLoaded ? isFavorite(session.id) : false;
+  const hasSegments = session.segments && session.segments.length > 0;
+  const currentSegment = hasSegments ? session.segments[currentSegmentIndex] : null;
 
 
 
@@ -136,6 +141,9 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
 
   const restart = useCallback(() => {
     setCurrentTime(0);
+    setCurrentSegmentIndex(0);
+    setSegmentTime(0);
+    setIsInPause(false);
     if (hasVideo && videoRef.current) {
       videoRef.current.currentTime = 0;
       if (!isPlaying) {
@@ -162,6 +170,9 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
     }
     setIsPlaying(false);
     setCurrentTime(0);
+    setCurrentSegmentIndex(0);
+    setSegmentTime(0);
+    setIsInPause(false);
     router.push("/");
   }, [router]);
 
@@ -232,7 +243,14 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
   };
 
   useEffect(() => {
-    if (isPlaying && !audioUrl && !hasVideo) {
+    if (isPlaying && !audioUrl && !hasVideo && hasSegments) {
+      const timer = setInterval(() => {
+        setSegmentTime((prevTime) => prevTime + 1);
+        setCurrentTime((prevTime) => prevTime + 1);
+      }, 1000);
+
+      return () => clearInterval(timer);
+    } else if (isPlaying && !audioUrl && !hasVideo) {
       const timer = setInterval(() => {
         setCurrentTime((prevTime) => {
           if (prevTime >= actualDuration) {
@@ -249,7 +267,28 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [isPlaying, actualDuration, session.id, audioUrl, hasVideo, addSession, router, toast, t, session.title]);
+  }, [isPlaying, actualDuration, session.id, audioUrl, hasVideo, addSession, router, toast, t, session.title, hasSegments]);
+
+  useEffect(() => {
+    if (!hasSegments || !currentSegment || !isPlaying) return;
+
+    const totalSegmentTime = currentSegment.duration + (currentSegment.pauseAfter || 0);
+    
+    if (segmentTime >= totalSegmentTime) {
+      if (currentSegmentIndex < session.segments!.length - 1) {
+        setCurrentSegmentIndex(prev => prev + 1);
+        setSegmentTime(0);
+        setIsInPause(false);
+      } else {
+        addSession(session.id);
+        setIsPlaying(false);
+        const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
+        setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 2000);
+      }
+    } else if (segmentTime >= currentSegment.duration && !isInPause) {
+      setIsInPause(true);
+    }
+  }, [segmentTime, currentSegment, currentSegmentIndex, hasSegments, session, addSession, router, isPlaying, isInPause]);
 
   useEffect(() => {
     const media = hasVideo ? videoRef.current : audioRef.current;
@@ -380,6 +419,16 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
               <p className="text-sm uppercase tracking-wider text-primary font-semibold">{session.category}</p>
               <h1 className="text-2xl font-bold font-headline mt-1">{session.title}</h1>
               <p className="text-sm text-muted-foreground mt-2">{tUI.guide.replace('{trainerName}', selectedTrainer.name)}</p>
+              {hasSegments && currentSegment && (
+                <div className="mt-4 p-3 bg-primary/10 rounded-lg">
+                  <p className="text-lg font-semibold">
+                    {isInPause ? '休憩中...' : currentSegment.action}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {currentSegmentIndex + 1} / {session.segments!.length}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
