@@ -40,6 +40,8 @@ import { cn } from "@/lib/utils";
 import { TRAINERS } from "@/lib/data";
 import { useLanguage } from "@/lib/hooks/use-language";
 
+import { useDiamonds } from "@/lib/hooks/use-diamonds";
+
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
@@ -64,6 +66,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
   const { toggleFollow, isFollowing } = useFollowStore();
   const { checkPremiumStatus } = usePremium();
   const { toast } = useToast();
+  const { checkDailyReward } = useDiamonds();
   const selectedTrainer = TRAINERS.find(trainer => trainer.id === trainerId) || TRAINERS[0];
   const isPremium = checkPremiumStatus();
   
@@ -302,8 +305,16 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
     const onEnded = () => {
       addSession(session.id);
       setIsPlaying(false);
+      
+      const gotReward = checkDailyReward();
+      if (gotReward) {
+        toast({
+          title: language === 'ja' ? 'デイリー報酬獲得！' : 'Daily Reward!',
+          description: language === 'ja' ? '+5ダイヤモンド' : '+5 Diamonds',
+        });
+      }
+      
       const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
-
       setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 2000);
     };
 

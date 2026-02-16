@@ -87,16 +87,16 @@ export default function LocaleSettingsPage() {
               <div className="mb-3">
                 <div className="relative mb-2">
                   <div className="absolute inset-0 bg-white/80 dark:bg-white/10 shadow-sm transform -skew-x-12 -ml-4 mr-8 rounded-r-lg"></div>
-                  <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">{t('settings.localeSettings')}</h1>
+                  <h1 className="relative text-xl font-bold font-headline py-1.5 pl-2">{t('localeSettings')}</h1>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <Label htmlFor="region" className="text-lg font-semibold">{t('settings.region')}</Label>
+                  <Label htmlFor="region" className="text-lg font-semibold">{t('region')}</Label>
                   <Select value={selectedRegion} onValueChange={setSelectedRegion}>
                     <SelectTrigger className="w-full mt-4">
-                      <SelectValue placeholder={t('settings.selectRegion')} />
+                      <SelectValue placeholder={t('selectRegion')} />
                     </SelectTrigger>
                     <SelectContent>
                       {REGIONS.map((region) => (
@@ -112,7 +112,7 @@ export default function LocaleSettingsPage() {
                 </div>
 
                 <div>
-                  <h2 className="text-lg font-semibold mb-4">{t('settings.language')}</h2>
+                  <h2 className="text-lg font-semibold mb-4">{t('language')}</h2>
                   <div className="space-y-3">
                     {AVAILABLE_LANGUAGES.map((lang) => (
                       <button

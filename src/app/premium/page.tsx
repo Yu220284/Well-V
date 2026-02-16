@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Crown, Video, Sparkles as SparklesIcon, Mic, Radio, Gauge, ArrowLeft, Ban } from "lucide-react";
+import { Check, Crown, Video, Sparkles as SparklesIcon, Mic, Radio, Gauge, ArrowLeft, Ban, Diamond } from "lucide-react";
 import { usePremium } from "@/lib/hooks/use-premium";
 import { useLanguage } from "@/lib/hooks/use-language";
 import { translations } from "@/lib/i18n/translations";
@@ -19,6 +19,11 @@ export default function PremiumPage() {
   const isCurrentlyPremium = checkPremiumStatus();
 
   const features = [
+    {
+      icon: Diamond,
+      title: language === 'ja' ? "毎月500ダイヤ獲得" : "500 Diamonds/Month",
+      description: language === 'ja' ? "毎月500ダイヤモンドが獲得できます（登録日が起点となります）" : "Receive 500 diamonds automatically every month",
+    },
     {
       icon: Ban,
       title: language === 'ja' ? "広告非表示" : "Ad-Free",

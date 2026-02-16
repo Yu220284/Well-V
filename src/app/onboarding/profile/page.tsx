@@ -13,6 +13,7 @@ import { AnimatedBackground } from '@/components/layout/AnimatedBackground';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useLanguage } from '@/lib/hooks/use-language';
 import { translations } from '@/lib/i18n/translations';
+import { supabase } from '@/lib/supabase';
 
 const avatarOptions = [
   { bg: 'bg-gradient-to-br from-pink-200 to-rose-300' },
@@ -43,6 +44,17 @@ export default function ProfilePage() {
     bio: '',
     avatar: avatarOptions[initialIndex].bg
   });
+
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const displayName = user.user_metadata?.full_name || user.email?.split('@')[0] || '';
+        setProfile(prev => ({ ...prev, displayName }));
+      }
+    };
+    loadUserProfile();
+  }, []);
 
   useEffect(() => {
     if (!emblaApi) return;

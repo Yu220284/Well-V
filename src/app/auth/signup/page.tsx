@@ -26,10 +26,22 @@ export default function SignupPage() {
   const t = translations[language || 'ja'].auth
 
   const handleSocialSignup = async (provider: 'google' | 'microsoft' | 'apple' | 'discord' | 'twitter' | 'instagram') => {
-    toast({
-      title: t.preparing,
-      description: `${provider}${t.socialSignupPreparing}`
-    })
+    if (provider === 'google') {
+      const { signInWithGoogle } = await import('@/lib/supabase/auth')
+      const { error } = await signInWithGoogle()
+      if (error) {
+        toast({
+          title: t.signupError || 'エラー',
+          description: error.message,
+          variant: 'destructive'
+        })
+      }
+    } else {
+      toast({
+        title: t.preparing,
+        description: `${provider}${t.socialSignupPreparing}`
+      })
+    }
   }
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -54,7 +66,7 @@ export default function SignupPage() {
                   <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
               </Button>
-              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent" onClick={() => handleSocialSignup('microsoft')}>
+              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent opacity-50 cursor-not-allowed" disabled>
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#f25022" d="M1 1h10v10H1z"/>
                   <path fill="#00a4ef" d="M13 1h10v10H13z"/>
@@ -62,22 +74,22 @@ export default function SignupPage() {
                   <path fill="#ffb900" d="M13 13h10v10H13z"/>
                 </svg>
               </Button>
-              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent" onClick={() => handleSocialSignup('apple')}>
+              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent opacity-50 cursor-not-allowed" disabled>
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                 </svg>
               </Button>
-              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent" onClick={() => handleSocialSignup('discord')}>
+              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent opacity-50 cursor-not-allowed" disabled>
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#5865F2">
                   <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
                 </svg>
               </Button>
-              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent" onClick={() => handleSocialSignup('twitter')}>
+              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent opacity-50 cursor-not-allowed" disabled>
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
               </Button>
-              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent" onClick={() => handleSocialSignup('instagram')}>
+              <Button variant="ghost" size="icon" className="border-0 hover:bg-accent opacity-50 cursor-not-allowed" disabled>
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="url(#instagram-gradient)">
                   <defs>
                     <linearGradient id="instagram-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
@@ -90,10 +102,10 @@ export default function SignupPage() {
               </Button>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="phone">{t.registerWithPhone}</Label>
+            <div className="space-y-2 opacity-50">
+              <Label htmlFor="phone" className="text-muted-foreground">{t.registerWithPhone}</Label>
               <div className="flex gap-2">
-                <select className="flex h-10 w-24 rounded-md border border-input bg-background px-3 py-2 text-sm">
+                <select className="flex h-10 w-24 rounded-md border border-input bg-background px-3 py-2 text-sm" disabled>
                   <option value="+81">+81</option>
                   <option value="+1">+1</option>
                   <option value="+86">+86</option>
@@ -103,6 +115,7 @@ export default function SignupPage() {
                   type="tel"
                   placeholder="90-1234-5678"
                   className="flex-1"
+                  disabled
                 />
               </div>
             </div>
