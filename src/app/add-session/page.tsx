@@ -1,3 +1,5 @@
+"use client";
+
 import { Header } from '@/components/layout/Header';
 import { PageTransition } from '@/components/layout/PageTransition';
 import { Card, CardContent } from '@/components/ui/card';
