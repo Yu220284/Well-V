@@ -16,6 +16,7 @@ const banners = [
   { id: 1, imageUrl: '/ads/Ad_V-WALK.png', alt: 'V-WALK Advertisement' },
   { id: 2, imageUrl: '/ads/Ad_Mary.png', alt: 'MARY Advertisement' },
   { id: 3, imageUrl: '/ads/Ad_RamenPro.png', alt: 'RamenPro Advertisement' },
+  { id: 4, imageUrl: '/ads/Ad_WellV.png', alt: 'Well-V Advertisement' },
 ];
 
 export function AdBanner() {
