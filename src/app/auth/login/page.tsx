@@ -28,6 +28,9 @@ export default function LoginPage() {
 
   const handleSocialLogin = async (provider: 'google' | 'microsoft' | 'apple' | 'discord' | 'twitter' | 'instagram') => {
     if (provider === 'google') {
+      // スプラッシュ画面をスキップするフラグを設定
+      localStorage.setItem('wellv_seen_splash', 'true')
+      
       const { signInWithGoogle } = await import('@/lib/supabase/auth')
       const { error } = await signInWithGoogle()
       if (error) {

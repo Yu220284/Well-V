@@ -10,7 +10,7 @@ import Link from "next/link";
 import { TRAINERS } from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, Heart } from "lucide-react";
+import { Sparkles, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useFollowStore } from "@/lib/hooks/use-follow-store";
 import type { Trainer } from "@/lib/types";
@@ -46,7 +46,7 @@ export default function TrainersPage() {
   const stretchTrainers = filterTrainers(TRAINERS.filter(tr => tr.specialty === 'ストレッチ'));
 
   const TrainerCard = ({ trainer, isFirst }: { trainer: Trainer; isFirst?: boolean }) => (
-    <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1" data-tutorial={isFirst ? "trainer-card" : undefined}>
+    <Card className="overflow-hidden h-full transition-all duration-300 ease-in-out hover:-translate-y-1" data-tutorial={isFirst ? "trainer-card" : undefined}>
       <Link href={`/trainer/${trainer.id}`} className="block">
         <div className="aspect-square w-full relative overflow-hidden">
           <Image
@@ -57,29 +57,29 @@ export default function TrainersPage() {
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover object-center transition-transform duration-300 hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-          <div className="absolute bottom-2 left-2 right-2 text-white">
-            <h3 className="font-semibold text-sm truncate">{trainer.name}</h3>
-            <p className="text-xs opacity-90">{trainer.specialty}</p>
-          </div>
         </div>
       </Link>
       <CardContent className="p-2">
-        <Button
-          size="sm"
-          variant={isFollowing(trainer.id) ? "default" : "outline"}
-          className="w-full"
-          onClick={(e) => {
-            e.preventDefault();
-            const isTutorialActive = typeof window !== 'undefined' && localStorage.getItem('wellv_tutorial_active') === 'true';
-            if (!isTutorialActive) {
-              toggleFollow(trainer.id);
-            }
-          }}
-        >
-          <Heart className={`h-3 w-3 mr-1 ${isFollowing(trainer.id) ? 'fill-current' : ''}`} />
-          {isFollowing(trainer.id) ? t.following : t.follow}
-        </Button>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-sm truncate">{trainer.name}</h3>
+            <p className="text-xs text-muted-foreground">{trainer.specialty}</p>
+          </div>
+          <Button
+            size="icon"
+            variant={isFollowing(trainer.id) ? "default" : "outline"}
+            className="h-8 w-8 flex-shrink-0"
+            onClick={(e) => {
+              e.preventDefault();
+              const isTutorialActive = typeof window !== 'undefined' && localStorage.getItem('wellv_tutorial_active') === 'true';
+              if (!isTutorialActive) {
+                toggleFollow(trainer.id);
+              }
+            }}
+          >
+            <UserPlus className="h-4 w-4" />
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
@@ -141,7 +141,6 @@ export default function TrainersPage() {
       </PageTransition>
       <footer className="text-center py-6 text-sm text-muted-foreground">
         <p className="inline-flex items-center">
-          <Sparkles className="inline-block h-4 w-4 text-primary mx-1" />
           Well-V
         </p>
       </footer>

@@ -33,13 +33,30 @@ export async function signIn(email: string, password: string) {
 }
 
 export async function signInWithGoogle() {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${window.location.origin}/auth/callback`
+  try {
+    // 常に本番URLを使用
+    const redirectUrl = 'https://well-v.vercel.app/auth/callback'
+    
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectUrl,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        }
+      }
+    })
+    
+    if (error) {
+      console.error('Google sign-in error:', error)
     }
-  })
-  return { data, error }
+    
+    return { data, error }
+  } catch (err) {
+    console.error('Unexpected Google sign-in error:', err)
+    return { data: null, error: { message: 'Failed to initiate Google sign-in' } }
+  }
 }
 
 export async function signOut() {

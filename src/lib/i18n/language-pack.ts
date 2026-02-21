@@ -26,18 +26,32 @@ export const AVAILABLE_LANGUAGES: { code: Language; name: string; nativeName: st
 ];
 
 export async function downloadLanguagePack(language: Language): Promise<LanguagePack> {
-  const response = await fetch(`/messages/${language}.json`);
-  const translations = await response.json();
-  
-  const pack: LanguagePack = {
-    code: language,
-    name: AVAILABLE_LANGUAGES.find(l => l.code === language)?.name || language,
-    version: '1.0.0',
-    translations,
-  };
-  
-  localStorage.setItem(`${LANGUAGE_PACK_KEY}_${language}`, JSON.stringify(pack));
-  return pack;
+  try {
+    const response = await fetch(`/messages/${language}.json`);
+    if (!response.ok) throw new Error('Failed to fetch');
+    const translations = await response.json();
+    
+    const pack: LanguagePack = {
+      code: language,
+      name: AVAILABLE_LANGUAGES.find(l => l.code === language)?.name || language,
+      version: '1.0.0',
+      translations,
+    };
+    
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`${LANGUAGE_PACK_KEY}_${language}`, JSON.stringify(pack));
+    }
+    return pack;
+  } catch (error) {
+    console.error('Failed to download language pack:', error);
+    // Return minimal pack as fallback
+    return {
+      code: language,
+      name: AVAILABLE_LANGUAGES.find(l => l.code === language)?.name || language,
+      version: '1.0.0',
+      translations: {},
+    };
+  }
 }
 
 export function getStoredLanguagePack(language: Language): LanguagePack | null {
@@ -47,7 +61,9 @@ export function getStoredLanguagePack(language: Language): LanguagePack | null {
 }
 
 export function setSelectedLanguage(language: Language): void {
-  localStorage.setItem(SELECTED_LANGUAGE_KEY, language);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(SELECTED_LANGUAGE_KEY, language);
+  }
 }
 
 export function getSelectedLanguage(): Language {
@@ -56,7 +72,9 @@ export function getSelectedLanguage(): Language {
 }
 
 export function clearLanguagePacks(): void {
-  AVAILABLE_LANGUAGES.forEach(lang => {
-    localStorage.removeItem(`${LANGUAGE_PACK_KEY}_${lang.code}`);
-  });
+  if (typeof window !== 'undefined') {
+    AVAILABLE_LANGUAGES.forEach(lang => {
+      localStorage.removeItem(`${LANGUAGE_PACK_KEY}_${lang.code}`);
+    });
+  }
 }

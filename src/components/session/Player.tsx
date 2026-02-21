@@ -413,6 +413,7 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                   className="w-full h-full object-cover"
                   preload="auto"
                   playsInline
+                  loop
                 />
               ) : (
                 <Image

@@ -26,7 +26,20 @@ export async function GET(request: Request) {
       }
     )
 
-    await supabase.auth.exchangeCodeForSession(code)
+    const { data } = await supabase.auth.exchangeCodeForSession(code)
+    
+    // 新規ユーザーの場合はオンボーディングへ、既存ユーザーはホームへ
+    if (data?.user) {
+      const { data: profile } = await supabase
+        .from('users')
+        .select('onboarding_completed')
+        .eq('id', data.user.id)
+        .single()
+      
+      if (!profile?.onboarding_completed) {
+        return NextResponse.redirect(new URL('/language-select', requestUrl.origin))
+      }
+    }
   }
 
   return NextResponse.redirect(new URL('/', requestUrl.origin))

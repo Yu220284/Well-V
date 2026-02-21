@@ -13,14 +13,15 @@ import {
 } from "@/components/ui/carousel";
 
 const banners = [
-  { id: 1, imageUrl: 'https://picsum.photos/seed/ad1/600/120', imageHint: 'running shoes on pavement', alt: 'Ad for new running shoes' },
-  { id: 2, imageUrl: 'https://picsum.photos/seed/ad2/600/120', imageHint: 'protein shake and fruit', alt: 'Ad for protein supplements' },
-  { id: 3, imageUrl: 'https://picsum.photos/seed/ad3/600/120', imageHint: 'yoga mat and water bottle', alt: 'Ad for yoga accessories' },
+  { id: 1, imageUrl: '/ads/Ad_V-WALK.png', alt: 'V-WALK Advertisement' },
+  { id: 2, imageUrl: '/ads/Ad_Mary.png', alt: 'MARY Advertisement' },
+  { id: 3, imageUrl: '/ads/Ad_RamenPro.png', alt: 'RamenPro Advertisement' },
 ];
 
 export function AdBanner() {
   const { checkPremiumStatus, showAds } = usePremium();
   const isPremium = checkPremiumStatus();
+  const [startIndex] = React.useState(() => Math.floor(Math.random() * banners.length));
   
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: false })
@@ -29,26 +30,26 @@ export function AdBanner() {
   if (isPremium && !showAds) return null;
 
   return (
-    <div className="flex justify-center px-4 mt-2">
+    <div className="flex justify-center mt-2 px-4">
       <Carousel
         plugins={[plugin.current]}
-        className="w-full max-w-2xl h-[120px]"
+        className="w-full max-w-[600px]"
         opts={{
           align: "center",
           loop: true,
+          startIndex,
         }}
       >
       <CarouselContent>
         {banners.map((banner) => (
           <CarouselItem key={banner.id}>
-            <div className="relative h-[120px] w-full overflow-hidden rounded-lg">
+            <div className="relative w-full aspect-[5/1]">
               <Image
                 src={banner.imageUrl}
                 alt={banner.alt}
-                data-ai-hint={banner.imageHint}
                 fill
-                sizes="600px"
-                className="object-cover rounded-lg"
+                className="rounded-lg object-cover"
+                unoptimized
               />
             </div>
           </CarouselItem>

@@ -50,7 +50,7 @@ export default function TrainerPage() {
                         alt={`Portrait of ${trainer.name}`}
                         data-ai-hint={trainer.imageHint}
                         fill
-                        className="rounded-full object-cover border-4 border-primary/50 shadow-xl"
+                        className="rounded-full object-cover border-4 border-primary/50"
                     />
                 </div>
                 <div className="flex-1 min-w-0">
