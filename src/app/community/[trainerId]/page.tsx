@@ -83,17 +83,16 @@ export default function TrainerCommunityPage() {
                   ← {t.backToList}
                 </Link>
                 
-                <Card className="mb-6 overflow-hidden">
-                  <div className="h-32 bg-gradient-to-r from-primary/20 to-primary/10" />
-                  <CardContent className="-mt-12 pb-6">
-                    <div className="flex items-end gap-4 mb-4">
+                <Card className="mb-6">
+                  <CardContent className="pt-6 pb-6">
+                    <div className="flex items-start gap-4 mb-4">
                       <Link href={`/trainer/${trainer.id}`}>
-                        <Avatar className="h-24 w-24 border-4 border-background cursor-pointer hover:opacity-80 transition-opacity">
+                        <Avatar className="h-24 w-24 cursor-pointer hover:opacity-80 transition-opacity">
                           <AvatarImage src={trainer.imageUrl} alt={trainer.name} />
                           <AvatarFallback>{trainer.name[0]}</AvatarFallback>
                         </Avatar>
                       </Link>
-                      <div className="flex-1 pb-2">
+                      <div className="flex-1 pt-2">
                         <div className="flex items-center gap-2">
                           <h2 className="text-2xl font-bold">{trainer.name}</h2>
                           <Link href={`/community/${trainerId}/shop`}>

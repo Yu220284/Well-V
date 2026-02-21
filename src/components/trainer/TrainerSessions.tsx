@@ -7,12 +7,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, Play } from "lucide-react";
 import type { Session, SessionCategory } from "@/lib/types";
+import { useLanguage } from "@/lib/hooks/use-language";
+import { translateSessionTitle } from "@/lib/session-translations";
 
 interface TrainerSessionsProps {
   sessions: Session[];
 }
 
 export function TrainerSessions({ sessions }: TrainerSessionsProps) {
+  const { language } = useLanguage();
+  
   const formatDuration = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     return `${minutes} min`;
@@ -52,7 +56,7 @@ export function TrainerSessions({ sessions }: TrainerSessionsProps) {
                           <Play className="h-12 w-12 text-white fill-white" />
                         </div>
                         <div className="absolute bottom-2 left-2 right-2 text-white">
-                          <CardTitle className="font-headline text-sm mb-1 line-clamp-2">{session.title}</CardTitle>
+                          <CardTitle className="font-headline text-sm mb-1 line-clamp-2">{translateSessionTitle(session.title, language || 'ja')}</CardTitle>
                           <div className="flex items-center text-xs">
                             <Clock className="h-3 w-3 mr-1" />
                             <span>{formatDuration(session.duration)}</span>

@@ -39,6 +39,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { TRAINERS } from "@/lib/data";
 import { useLanguage } from "@/lib/hooks/use-language";
+import { translateSessionTitle, translateSegmentAction } from "@/lib/session-translations";
 
 import { useDiamonds } from "@/lib/hooks/use-diamonds";
 
@@ -283,10 +284,19 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
         setSegmentTime(0);
         setIsInPause(false);
       } else {
-        addSession(session.id);
         setIsPlaying(false);
+        addSession(session.id);
+        
+        const gotReward = checkDailyReward();
+        if (gotReward && toast && language) {
+          toast({
+            title: language === 'ja' ? 'デイリー報酬獲得！' : 'Daily Reward!',
+            description: language === 'ja' ? '+5ダイヤモンド' : '+5 Diamonds',
+          });
+        }
+        
         const tutorialActive = localStorage.getItem('wellv_tutorial_active') === 'true';
-        setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 2000);
+        setTimeout(() => router.push(`/session/${session.id}/result`), tutorialActive ? 0 : 500);
       }
     } else if (segmentTime >= currentSegment.duration && !isInPause) {
       setIsInPause(true);
@@ -413,7 +423,6 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
                   className="w-full h-full object-cover"
                   preload="auto"
                   playsInline
-                  loop
                 />
               ) : (
                 <Image
@@ -429,12 +438,12 @@ export function Player({ session, trainerId = 1 }: { session: Session; trainerId
 
             <div className="text-center">
               <p className="text-sm uppercase tracking-wider text-primary font-semibold">{session.category}</p>
-              <h1 className="text-2xl font-bold font-headline mt-1">{session.title}</h1>
+              <h1 className="text-2xl font-bold font-headline mt-1">{translateSessionTitle(session.title, language || 'ja')}</h1>
               <p className="text-sm text-muted-foreground mt-2">{tUI.guide.replace('{trainerName}', selectedTrainer.name)}</p>
               {hasSegments && currentSegment && (
                 <div className="mt-4 p-3 bg-primary/10 rounded-lg">
                   <p className="text-lg font-semibold">
-                    {isInPause ? '休憩中...' : currentSegment.action}
+                    {isInPause ? (language === 'ja' ? '休憩中...' : 'Rest...') : translateSegmentAction(currentSegment.action, language || 'ja')}
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
                     {currentSegmentIndex + 1} / {session.segments!.length}

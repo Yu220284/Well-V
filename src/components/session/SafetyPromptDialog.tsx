@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -12,21 +11,41 @@ import {
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, Dot } from "lucide-react";
 import { AdBanner } from "@/components/layout/AdBanner";
-import messages from '@/../messages/ja.json';
+import { useLanguage } from "@/lib/hooks/use-language";
+import { useEffect, useState } from "react";
 
 interface SafetyPromptDialogProps {
   open: boolean;
   onStart: () => void;
 }
 
-const safetyPrompt = [
+const safetyPromptJa = [
     "足元や周囲に物がないかを確認し、転倒や事故を防ぎましょう。",
     "運動前後には十分な水分を摂取してください。",
     "痛み・強い不快感・めまいなどを感じた場合はすぐに中止し、必要に応じて医療機関へ相談してください。",
 ];
 
+const safetyPromptEn = [
+    "Check your surroundings and ensure there are no obstacles to prevent falls or accidents.",
+    "Stay hydrated before and after exercise.",
+    "Stop immediately if you experience pain, discomfort, or dizziness, and consult a medical professional if necessary.",
+];
+
 export function SafetyPromptDialog({ open, onStart }: SafetyPromptDialogProps) {
-  const t = messages.SafetyPrompt;
+  const { language } = useLanguage();
+  const [t, setT] = useState<any>(null);
+  
+  useEffect(() => {
+    const loadTranslations = async () => {
+      const messages = await import(`@/../messages/${language || 'ja'}.json`);
+      setT(messages.default.SafetyPrompt);
+    };
+    loadTranslations();
+  }, [language]);
+
+  const safetyPrompt = language === 'en' ? safetyPromptEn : safetyPromptJa;
+
+  if (!t) return null;
 
   return (
     <Dialog open={open}>

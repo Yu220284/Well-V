@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { saveSessionCompletion } from '@/lib/supabase/session-history';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { useLanguage } from '@/lib/hooks/use-language';
+import { translateSessionTitle } from '@/lib/session-translations';
 
 export default function SessionResultPage({
   params,
@@ -32,8 +33,15 @@ export default function SessionResultPage({
   
   React.useEffect(() => {
     const loadTranslations = async () => {
-      const messages = await import(`@/../messages/${language || 'ja'}.json`);
-      setT(messages.default.SessionResult);
+      try {
+        const messages = language === 'en' 
+          ? await import('@/../messages/en.json')
+          : await import('@/../messages/ja.json');
+        setT(messages.default.SessionResult);
+      } catch (error) {
+        const messages = await import('@/../messages/ja.json');
+        setT(messages.default.SessionResult);
+      }
     };
     loadTranslations();
   }, [language]);
@@ -117,7 +125,7 @@ export default function SessionResultPage({
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
             
             <div className="absolute bottom-3 left-3 right-3 text-white">
-              <h2 className="text-xl font-bold mb-1">{session.title}</h2>
+              <h2 className="text-xl font-bold mb-1">{translateSessionTitle(session.title, language || 'ja')}</h2>
               <div className="flex items-center gap-1 text-sm">
                 <Clock className="h-3 w-3" />
                 <span>{t.completion_time.replace('{minutes}', minutes).replace('{seconds}', seconds)}</span>

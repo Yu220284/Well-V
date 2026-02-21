@@ -23,6 +23,7 @@ import Link from "next/link";
 import { PremiumDialog } from "@/components/premium/PremiumDialog";
 import { useLanguage } from "@/lib/hooks/use-language";
 import { translations } from "@/lib/i18n/translations";
+import { translateSessionTitle } from "@/lib/session-translations";
 
 function formatDuration(seconds: number, language: string): string {
   const mins = Math.floor(seconds / 60);
@@ -134,7 +135,7 @@ export function SessionDetail({ session }: { session: Session }) {
                   </div>
                   
                   <div className="absolute bottom-3 left-3 right-3 text-white">
-                    <h1 className="text-xl font-bold font-headline mb-1">{session.title}</h1>
+                    <h1 className="text-xl font-bold font-headline mb-1">{translateSessionTitle(session.title, language || 'ja')}</h1>
                     <div className="flex items-center gap-3 text-xs">
                       <div className="flex items-center gap-1">
                         <Users className="h-3 w-3" />

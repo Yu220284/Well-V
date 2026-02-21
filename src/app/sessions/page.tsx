@@ -17,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavoriteStore } from "@/lib/hooks/use-favorite-store";
 import { useLanguage } from "@/lib/hooks/use-language";
 import { translations } from "@/lib/i18n/translations";
+import { translateSessionTitle } from "@/lib/session-translations";
 
 export default function SessionsPage() {
   const { language } = useLanguage();
@@ -86,7 +87,7 @@ export default function SessionsPage() {
                           <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                           <div className="absolute bottom-2 left-2 right-2 text-white">
-                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{translateSessionTitle(session.title, language || 'ja')}</h3>
                             <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
                           </div>
                         </div>
@@ -108,7 +109,7 @@ export default function SessionsPage() {
                             <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                             <div className="absolute bottom-2 left-2 right-2 text-white">
-                              <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                              <h3 className="font-semibold text-sm mb-1 line-clamp-2">{translateSessionTitle(session.title, language || 'ja')}</h3>
                               <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
                             </div>
                           </div>
@@ -128,7 +129,7 @@ export default function SessionsPage() {
                           <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                           <div className="absolute bottom-2 left-2 right-2 text-white">
-                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{translateSessionTitle(session.title, language || 'ja')}</h3>
                             <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
                           </div>
                         </div>
@@ -147,7 +148,7 @@ export default function SessionsPage() {
                           <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                           <div className="absolute bottom-2 left-2 right-2 text-white">
-                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{translateSessionTitle(session.title, language || 'ja')}</h3>
                             <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
                           </div>
                         </div>
@@ -166,7 +167,7 @@ export default function SessionsPage() {
                           <Image src={session.imageUrl} alt={session.title} fill className="object-cover" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                           <div className="absolute bottom-2 left-2 right-2 text-white">
-                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{session.title}</h3>
+                            <h3 className="font-semibold text-sm mb-1 line-clamp-2">{translateSessionTitle(session.title, language || 'ja')}</h3>
                             <p className="text-xs opacity-90">{Math.floor(session.duration / 60)}{language === 'ja' ? '分' : ' min'}</p>
                           </div>
                         </div>
